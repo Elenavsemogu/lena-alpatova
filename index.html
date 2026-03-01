@@ -42,11 +42,11 @@ h1,h2,h3,h4{font-family:'Forum',cursive;font-weight:400}
 .btn-sm{font-size:.7rem;padding:5px 12px;border-radius:6px;cursor:pointer;border:1px solid var(--gold);background:transparent;color:var(--gold);font-family:inherit;letter-spacing:.05em;transition:all .2s}
 .btn-sm:hover{background:var(--gold);color:#fff}
 .card-preview{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
-.card-mock{border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,0.15);overflow:hidden}
-.card-mock svg{display:block}
+.card-mock{border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,0.15);overflow:hidden;max-width:100%}
+.card-mock svg{display:block;max-width:100%;height:auto}
 .sticker-preview{display:flex;justify-content:center;margin-bottom:30px}
-.sticker-mock{border-radius:50%;box-shadow:0 8px 30px rgba(0,0,0,0.15);overflow:hidden}
-.sticker-mock svg{display:block}
+.sticker-mock{border-radius:50%;box-shadow:0 8px 30px rgba(0,0,0,0.15);overflow:hidden;max-width:300px}
+.sticker-mock svg{display:block;max-width:100%;height:auto}
 .download-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:20px 0}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:2px solid var(--sage);color:var(--sage);background:transparent;font-family:'Forum',cursive;font-size:1rem;letter-spacing:0.08em;border-radius:8px;cursor:pointer;transition:all 0.3s}
 .btn:hover{background:var(--sage);color:#fff}
@@ -61,10 +61,37 @@ h1,h2,h3,h4{font-family:'Forum',cursive;font-weight:400}
 .do-list li::before{content:'✓';color:green}
 .dont-list li::before{content:'✗';color:#c0392b}
 @media(max-width:768px){
-  .logo-grid{grid-template-columns:repeat(2,1fr)}
-  .guidelines-grid{grid-template-columns:1fr}
-  .brand-header h1{font-size:2rem}
+  .brand-header{padding:40px 16px}
+  .brand-header h1{font-size:1.8rem;letter-spacing:0.08em}
+  .brand-header p{font-size:1rem;letter-spacing:0.15em}
+  .section{padding:40px 16px}
+  .section-title{font-size:1.5rem;margin-bottom:28px}
+  .section-subtitle{font-size:1.1rem;margin-bottom:20px}
+  .logo-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .logo-variant svg{max-width:100%;height:auto}
+  .variant-preview{max-width:100%}
+  .variant-preview svg{max-width:100%;height:auto}
   .card-preview{flex-direction:column;align-items:center}
+  .guidelines-grid{grid-template-columns:1fr;gap:16px}
+  .guideline-card{padding:20px}
+  .font-sample{padding:20px}
+  .font-sample .preview.display{font-size:1.4rem;letter-spacing:0.06em;overflow-wrap:break-word;word-break:break-word}
+  .note-box{padding:14px;font-size:0.9rem}
+  .download-row{gap:8px}
+  .btn{padding:10px 16px;font-size:0.9rem}
+  .btn-sm{font-size:.65rem;padding:4px 8px}
+  .colors-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+}
+@media(max-width:480px){
+  .brand-header{padding:30px 12px}
+  .brand-header h1{font-size:1.4rem}
+  .section{padding:30px 12px}
+  .section-title{font-size:1.3rem;margin-bottom:20px}
+  .logo-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .colors-grid{grid-template-columns:1fr;gap:12px}
+  .font-sample .preview.display{font-size:1.1rem}
+  .btn{padding:8px 12px;font-size:0.85rem}
+  .download-row{flex-direction:column;align-items:center}
 }
 @media print{
   .btn,.download-row{display:none!important}
@@ -79,6 +106,7 @@ h1,h2,h3,h4{font-family:'Forum',cursive;font-weight:400}
 .font-sample code{font-size:0.85rem;color:#888;display:block;margin-top:8px}
 .divider{width:100%;height:1px;background:var(--cream-dark);margin:0 auto}
 .note-box{background:#fff;border-left:4px solid var(--gold);padding:20px;border-radius:0 8px 8px 0;margin:20px 0;font-size:0.95rem;color:#555}
+svg{max-width:100%;height:auto}
 </style>
 </head>
 <body>
