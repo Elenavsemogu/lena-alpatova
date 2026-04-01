@@ -3,225 +3,259 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Фея твоего КБЖУ — ПП-рационы и выпечка | Елена Алпатова</title>
-<meta name="description" content="ПП Фея Елена Алпатова — авторские ПП-десерты (трюфель, Молочная девочка, Рафаэлло), рационы питания с точным КБЖУ и марафон-интенсив. Барнаул. Без сахара и белой муки.">
+<title>ПП Фея — Десерты, выпечка и блюда на заказ | Елена Алпатова</title>
+<meta name="description" content="ПП Фея Елена Алпатова — авторские десерты, несладкая выпечка, торты и блюда из 100% натуральных ингредиентов. Каталог с КБЖУ, умная корзина, доставка по Барнаулу.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Forum&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --sage:#6B7F6E;--sage-dark:#4F5F50;--sage-deep:#3E4E3F;
-  --gold:#D4BB85;--gold-light:#E8D9B5;--gold-dark:#B49B5E;
-  --cream:#F5F0E6;--cream-dark:#E8E0D0;
-  --charcoal:#2C2C2C;--white:#fff;
-  --radius:12px;--shadow:0 4px 24px rgba(0,0,0,.08);
+  --sage:#5B6F5E;--sage-light:#6B7F6E;--sage-dark:#3E4E3F;--sage-deep:#2D3B2E;
+  --gold:#C9AD6E;--gold-light:#E0CFA0;--gold-dark:#A68D4B;
+  --bg:#FBFBF8;--bg-alt:#FFFFFF;--bg-warm:#F5F2EB;
+  --text:#1A1D1A;--text-sec:#3D4340;--text-muted:#5F6B63;
+  --border:#E5E2DA;--border-light:#EEEBE4;
+  --radius:12px;--shadow:0 2px 16px rgba(0,0,0,.06);--shadow-lg:0 8px 32px rgba(0,0,0,.10);
 }
 html{scroll-behavior:smooth}
-body{font-family:'Cormorant Garamond',serif;background:var(--cream);color:var(--charcoal);line-height:1.7;font-size:18px}
+body{font-family:'Cormorant Garamond',serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:18px}
 h1,h2,h3,h4,h5{font-family:'Forum',cursive;font-weight:400;line-height:1.3}
 a{color:var(--sage-dark);text-decoration:none;transition:color .2s}
 a:hover{color:var(--gold-dark)}
 img{max-width:100%;display:block}
-.container{max-width:1100px;margin:0 auto;padding:0 24px}
+.container{max-width:1140px;margin:0 auto;padding:0 24px}
 
-/* ─── HEADER ─── */
-.site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,240,230,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--cream-dark);transition:box-shadow .3s}
+/* HEADER */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(251,251,248,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-light);transition:box-shadow .3s}
 .site-header.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.06)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
 .logo{display:flex;align-items:center;gap:10px}
 .logo img{width:36px;height:auto}
-.fairy-img{display:block;object-fit:contain}
-.about-img-placeholder img{display:block}
 .logo-text{font-family:'Forum',cursive;font-size:1.15rem;letter-spacing:.08em;color:var(--sage-dark)}
 .logo-sub{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-dark);display:block;margin-top:-2px}
-nav{display:flex;align-items:center;gap:28px}
-nav a{font-family:'Forum',cursive;font-size:.95rem;letter-spacing:.04em;color:var(--sage-dark);position:relative}
-nav a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+nav{display:flex;align-items:center;gap:24px}
+nav a{font-family:'Forum',cursive;font-size:.92rem;letter-spacing:.04em;color:var(--text-sec);position:relative}
+nav a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;background:var(--gold);transition:width .3s}
+nav a:hover{color:var(--sage-dark)}
 nav a:hover::after{width:100%}
-.nav-cta{background:var(--sage);color:var(--cream)!important;padding:8px 20px;border-radius:50px;font-size:.85rem;letter-spacing:.06em}
-.nav-cta::after{display:none}
-.nav-cta:hover{background:var(--sage-dark);color:var(--cream)!important}
+.nav-cart{position:relative;cursor:pointer;padding:6px}
+.nav-cart svg{width:22px;height:22px;stroke:var(--sage-dark);fill:none;stroke-width:1.8}
+.cart-badge{position:absolute;top:-2px;right:-6px;background:var(--gold-dark);color:#fff;font-size:.6rem;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Forum',cursive;display:none}
+.cart-badge.show{display:flex}
 .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
 .burger span{width:24px;height:2px;background:var(--sage-dark);border-radius:2px;transition:all .3s}
 
-/* ─── HERO ─── */
+/* HERO */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(107,127,110,.06) 0%,transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(212,187,133,.06) 0%,transparent 60%)}
-.hero-content{position:relative;z-index:2;max-width:680px}
-.hero-fairy{width:120px;margin:0 auto 24px}
-.hero-badge{display:inline-block;font-family:'Forum',cursive;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);border:1px solid var(--gold-light);padding:6px 20px;border-radius:50px;margin-bottom:24px}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(91,111,94,.05) 0%,transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(201,173,110,.05) 0%,transparent 60%)}
+.hero-content{position:relative;z-index:2;max-width:700px}
+.hero-badge{display:inline-block;font-family:'Forum',cursive;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);border:1px solid var(--gold-light);padding:6px 20px;border-radius:50px;margin-bottom:24px}
 .hero h1{font-size:3.2rem;color:var(--sage-dark);margin-bottom:16px;letter-spacing:.02em}
-.hero h1 em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;color:var(--gold-dark)}
-.hero p{font-size:1.25rem;color:var(--sage);margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;color:var(--gold-dark)}
+.hero p{font-size:1.2rem;color:var(--text-sec);margin-bottom:36px;max-width:560px;margin-left:auto;margin-right:auto}
 .hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:50px;font-family:'Forum',cursive;font-size:1rem;letter-spacing:.06em;cursor:pointer;border:2px solid transparent;transition:all .3s}
-.btn-primary{background:var(--sage);color:var(--cream);border-color:var(--sage)}
-.btn-primary:hover{background:var(--sage-dark);border-color:var(--sage-dark);color:var(--cream)}
+.btn-primary{background:var(--sage);color:#fff;border-color:var(--sage)}
+.btn-primary:hover{background:var(--sage-dark);border-color:var(--sage-dark);color:#fff}
 .btn-outline{border-color:var(--gold);color:var(--gold-dark);background:transparent}
-.btn-outline:hover{background:var(--gold);color:var(--white)}
-.hero-decor{position:absolute;bottom:-1px;left:0;right:0}
-.hero-decor svg{display:block;width:100%}
+.btn-outline:hover{background:var(--gold);color:#fff}
+.btn-gold{background:var(--gold);color:var(--text);border-color:var(--gold)}
+.btn-gold:hover{background:var(--gold-dark);border-color:var(--gold-dark);color:#fff}
 
-/* ─── SECTIONS ─── */
+/* SECTIONS */
 .section{padding:80px 0}
-.section-alt{background:var(--white)}
-.section-sage{background:var(--sage);color:var(--cream)}
+.section-alt{background:var(--bg-alt)}
+.section-sage{background:var(--sage-deep);color:#F0EDE5}
 .section-heading{text-align:center;margin-bottom:48px}
 .section-heading h2{font-size:2.2rem;color:var(--sage-dark);margin-bottom:8px}
 .section-sage .section-heading h2{color:var(--gold)}
-.section-heading p{font-size:1.1rem;color:var(--sage);max-width:540px;margin:0 auto}
-.section-sage .section-heading p{color:rgba(245,240,230,.7)}
+.section-heading p{font-size:1.05rem;color:var(--text-muted);max-width:540px;margin:0 auto}
+.section-sage .section-heading p{color:rgba(240,237,229,.65)}
 .section-line{width:48px;height:2px;background:var(--gold);margin:12px auto 0;border-radius:1px}
 
-/* ─── ABOUT ─── */
+/* CATALOG TABS */
+.catalog-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:36px;flex-wrap:wrap}
+.catalog-tab{padding:8px 18px;border-radius:50px;font-family:'Forum',cursive;font-size:.88rem;letter-spacing:.03em;cursor:pointer;border:1px solid var(--border);background:var(--bg-alt);color:var(--text-sec);transition:all .25s;user-select:none}
+.catalog-tab.active,.catalog-tab:hover{background:var(--sage);color:#fff;border-color:var(--sage)}
+
+/* CATALOG GRID */
+.catalog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.product-card{background:var(--bg-alt);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
+.product-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.product-card-img{aspect-ratio:4/3;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative}
+.product-card-img .cat-icon{opacity:.6}
+.product-card-body{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column}
+.product-card-body h4{font-size:1.1rem;color:var(--sage-dark);margin-bottom:4px;line-height:1.3}
+.product-card-body .p-desc{font-size:.85rem;color:var(--text-muted);margin-bottom:10px;line-height:1.5;flex:1}
+.p-kbzhu{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.p-kbzhu span{padding:2px 8px;border-radius:50px;background:rgba(91,111,94,.07);font-size:.72rem;color:var(--sage);font-family:'Forum',cursive;letter-spacing:.02em}
+.p-variants{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.p-var{padding:5px 12px;border-radius:50px;font-size:.8rem;font-family:'Forum',cursive;cursor:pointer;border:1.5px solid var(--border);color:var(--text-sec);background:var(--bg);transition:all .2s}
+.p-var.active{border-color:var(--sage);background:var(--sage);color:#fff}
+.p-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto}
+.p-price{font-family:'Forum',cursive;font-size:1.35rem;color:var(--sage-dark)}
+.p-price small{font-size:.8rem;color:var(--text-muted);font-family:'Cormorant Garamond',serif}
+.btn-add{padding:8px 18px;border-radius:50px;background:var(--sage);color:#fff;border:none;font-family:'Forum',cursive;font-size:.85rem;cursor:pointer;transition:background .2s;letter-spacing:.04em}
+.btn-add:hover{background:var(--sage-dark)}
+.btn-add.added{background:var(--gold-dark)}
+
+/* ABOUT */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.about-img{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);aspect-ratio:3/4;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;position:relative}
-.about-img-placeholder{color:var(--sage);font-family:'Forum',cursive;font-size:1.1rem;text-align:center;padding:40px;opacity:.6}
-.about-img-placeholder svg{width:80px;height:80px;margin:0 auto 16px;opacity:.4}
+.about-img{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);aspect-ratio:3/4;background:var(--bg-warm);display:flex;align-items:center;justify-content:center}
+.about-img img{width:100%;height:100%;object-fit:cover}
 .about-text h3{font-size:1.8rem;color:var(--sage-dark);margin-bottom:16px}
-.about-text p{margin-bottom:16px;color:#555}
+.about-text p{margin-bottom:16px;color:var(--text-sec)}
 .about-values{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
-.about-value{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:50px;background:rgba(107,127,110,.08);font-size:.85rem;color:var(--sage-dark)}
-.about-value svg{width:16px;height:16px;stroke:var(--gold-dark);fill:none;stroke-width:1.5}
+.about-value{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:50px;background:rgba(91,111,94,.07);font-size:.85rem;color:var(--sage-dark)}
 
-/* ─── PACKAGES ─── */
-.packages-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.pkg-card{background:var(--white);border-radius:var(--radius);padding:36px 28px;box-shadow:var(--shadow);text-align:center;position:relative;transition:transform .3s,box-shadow .3s}
-.pkg-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,0,0,.12)}
-.pkg-card.featured{border:2px solid var(--gold);transform:scale(1.03)}
-.pkg-card.featured:hover{transform:scale(1.03) translateY(-4px)}
-.pkg-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--white);font-family:'Forum',cursive;font-size:.75rem;letter-spacing:.1em;padding:4px 16px;border-radius:50px}
-.pkg-icon{width:56px;height:56px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(107,127,110,.08)}
-.pkg-icon svg{width:28px;height:28px;stroke:var(--sage);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.pkg-card h3{font-size:1.5rem;margin-bottom:4px;color:var(--sage-dark)}
-.pkg-card .pkg-desc{font-size:.9rem;color:var(--sage);margin-bottom:16px}
-.pkg-price{font-family:'Forum',cursive;font-size:2.4rem;color:var(--sage-dark);margin-bottom:4px}
-.pkg-price span{font-size:1rem;color:var(--sage)}
-.pkg-per{font-size:.85rem;color:#999;margin-bottom:20px}
-.pkg-features{text-align:left;list-style:none;margin-bottom:24px}
-.pkg-features li{padding:6px 0;padding-left:24px;position:relative;font-size:.95rem;color:#555}
-.pkg-features li::before{content:'';position:absolute;left:0;top:12px;width:14px;height:14px;border-radius:50%;border:1.5px solid var(--gold);background:rgba(212,187,133,.1)}
-.pkg-card .btn{width:100%;justify-content:center}
-
-/* ─── MENU PREVIEW ─── */
-.menu-tabs{display:flex;justify-content:center;gap:12px;margin-bottom:32px;flex-wrap:wrap}
-.menu-tab{padding:8px 20px;border-radius:50px;font-family:'Forum',cursive;font-size:.9rem;letter-spacing:.04em;cursor:pointer;border:1px solid var(--cream-dark);background:var(--white);color:var(--sage);transition:all .3s}
-.menu-tab.active,.menu-tab:hover{background:var(--sage);color:var(--cream);border-color:var(--sage)}
-.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
-.menu-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .3s}
-.menu-card:hover{transform:translateY(-3px)}
-.menu-card-img{aspect-ratio:4/3;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.menu-card-img svg{width:48px;height:48px;stroke:var(--sage);fill:none;stroke-width:1.2;opacity:.3}
-.menu-card-body{padding:16px}
-.menu-card-body h4{font-size:1.1rem;color:var(--sage-dark);margin-bottom:4px}
-.menu-card-body p{font-size:.85rem;color:#888}
-.menu-card-kbzhu{display:flex;gap:12px;margin-top:8px;font-size:.75rem;color:var(--sage)}
-.menu-card-kbzhu span{padding:2px 8px;border-radius:50px;background:rgba(107,127,110,.06)}
-
-/* ─── BAKERY ─── */
-.bakery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
-.bakery-card{background:var(--cream);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .3s}
-.bakery-card:hover{transform:translateY(-3px)}
-.bakery-card-img{aspect-ratio:1;background:var(--cream-dark);display:flex;align-items:center;justify-content:center}
-.bakery-card-img svg{width:56px;height:56px;stroke:var(--gold-dark);fill:none;stroke-width:1.2;opacity:.3}
-.bakery-card-body{padding:20px;text-align:center}
-.bakery-card-body h4{font-size:1.2rem;color:var(--sage-dark);margin-bottom:4px}
-.bakery-card-body .bakery-desc{font-size:.9rem;color:#888;margin-bottom:8px}
-.bakery-card-body .bakery-price{font-family:'Forum',cursive;font-size:1.4rem;color:var(--gold-dark)}
-.bakery-kbzhu{font-size:.8rem;color:var(--sage);margin-top:8px;padding:4px 12px;background:rgba(107,127,110,.06);border-radius:50px;display:inline-block}
-
-/* ─── MARATHON ─── */
+/* MARATHON */
 .marathon-wrap{max-width:800px;margin:0 auto}
 .marathon-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:start}
 .marathon-price-tag{font-family:'Forum',cursive;font-size:3rem;color:var(--gold);margin-bottom:4px}
-.marathon-duration{font-size:1rem;color:rgba(245,240,230,.6);margin-bottom:20px}
+.marathon-duration{font-size:1rem;color:rgba(240,237,229,.55);margin-bottom:20px}
 .marathon-list{list-style:none;padding:0}
-.marathon-list li{padding:8px 0 8px 28px;position:relative;color:rgba(245,240,230,.85);font-size:1rem}
+.marathon-list li{padding:8px 0 8px 28px;position:relative;color:rgba(240,237,229,.85);font-size:1rem}
 .marathon-list li::before{content:'✓';position:absolute;left:0;color:var(--gold);font-weight:bold}
-.marathon-who p{color:rgba(245,240,230,.75);font-size:1.05rem;line-height:1.7}
-@media(max-width:768px){.marathon-grid{grid-template-columns:1fr;gap:24px}}
 
-/* ─── CALCULATOR ─── */
-.calc-wrap{max-width:600px;margin:0 auto;background:var(--white);border-radius:var(--radius);padding:40px;box-shadow:var(--shadow)}
-.calc-row{margin-bottom:24px}
-.calc-row label{display:block;font-family:'Forum',cursive;font-size:1.1rem;color:var(--sage-dark);margin-bottom:8px}
-.calc-options{display:flex;gap:10px;flex-wrap:wrap}
-.calc-opt{padding:10px 20px;border-radius:50px;border:1.5px solid var(--cream-dark);font-family:'Cormorant Garamond',serif;font-size:1rem;cursor:pointer;background:var(--white);color:var(--sage);transition:all .2s}
-.calc-opt.active,.calc-opt:hover{border-color:var(--sage);background:var(--sage);color:var(--cream)}
-.calc-result{text-align:center;padding:24px;background:rgba(107,127,110,.05);border-radius:var(--radius);margin-top:8px}
-.calc-result .calc-total{font-family:'Forum',cursive;font-size:2.8rem;color:var(--sage-dark)}
-.calc-result .calc-total span{font-size:1.2rem;color:var(--sage)}
-.calc-result p{font-size:.9rem;color:#888;margin-top:4px}
-
-/* ─── REVIEWS ─── */
-.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px}
-.review-card{background:var(--white);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
+/* REVIEWS */
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+.review-card{background:var(--bg-alt);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
 .review-stars{color:var(--gold);font-size:1rem;letter-spacing:2px;margin-bottom:12px}
-.review-card blockquote{font-style:italic;color:#555;margin-bottom:16px;font-size:1.05rem;line-height:1.6}
+.review-card blockquote{font-style:italic;color:var(--text-sec);margin-bottom:16px;font-size:1.02rem;line-height:1.65}
 .review-author{display:flex;align-items:center;gap:12px}
-.review-avatar{width:40px;height:40px;border-radius:50%;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;font-family:'Forum',cursive;color:var(--sage);font-size:.9rem}
+.review-avatar{width:40px;height:40px;border-radius:50%;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;font-family:'Forum',cursive;color:var(--sage);font-size:.9rem}
 .review-name{font-family:'Forum',cursive;font-size:.95rem;color:var(--sage-dark)}
-.review-date{font-size:.75rem;color:#aaa}
+.review-date{font-size:.75rem;color:var(--text-muted)}
 
-/* ─── FAQ ─── */
+/* FAQ */
 .faq-list{max-width:700px;margin:0 auto}
-.faq-item{border-bottom:1px solid var(--cream-dark);padding:20px 0}
-.faq-q{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Forum',cursive;font-size:1.15rem;color:var(--sage-dark);gap:16px}
+.faq-item{border-bottom:1px solid var(--border-light);padding:20px 0}
+.faq-q{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Forum',cursive;font-size:1.12rem;color:var(--sage-dark);gap:16px}
 .faq-q svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:2;flex-shrink:0;transition:transform .3s}
 .faq-item.open .faq-q svg{transform:rotate(45deg)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;padding:0}
 .faq-item.open .faq-a{max-height:300px;padding:12px 0 0}
-.faq-a p{color:#555;font-size:1rem}
+.faq-a p{color:var(--text-sec);font-size:1rem}
 
-/* ─── CTA ─── */
+/* CTA */
 .cta-section{text-align:center;padding:80px 24px}
 .cta-section h2{font-size:2.2rem;color:var(--gold);margin-bottom:12px}
-.cta-section p{font-size:1.1rem;color:rgba(245,240,230,.7);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto}
-.btn-gold{background:var(--gold);color:var(--charcoal);border-color:var(--gold)}
-.btn-gold:hover{background:var(--gold-dark);border-color:var(--gold-dark);color:var(--white)}
+.cta-section p{font-size:1.05rem;color:rgba(240,237,229,.65);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto}
 
-/* ─── FOOTER ─── */
-.site-footer{background:var(--sage-deep);color:rgba(245,240,230,.5);padding:40px 0 24px}
+/* FOOTER */
+.site-footer{background:var(--sage-deep);color:rgba(240,237,229,.5);padding:40px 0 24px}
 .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
 .footer-logo{display:flex;align-items:center;gap:8px;color:var(--gold-light);font-family:'Forum',cursive;font-size:1rem;letter-spacing:.06em}
-.footer-logo svg{width:28px;height:28px;opacity:.7}
-.footer-links{display:flex;gap:20px}
-.footer-links a{color:rgba(245,240,230,.5);font-size:.85rem;transition:color .2s}
+.footer-logo img{width:28px;height:auto;opacity:.7}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-links a{color:rgba(240,237,229,.5);font-size:.85rem;transition:color .2s}
 .footer-links a:hover{color:var(--gold)}
-.footer-copy{text-align:center;font-size:.75rem;margin-top:24px;padding-top:16px;border-top:1px solid rgba(245,240,230,.1)}
+.footer-copy{text-align:center;font-size:.75rem;margin-top:24px;padding-top:16px;border-top:1px solid rgba(240,237,229,.1)}
 
-/* ─── PLACEHOLDER NOTE ─── */
-.placeholder-note{background:rgba(212,187,133,.12);border:1px dashed var(--gold-light);border-radius:8px;padding:12px 20px;text-align:center;font-size:.85rem;color:var(--gold-dark);font-style:italic;margin:12px 0}
+/* CART DRAWER */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;opacity:0;visibility:hidden;transition:all .3s}
+.cart-overlay.open{opacity:1;visibility:visible}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:100vw;background:var(--bg);z-index:201;transform:translateX(100%);transition:transform .35s ease;display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.1)}
+.cart-drawer.open{transform:translateX(0)}
+.cart-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border-light)}
+.cart-header h3{font-size:1.3rem;color:var(--sage-dark)}
+.cart-close{background:none;border:none;cursor:pointer;padding:4px}
+.cart-close svg{width:24px;height:24px;stroke:var(--text-muted);stroke-width:2}
+.cart-body{flex:1;overflow-y:auto;padding:16px 24px}
+.cart-empty{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:1.05rem}
+.cart-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border-light);align-items:flex-start}
+.cart-item-icon{width:48px;height:48px;border-radius:8px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{font-family:'Forum',cursive;font-size:.95rem;color:var(--sage-dark);margin-bottom:2px}
+.cart-item-detail{font-size:.78rem;color:var(--text-muted)}
+.cart-item-qty{display:flex;align-items:center;gap:8px;margin-top:6px}
+.cart-item-qty button{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:var(--bg-alt);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;color:var(--text-sec);transition:all .2s}
+.cart-item-qty button:hover{border-color:var(--sage);color:var(--sage)}
+.cart-item-qty span{font-family:'Forum',cursive;font-size:.9rem;min-width:20px;text-align:center}
+.cart-item-price{font-family:'Forum',cursive;font-size:1rem;color:var(--sage-dark);white-space:nowrap;margin-left:8px}
+.cart-item-remove{cursor:pointer;color:var(--text-muted);font-size:.75rem;padding:0;transition:color .2s;display:inline-block;margin-top:4px}
+.cart-item-remove:hover{color:#c44}
+.cart-footer{padding:20px 24px;border-top:1px solid var(--border-light);background:var(--bg-alt)}
+.cart-kbzhu-summary{background:rgba(91,111,94,.06);border-radius:10px;padding:14px 16px;margin-bottom:16px}
+.cart-kbzhu-title{font-family:'Forum',cursive;font-size:.9rem;color:var(--sage-dark);margin-bottom:8px}
+.cart-kbzhu-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.cart-kbzhu-item{text-align:center;flex:1;min-width:60px}
+.cart-kbzhu-item .val{font-family:'Forum',cursive;font-size:1.3rem;color:var(--sage-dark);display:block}
+.cart-kbzhu-item .lbl{font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.cart-total-label{font-family:'Forum',cursive;font-size:1.1rem;color:var(--text-sec)}
+.cart-total-price{font-family:'Forum',cursive;font-size:1.6rem;color:var(--sage-dark)}
+.cart-actions{display:flex;flex-direction:column;gap:10px}
+.cart-actions .btn{width:100%;justify-content:center;font-size:.95rem}
+.btn-planner{background:none;border:1.5px solid var(--sage);color:var(--sage-dark);padding:12px 24px;border-radius:50px;font-family:'Forum',cursive;font-size:.9rem;cursor:pointer;transition:all .2s;letter-spacing:.04em}
+.btn-planner:hover{background:var(--sage);color:#fff}
 
-/* ─── RESPONSIVE ─── */
+/* PLANNER MODAL */
+.planner-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:all .3s}
+.planner-overlay.open{opacity:1;visibility:visible}
+.planner-modal{background:var(--bg);border-radius:16px;width:100%;max-width:640px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-lg);padding:32px}
+.planner-modal h3{font-size:1.5rem;color:var(--sage-dark);margin-bottom:8px}
+.planner-subtitle{color:var(--text-muted);font-size:.95rem;margin-bottom:24px}
+.planner-targets{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.planner-target{padding:10px 20px;border-radius:50px;border:1.5px solid var(--border);font-family:'Forum',cursive;font-size:.95rem;cursor:pointer;background:var(--bg-alt);color:var(--text-sec);transition:all .2s}
+.planner-target.active{border-color:var(--sage);background:var(--sage);color:#fff}
+.planner-summary{background:rgba(91,111,94,.06);border-radius:12px;padding:20px;margin-bottom:24px;text-align:center}
+.planner-days{font-family:'Forum',cursive;font-size:2.4rem;color:var(--sage-dark)}
+.planner-days-label{font-size:.9rem;color:var(--text-muted);margin-bottom:12px}
+.planner-avg{display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
+.planner-avg-item{text-align:center}
+.planner-avg-item .val{font-family:'Forum',cursive;font-size:1.2rem;color:var(--sage-dark);display:block}
+.planner-avg-item .lbl{font-size:.7rem;color:var(--text-muted);text-transform:uppercase}
+.planner-day{border:1px solid var(--border-light);border-radius:12px;padding:18px;margin-bottom:16px;background:var(--bg-alt)}
+.planner-day-title{font-family:'Forum',cursive;font-size:1.1rem;color:var(--sage-dark);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.planner-day-kcal{font-size:.85rem;color:var(--text-muted);font-family:'Cormorant Garamond',serif}
+.planner-meal{padding:8px 0;border-bottom:1px solid var(--border-light)}
+.planner-meal:last-child{border-bottom:none}
+.planner-meal-name{font-family:'Forum',cursive;font-size:.88rem;color:var(--gold-dark);margin-bottom:4px}
+.planner-meal-items{font-size:.9rem;color:var(--text-sec)}
+.planner-meal-kbzhu{font-size:.75rem;color:var(--text-muted);margin-top:2px}
+.planner-close{display:flex;justify-content:center;margin-top:20px}
+.planner-note{font-size:.82rem;color:var(--text-muted);text-align:center;margin-top:16px;font-style:italic}
+.planner-controls{margin-bottom:28px}
+.planner-control-group{margin-bottom:20px}
+.planner-label{font-family:'Forum',cursive;font-size:1rem;color:var(--sage-dark);display:block;margin-bottom:10px}
+.planner-meals-check{display:flex;gap:8px;flex-wrap:wrap}
+.planner-meal-btn{padding:8px 18px;border-radius:50px;border:1.5px solid var(--border);font-family:'Forum',cursive;font-size:.9rem;cursor:pointer;background:var(--bg-alt);color:var(--text-sec);transition:all .2s;user-select:none}
+.planner-meal-btn.active{border-color:var(--sage);background:var(--sage);color:#fff}
+.planner-warn{background:rgba(201,173,110,.1);border-radius:10px;padding:14px 18px;font-size:.9rem;color:var(--gold-dark);text-align:center;margin-bottom:20px}
+
+/* KBZHU NOTE */
+.kbzhu-note{text-align:center;font-size:.82rem;color:var(--text-muted);margin-top:12px;font-style:italic;padding:8px 16px;background:rgba(201,173,110,.08);border-radius:8px;display:inline-block}
+
+/* RESPONSIVE */
 @media(max-width:900px){
   .about-grid{grid-template-columns:1fr;gap:32px}
   .about-img{max-width:400px;margin:0 auto}
-  .packages-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto}
-  .pkg-card.featured{transform:none}
-  .pkg-card.featured:hover{transform:translateY(-4px)}
+  .marathon-grid{grid-template-columns:1fr;gap:24px}
 }
 @media(max-width:768px){
-  nav{display:none;position:fixed;top:64px;left:0;right:0;background:var(--cream);flex-direction:column;padding:24px;gap:20px;border-bottom:1px solid var(--cream-dark);box-shadow:0 4px 20px rgba(0,0,0,.08)}
+  nav{display:none;position:fixed;top:64px;left:0;right:0;background:var(--bg);flex-direction:column;padding:24px;gap:20px;border-bottom:1px solid var(--border-light);box-shadow:0 4px 20px rgba(0,0,0,.06)}
   nav.open{display:flex}
   .burger{display:flex}
   .hero h1{font-size:2.2rem}
-  .hero p{font-size:1.1rem}
-  .hero-fairy{width:90px}
+  .hero p{font-size:1.05rem}
   .section{padding:60px 0}
   .section-heading h2{font-size:1.8rem}
   .reviews-grid{grid-template-columns:1fr}
+  .cart-drawer{width:100%}
+  .planner-modal{padding:20px}
 }
 @media(max-width:480px){
   .hero h1{font-size:1.7rem}
   .hero-btns{flex-direction:column;align-items:center}
   .btn{padding:12px 24px;font-size:.9rem}
-  .menu-grid{grid-template-columns:1fr 1fr;gap:12px}
-  .bakery-grid{grid-template-columns:1fr 1fr;gap:12px}
-  .calc-wrap{padding:24px}
-  .calc-opt{padding:8px 14px;font-size:.9rem}
-  .packages-grid{max-width:100%}
+  .catalog-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .product-card-body{padding:12px 14px 14px}
+  .product-card-body h4{font-size:.95rem}
+  .p-kbzhu span{font-size:.65rem;padding:2px 6px}
+  .p-price{font-size:1.1rem}
+  .planner-modal{max-height:95vh}
 }
 </style>
 </head>
@@ -231,23 +265,28 @@ nav a:hover::after{width:100%}
 <header class="site-header" id="header">
   <div class="container header-inner">
     <a href="#" class="logo">
-      <img src="fairy-sage.svg" alt="Фея" style="width:36px;height:auto">
+      <img src="Fairytrue.svg" alt="ПП Фея" style="width:36px;height:auto">
       <div>
-        <span class="logo-text">Фея твоего КБЖУ</span>
+        <span class="logo-text">ПП Фея</span>
         <span class="logo-sub">Елена Алпатова</span>
       </div>
     </a>
     <nav id="nav">
+      <a href="#catalog">Каталог</a>
       <a href="#about">Обо мне</a>
-      <a href="#packages">Рационы</a>
-      <a href="#menu">Меню</a>
-      <a href="#bakery">Выпечка</a>
       <a href="#marathon">Марафон</a>
+      <a href="#reviews">Отзывы</a>
       <a href="#faq">Вопросы</a>
-      <a href="#order" class="nav-cta">Заказать</a>
+      <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" target="_blank">Instagram</a>
     </nav>
-    <div class="burger" id="burger" onclick="document.getElementById('nav').classList.toggle('open')">
-      <span></span><span></span><span></span>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="nav-cart" onclick="toggleCart()">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </div>
+      <div class="burger" id="burger" onclick="document.getElementById('nav').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </div>
     </div>
   </div>
 </header>
@@ -255,292 +294,54 @@ nav a:hover::after{width:100%}
 <!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-content">
-    <img src="Fairytrue.svg" alt="" class="fairy-img" style="width:120px;height:auto;margin:0 auto 24px;opacity:.7">
-    <div class="hero-badge">Здоровье · Вкус · Баланс</div>
-    <h1>Готовлю <em>с любовью</em><br>и точным КБЖУ</h1>
-    <p>ПП-рационы, авторские десерты — без белой муки, без сахара, с точным КБЖУ</p>
+    <img src="Fairytrue.svg" alt="" style="width:110px;height:auto;margin:0 auto 24px;opacity:.65">
+    <div class="hero-badge">Натурально · Штучно · С любовью</div>
+    <h1>Десерты и выпечка<br><em>из 100% натуральных</em> ингредиентов</h1>
+    <p>Торты, конфеты, пицца, хлеб и блюда на каждый день — без сахара и белой муки, с точным КБЖУ. Собери заказ и узнай полную раскладку по нутриентам.</p>
     <div class="hero-btns">
-      <a href="#packages" class="btn btn-primary">Выбрать рацион</a>
-      <a href="#bakery" class="btn btn-outline">Десерты на заказ</a>
+      <a href="#catalog" class="btn btn-primary">Смотреть каталог</a>
+      <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" class="btn btn-outline" target="_blank">Написать мне</a>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOG -->
+<section class="section section-alt" id="catalog">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Каталог</h2>
+      <p>Каждая позиция — из натуральных ингредиентов, с любовью и точным расчётом КБЖУ</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="catalog-tabs" id="catalogTabs"></div>
+    <div class="catalog-grid" id="catalogGrid"></div>
+    <div style="text-align:center;margin-top:20px">
+      <span class="kbzhu-note">КБЖУ указано приблизительно — точные значения уточняйте при заказе</span>
     </div>
   </div>
 </section>
 
 <!-- ABOUT -->
-<section class="section section-alt" id="about">
+<section class="section" id="about">
   <div class="container">
     <div class="about-grid">
       <div class="about-img">
-        <img src="elena-photo.png" alt="Елена Алпатова — ПП Фея" style="width:100%;height:100%;object-fit:cover">
+        <img src="elena-photo.png" alt="Елена Алпатова — ПП Фея" onerror="this.parentElement.innerHTML='<div style=\'text-align:center;padding:40px;color:var(--text-muted);font-family:Forum,cursive\'>Фото Елены</div>'">
       </div>
       <div class="about-text">
         <h3>Привет, я Елена!</h3>
-        <p>Кондитер полезных десертов с дипломом государственного образца. Разрабатываю авторские рецепты, готовлю из натуральных продуктов — без белой пшеничной муки, без сахара, без компромиссов. Каждый десерт и рацион — с точным расчётом КБЖУ.</p>
-        <p>Мои клиенты называют меня «ПП Фея» — и я горжусь этим. Готовлю так, как готовила бы для своих детей: только натуральный состав, мука бурого риса вместо пшеничной, эритритол вместо сахара, хлеб на собственной закваске.</p>
-        <p>Моя мечта — собственная ПП-кондитерская. А пока я кормлю Барнаул рационами и десертами, от которых не нужно потом себя корить.</p>
+        <p>Готовлю только из 100% натуральных ингредиентов, с любовью и заботой о каждом клиенте. Моя суперсила — индивидуальный подход: каждый заказ выполняю максимально качественно.</p>
+        <p>Мои клиенты — люди с ограничениями в питании, спортсмены, веганы и все, кто ведёт здоровый образ жизни. Вместо белой муки — рисовая и полбяная. Вместо сахара — эритритол. Шоколад только без сахара, хлеб на собственной закваске.</p>
+        <p>Каждый день готовлю свежие десерты, торты, выпечку, пиццу и хлеб — штучно, на заказ. Никакого конвейера.</p>
         <div class="about-values">
-          <span class="about-value">
-            <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-            Диплом кондитера
-          </span>
-          <span class="about-value">
-            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-            Точный КБЖУ
-          </span>
-          <span class="about-value">
-            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            Авторские рецепты
-          </span>
-          <span class="about-value">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Без сахара и белой муки
-          </span>
+          <span class="about-value">100% натуральный состав</span>
+          <span class="about-value">Точный КБЖУ</span>
+          <span class="about-value">Без сахара и белой муки</span>
+          <span class="about-value">Индивидуальный подход</span>
+          <span class="about-value">Свежее каждый день</span>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- PACKAGES -->
-<section class="section" id="packages">
-  <div class="container">
-    <div class="section-heading">
-      <h2>Рационы на любой вкус</h2>
-      <p>Выбери удобный формат — попробуй на 3 дня или сразу на месяц со скидкой</p>
-      <div class="section-line"></div>
-    </div>
-    <div class="packages-grid">
-
-      <div class="pkg-card">
-        <div class="pkg-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-        </div>
-        <h3>Пробный</h3>
-        <p class="pkg-desc">3 дня полноценного ПП-питания</p>
-        <div class="pkg-price">X XXX <span>₽</span></div>
-        <p class="pkg-per">≈ X XXX ₽ / день</p>
-        <ul class="pkg-features">
-          <li>Завтрак, обед, ужин, перекус</li>
-          <li>Индивидуальный расчёт КБЖУ</li>
-          <li>Доставка включена</li>
-          <li>Учёт аллергий и предпочтений</li>
-        </ul>
-        <a href="#order" class="btn btn-outline">Попробовать</a>
-      </div>
-
-      <div class="pkg-card featured">
-        <span class="pkg-badge">Популярный</span>
-        <div class="pkg-icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-        </div>
-        <h3>Неделя</h3>
-        <p class="pkg-desc">7 дней — полноценный курс</p>
-        <div class="pkg-price">X XXX <span>₽</span></div>
-        <p class="pkg-per">≈ X XXX ₽ / день</p>
-        <ul class="pkg-features">
-          <li>Всё из «Пробного»</li>
-          <li>Разнообразное меню на 7 дней</li>
-          <li>Рекомендации по водному балансу</li>
-          <li>Чат с Еленой в Telegram</li>
-        </ul>
-        <a href="#order" class="btn btn-primary">Заказать</a>
-      </div>
-
-      <div class="pkg-card">
-        <div class="pkg-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h3>Месяц</h3>
-        <p class="pkg-desc">28 дней — максимальный результат</p>
-        <div class="pkg-price">XX XXX <span>₽</span></div>
-        <p class="pkg-per">≈ X XXX ₽ / день · экономия до 20%</p>
-        <ul class="pkg-features">
-          <li>Всё из «Недели»</li>
-          <li>Ротация меню каждую неделю</li>
-          <li>Корректировка рациона по ходу</li>
-          <li>Скидка на продление</li>
-        </ul>
-        <a href="#order" class="btn btn-outline">Начать курс</a>
-      </div>
-
-    </div>
-    <div class="placeholder-note" style="margin-top:24px">💰 Цены появятся после заполнения анкеты — подберём оптимальные пакеты под твой бизнес</div>
-  </div>
-</section>
-
-<!-- MENU -->
-<section class="section section-alt" id="menu">
-  <div class="container">
-    <div class="section-heading">
-      <h2>Примеры блюд</h2>
-      <p>Каждое блюдо — с точным расчётом КБЖУ и из натуральных продуктов</p>
-      <div class="section-line"></div>
-    </div>
-    <div class="menu-tabs">
-      <span class="menu-tab active">Завтраки</span>
-      <span class="menu-tab">Обеды</span>
-      <span class="menu-tab">Ужины</span>
-      <span class="menu-tab">Перекусы</span>
-    </div>
-    <div class="menu-grid">
-
-      <div class="menu-card">
-        <div class="menu-card-img">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-        </div>
-        <div class="menu-card-body">
-          <h4>Лепёшка с зеленью</h4>
-          <p>Яйцо, рисовая мука, творог, индейка, сыр и зелёный лук — насыщает на часы</p>
-          <div class="menu-card-kbzhu">
-            <span>366 ккал</span><span>Б: 37</span><span>Ж: 12</span><span>У: 23</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-card-img">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-        </div>
-        <div class="menu-card-body">
-          <h4>Бургеры с сёмгой и авокадо</h4>
-          <p>Полезные бургеры с высоким содержанием белка, зеленью и авокадо</p>
-          <div class="menu-card-kbzhu">
-            <span>380 ккал</span><span>Б: 32</span><span>Ж: 18</span><span>У: 22</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-card-img">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-        </div>
-        <div class="menu-card-body">
-          <h4>Блинчики ПП</h4>
-          <p>Мягкий творог, молоко, мука бурого риса — вкус детства без вреда</p>
-          <div class="menu-card-kbzhu">
-            <span>162 ккал</span><span>Б: 11</span><span>Ж: 4</span><span>У: 19</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-card-img">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-        </div>
-        <div class="menu-card-body">
-          <h4>Ватрушка с индейкой</h4>
-          <p>Творожная ватрушка с индейкой, сыром и томатами — 36 г белка на порцию</p>
-          <div class="menu-card-kbzhu">
-            <span>310 ккал</span><span>Б: 36</span><span>Ж: 10</span><span>У: 18</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <div class="placeholder-note" style="margin-top:24px">Лена, пришли фото этих блюд — поставим реальные фотографии</div>
-  </div>
-</section>
-
-<!-- BAKERY -->
-<section class="section" id="bakery">
-  <div class="container">
-    <div class="section-heading">
-      <h2>ПП-выпечка и десерты</h2>
-      <p>Торты, печенье и десерты — без сахара, но с удовольствием</p>
-      <div class="section-line"></div>
-    </div>
-    <div class="bakery-grid">
-
-      <div class="bakery-card">
-        <div class="bakery-card-img">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <div class="bakery-card-body">
-          <h4>Трюфель «Дор-блю»</h4>
-          <p class="bakery-desc">Авторский рецепт. Натуральный, полезный — много белка и правильных жиров</p>
-          <div class="bakery-kbzhu">КБЖУ: уточняйте</div>
-        </div>
-      </div>
-
-      <div class="bakery-card">
-        <div class="bakery-card-img">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <div class="bakery-card-body">
-          <h4>Торт «Молочная девочка»</h4>
-          <p class="bakery-desc">ПП-версия любимой классики — невероятно нежный, без вреда для фигуры</p>
-          <div class="bakery-kbzhu">КБЖУ: уточняйте</div>
-        </div>
-      </div>
-
-      <div class="bakery-card">
-        <div class="bakery-card-img">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <div class="bakery-card-body">
-          <h4>Рулет с томлёной грушей</h4>
-          <p class="bakery-desc">Рикотта, творожный сыр, груша — воздушный и лёгкий</p>
-          <div class="bakery-kbzhu">149 ккал · Б:10 · Ж:5 · У:15</div>
-        </div>
-      </div>
-
-      <div class="bakery-card">
-        <div class="bakery-card-img">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <div class="bakery-card-body">
-          <h4>Конфеты «Рафаэлло»</h4>
-          <p class="bakery-desc">Творог, кокос, белый шоколад без сахара, миндаль</p>
-          <div class="bakery-kbzhu">243 ккал · Б:18 · Ж:11 · У:18</div>
-        </div>
-      </div>
-
-      <div class="bakery-card">
-        <div class="bakery-card-img">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <div class="bakery-card-body">
-          <h4>Овсяное печенье</h4>
-          <p class="bakery-desc">Овсянка, полбяная мука, масло виноградной косточки. Подходит веганам</p>
-          <div class="bakery-kbzhu">202 ккал · Б:6 · Ж:3 · У:40</div>
-        </div>
-      </div>
-
-      <div class="bakery-card">
-        <div class="bakery-card-img">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <div class="bakery-card-body">
-          <h4>Пирожное «Картошка»</h4>
-          <p class="bakery-desc">Овсяная и рисовая мука, какао, ряженка — вкус детства</p>
-          <div class="bakery-kbzhu">175 ккал · Б:8 · Ж:7 · У:12</div>
-        </div>
-      </div>
-
-      <div class="bakery-card">
-        <div class="bakery-card-img">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <div class="bakery-card-body">
-          <h4>Хлеб на закваске</h4>
-          <p class="bakery-desc">Цельнозерновой, на закваске собственного производства</p>
-          <div class="bakery-kbzhu">Сложные углеводы</div>
-        </div>
-      </div>
-
-      <div class="bakery-card">
-        <div class="bakery-card-img">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <div class="bakery-card-body">
-          <h4>Бенто-торт</h4>
-          <p class="bakery-desc">Торт-открытка — идеально для подарка с персональной надписью</p>
-          <div class="bakery-kbzhu">Индивидуально</div>
-        </div>
-      </div>
-
-    </div>
-    <div class="placeholder-note" style="margin-top:24px">Лена, пришли фото десертов — поставим реальные фотографии и цены</div>
   </div>
 </section>
 
@@ -554,7 +355,7 @@ nav a:hover::after{width:100%}
     </div>
     <div class="marathon-wrap">
       <div class="marathon-grid">
-        <div class="marathon-info">
+        <div>
           <div class="marathon-price-tag">1 399 ₽</div>
           <p class="marathon-duration">16 дней · Старт каждый месяц</p>
           <ul class="marathon-list">
@@ -566,63 +367,20 @@ nav a:hover::after{width:100%}
             <li>Личная поддержка Елены</li>
             <li>Онлайн-встреча с разбором</li>
           </ul>
-          <a href="#order" class="btn btn-gold" style="margin-top:20px">Записаться на марафон</a>
+          <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" class="btn btn-gold" style="margin-top:20px" target="_blank">Записаться на марафон</a>
         </div>
-        <div class="marathon-who">
+        <div>
           <h3 style="color:var(--gold);margin-bottom:16px">Для кого?</h3>
-          <p>Нет сил, апатия, лишние килограммы, срывы… Хочешь наладить питание, но не знаешь с чего начать?</p>
-          <p style="margin-top:12px">Елена проходит марафон вместе с участницами — вы будете командой.</p>
+          <p style="color:rgba(240,237,229,.8)">Нет сил, апатия, лишние килограммы, срывы… Хочешь наладить питание, но не знаешь с чего начать?</p>
+          <p style="margin-top:12px;color:rgba(240,237,229,.8)">Елена проходит марафон вместе с участницами — вы будете командой. Не просто инструкция, а совместный путь.</p>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- CALCULATOR -->
-<section class="section section-alt" id="calc">
-  <div class="container">
-    <div class="section-heading">
-      <h2>Калькулятор стоимости</h2>
-      <p>Узнай примерную стоимость своего рациона</p>
-      <div class="section-line"></div>
-    </div>
-    <div class="calc-wrap">
-      <div class="calc-row">
-        <label>Цель:</label>
-        <div class="calc-options" data-calc="goal">
-          <span class="calc-opt active" data-v="slim">Похудение</span>
-          <span class="calc-opt" data-v="health">Здоровье</span>
-          <span class="calc-opt" data-v="gain">Набор массы</span>
-        </div>
-      </div>
-      <div class="calc-row">
-        <label>Длительность:</label>
-        <div class="calc-options" data-calc="days">
-          <span class="calc-opt" data-v="3">3 дня</span>
-          <span class="calc-opt active" data-v="7">7 дней</span>
-          <span class="calc-opt" data-v="14">14 дней</span>
-          <span class="calc-opt" data-v="28">28 дней</span>
-        </div>
-      </div>
-      <div class="calc-row">
-        <label>Приёмов пищи:</label>
-        <div class="calc-options" data-calc="meals">
-          <span class="calc-opt" data-v="3">3 в день</span>
-          <span class="calc-opt active" data-v="4">4 в день</span>
-          <span class="calc-opt" data-v="5">5 в день</span>
-        </div>
-      </div>
-      <div class="calc-result">
-        <div class="calc-total" id="calcTotal">— <span>₽</span></div>
-        <p>Точную стоимость уточним после консультации</p>
-      </div>
-      <div class="placeholder-note" style="margin-top:16px">📊 Калькулятор заработает после настройки твоих цен</div>
     </div>
   </div>
 </section>
 
 <!-- REVIEWS -->
-<section class="section" id="reviews">
+<section class="section section-alt" id="reviews">
   <div class="container">
     <div class="section-heading">
       <h2>Отзывы клиентов</h2>
@@ -630,88 +388,84 @@ nav a:hover::after{width:100%}
       <div class="section-line"></div>
     </div>
     <div class="reviews-grid">
-
       <div class="review-card">
         <div class="review-stars">★★★★★</div>
-        <blockquote>«Наконец-то нашла ПП, которое реально вкусно! Елена подобрала рацион под мои ограничения — и я даже не чувствую, что на диете. Минус 4 кг за месяц!»</blockquote>
+        <blockquote>«Заказала торт Прагу ПП-вариант для мужа с повышенным сахаром. Все были в шоке, что он без сахара — вкуснее обычного! Теперь только у Елены.»</blockquote>
+        <div class="review-author">
+          <div class="review-avatar">К</div>
+          <div><div class="review-name">Кристина</div><div class="review-date">Постоянный клиент</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <blockquote>«Пицца с сёмгой — это что-то невероятное. ПП, но такая вкусная! Заказываю каждую неделю. Очень удобно, что всё с точным КБЖУ.»</blockquote>
         <div class="review-author">
           <div class="review-avatar">М</div>
-          <div><div class="review-name">Мария</div><div class="review-date">Пример отзыва</div></div>
+          <div><div class="review-name">Мария</div><div class="review-date">Постоянный клиент</div></div>
         </div>
       </div>
-
       <div class="review-card">
         <div class="review-stars">★★★★★</div>
-        <blockquote>«Торт на день рождения — все были в шоке, что он ПП. Вкуснее многих обычных тортов! Теперь заказываю только у Елены.»</blockquote>
+        <blockquote>«Я веган с аллергией на глютен — найти кондитера было невозможно, пока не нашла Елену. Торт на день рождения был шедевром!»</blockquote>
         <div class="review-author">
           <div class="review-avatar">А</div>
-          <div><div class="review-name">Анна</div><div class="review-date">Пример отзыва</div></div>
+          <div><div class="review-name">Анна</div><div class="review-date">Постоянный клиент</div></div>
         </div>
       </div>
-
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <blockquote>«Удобно, что всё рассчитано — не нужно думать, что готовить. Просто получаю и ем. Качество на высоте, порции сытные.»</blockquote>
-        <div class="review-author">
-          <div class="review-avatar">Е</div>
-          <div><div class="review-name">Екатерина</div><div class="review-date">Пример отзыва</div></div>
-        </div>
-      </div>
-
     </div>
-    <div class="placeholder-note" style="margin-top:24px">💬 Пришли скриншоты реальных отзывов — оформим их красиво</div>
   </div>
 </section>
 
 <!-- FAQ -->
-<section class="section section-alt" id="faq">
+<section class="section" id="faq">
   <div class="container">
     <div class="section-heading">
       <h2>Частые вопросы</h2>
       <div class="section-line"></div>
     </div>
     <div class="faq-list">
-
       <div class="faq-item open">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Из чего ты готовишь? Что используешь вместо сахара и муки?
+          Какие есть торты без сахара?
           <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </div>
-        <div class="faq-a"><p>Вместо белой пшеничной муки — мука бурого риса, полбяная, овсяная. Вместо сахара — эритритол. Шоколад только без сахара, творог, рикотта, закваска собственного производства. Никаких дешёвых замен, добавок и усилителей вкуса.</p></div>
+        <div class="faq-a"><p>Бенто-торты, муссовые, бисквитные — все без сахара, на эритритоле. Делаю торты для аллергиков и веганов. Также есть классические торты с сахаром — если нужен именно такой.</p></div>
       </div>
-
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Как заказать рацион или десерт?
+          Из чего ты готовишь?
           <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </div>
-        <div class="faq-a"><p>Напиши в директ Instagram или по ссылке на сайте — расскажи о своих целях и предпочтениях. Первая консультация бесплатно! Обсудим рацион, десерт на праздник или участие в марафоне.</p></div>
+        <div class="faq-a"><p>Только 100% натуральные ингредиенты. Мука бурого риса, полбяная, овсяная вместо белой пшеничной. Эритритол вместо сахара. Шоколад без сахара, творог, рикотта. Хлеб — на собственной закваске. Никаких добавок и усилителей вкуса.</p></div>
       </div>
-
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Правда ли, что ПП-десерты вкусные?
+          Есть ли доставка?
           <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </div>
-        <div class="faq-a"><p>Мои клиенты часто не верят, что торт «Молочная девочка» или трюфель — это ПП. Секрет в авторских рецептурах, которые я довожу до идеального вкуса. Многие любимые десерты можно сделать полезными — достаточно заменить ряд ингредиентов.</p></div>
+        <div class="faq-a"><p>Да, доставка по Барнаулу. Стоимость и условия уточняйте при заказе. Также можно забрать самовывозом.</p></div>
       </div>
-
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Можно заказать торт на праздник?
+          Можно заказать отдельно обед или ужин?
           <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </div>
-        <div class="faq-a"><p>Конечно! Бенто-торт, торт с детским оформлением, муссовые пирожные — принимаю любые заказы. К Пасхе делаю ПП-куличи и творожную пасху. Лучше заказывать за 3–5 дней, на праздники — за неделю.</p></div>
+        <div class="faq-a"><p>Конечно! Можете заказать любые позиции из каталога — хоть одну пиццу, хоть набор на неделю. Каждое блюдо готовится отдельно, штучно.</p></div>
       </div>
-
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Что даёт марафон-интенсив?
+          Как оплатить заказ?
           <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </div>
-        <div class="faq-a"><p>За 16 дней ты научишься разбираться в продуктах и КБЖУ, получишь разнообразное меню из доступных продуктов и поддержку в чате. Елена проходит марафон вместе с участницами — это не просто инструкция, а совместный путь.</p></div>
+        <div class="faq-a"><p>Работаю по предоплате — перевод на карту. После подтверждения заказа отправлю реквизиты. Как только оплата поступит — оформляю заказ.</p></div>
       </div>
-
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Что такое «умная корзина»?
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <div class="faq-a"><p>Добавляйте блюда в корзину — система автоматически рассчитает общее КБЖУ всего заказа. А если хотите — нажмите «Разбить по дням» и получите предложение, как распределить блюда по приёмам пищи для сбалансированного питания.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -719,10 +473,13 @@ nav a:hover::after{width:100%}
 <!-- CTA -->
 <section class="section section-sage" id="order">
   <div class="container cta-section">
-    <img src="fairy-cream.svg" alt="" class="fairy-img" style="width:80px;height:auto;margin:0 auto 20px;opacity:.3">
-    <h2>Начни питаться вкусно и полезно</h2>
-    <p>Напиши мне — расскажу подробнее и помогу выбрать идеальный рацион</p>
-    <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" class="btn btn-gold" target="_blank">Написать в Instagram</a>
+    <img src="Fairytrue.svg" alt="" style="width:80px;height:auto;margin:0 auto 20px;opacity:.25">
+    <h2>Собери свой идеальный заказ</h2>
+    <p>Выбери блюда в каталоге, посмотри КБЖУ — и закажи с доставкой по Барнаулу</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+      <a href="#catalog" class="btn btn-gold">Открыть каталог</a>
+      <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" class="btn btn-outline" style="border-color:var(--gold-light);color:var(--gold-light)" target="_blank">Написать в Instagram</a>
+    </div>
   </div>
 </section>
 
@@ -731,54 +488,553 @@ nav a:hover::after{width:100%}
   <div class="container">
     <div class="footer-inner">
       <div class="footer-logo">
-        <img src="fairy-gold-light.svg" alt="" style="width:28px;height:auto;opacity:.7">
-        Фея твоего КБЖУ
+        <img src="Fairytrue.svg" alt="" style="width:28px;height:auto;opacity:.5">
+        ПП Фея — Елена Алпатова
       </div>
       <div class="footer-links">
+        <a href="#catalog">Каталог</a>
         <a href="#about">Обо мне</a>
-        <a href="#packages">Рационы</a>
-        <a href="#bakery">Выпечка</a>
         <a href="#marathon">Марафон</a>
         <a href="#faq">FAQ</a>
-        <a href="brandbook.html" target="_blank">Брендбук</a>
         <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" target="_blank">Instagram</a>
       </div>
     </div>
-    <div class="footer-copy">© 2026 Фея твоего КБЖУ — Елена Алпатова. Все права защищены.</div>
+    <div class="footer-copy">© 2026 ПП Фея — Елена Алпатова. Барнаул. Все права защищены.</div>
   </div>
 </footer>
 
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>Корзина</h3>
+    <button class="cart-close" onclick="toggleCart()"><svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty">Корзина пуста — добавьте блюда из каталога</div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-kbzhu-summary">
+      <div class="cart-kbzhu-title">КБЖУ всего заказа</div>
+      <div class="cart-kbzhu-row">
+        <div class="cart-kbzhu-item"><span class="val" id="cartKcal">0</span><span class="lbl">ккал</span></div>
+        <div class="cart-kbzhu-item"><span class="val" id="cartP">0</span><span class="lbl">белки</span></div>
+        <div class="cart-kbzhu-item"><span class="val" id="cartF">0</span><span class="lbl">жиры</span></div>
+        <div class="cart-kbzhu-item"><span class="val" id="cartC">0</span><span class="lbl">углеводы</span></div>
+      </div>
+    </div>
+    <div class="cart-total-row">
+      <span class="cart-total-label">Итого:</span>
+      <span class="cart-total-price" id="cartTotal">0 ₽</span>
+    </div>
+    <div class="cart-actions">
+      <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" target="_blank" class="btn btn-primary" id="btnOrder" style="width:100%;justify-content:center">Оформить заказ</a>
+      <button class="btn-planner" onclick="openPlanner()">Разбить по дням и приёмам пищи</button>
+    </div>
+  </div>
+</div>
+
+<!-- PLANNER MODAL -->
+<div class="planner-overlay" id="plannerOverlay" onclick="closePlanner()">
+  <div class="planner-modal" onclick="event.stopPropagation()">
+    <h3>Распределение по дням</h3>
+    <p class="planner-subtitle">Настройте под себя — выберите количество дней и приёмы пищи</p>
+
+    <div class="planner-controls">
+      <div class="planner-control-group">
+        <label class="planner-label">Сколько ккал в день?</label>
+        <div class="planner-targets" id="plannerKcal"></div>
+      </div>
+      <div class="planner-control-group">
+        <label class="planner-label">На сколько дней?</label>
+        <div class="planner-targets" id="plannerDays"></div>
+      </div>
+      <div class="planner-control-group">
+        <label class="planner-label">Какие приёмы пищи?</label>
+        <div class="planner-meals-check" id="plannerMeals"></div>
+      </div>
+    </div>
+
+    <div id="plannerContent"></div>
+    <p class="planner-note">Расчёт приблизительный — для точного рациона проконсультируйтесь с Еленой</p>
+    <div class="planner-close">
+      <button class="btn btn-outline" onclick="closePlanner()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// Header shadow on scroll
-const hdr = document.getElementById('header');
-window.addEventListener('scroll', () => {
-  hdr.classList.toggle('scrolled', window.scrollY > 10);
-});
+const CATEGORIES = [
+  {id:'all',name:'Все',icon:''},
+  {id:'torty',name:'Торты',icon:'🎂'},
+  {id:'deserty',name:'Десерты',icon:'🍰'},
+  {id:'konfety',name:'Конфеты',icon:'🍬'},
+  {id:'pechenie',name:'Печенье',icon:'🍪'},
+  {id:'pizza',name:'Пицца и киши',icon:'🍕'},
+  {id:'vypechka',name:'Выпечка и хлеб',icon:'🥐'},
+  {id:'classic',name:'Классические торты',icon:'🎂'}
+];
 
-// Close mobile nav on link click
-document.querySelectorAll('#nav a').forEach(a => {
-  a.addEventListener('click', () => {
-    document.getElementById('nav').classList.remove('open');
+const PRODUCTS = [
+  // ТОРТЫ ПП
+  {id:1, name:'Бенто-торт', cat:'torty', icon:'🎂', desc:'Торт-открытка с персональной надписью. ПП, без сахара.', meal:'snack',
+    per100:{kcal:210,p:8,f:10,c:24}, variants:[{label:'~450 г',w:450,price:1400}]},
+  {id:2, name:'Торт муссовый', cat:'torty', icon:'🎂', desc:'Нежный муссовый торт без сахара — лёгкий и воздушный.', meal:'snack',
+    per100:{kcal:190,p:6,f:10,c:20}, variants:[{label:'~800 г',w:800,price:2400},{label:'~1.2 кг',w:1200,price:3400}]},
+  {id:3, name:'Торт бисквитный', cat:'torty', icon:'🎂', desc:'Классический бисквит ПП — шоколадный, ванильный или фруктовый.', meal:'snack',
+    per100:{kcal:220,p:8,f:8,c:30}, variants:[{label:'~800 г',w:800,price:2300},{label:'~1.2 кг',w:1200,price:3300}]},
+  {id:4, name:'Торт для аллергиков / веганов', cat:'torty', icon:'🌿', desc:'Без глютена, без лактозы, без яиц — без компромиссов по вкусу.', meal:'snack',
+    per100:{kcal:200,p:5,f:9,c:26}, variants:[{label:'~800 г',w:800,price:2300},{label:'~1.2 кг',w:1200,price:3300}]},
+  {id:5, name:'Карамель веган', cat:'torty', icon:'🌿', desc:'Веганская карамель — нежная, тающая, полностью растительная.', meal:'snack',
+    per100:{kcal:240,p:3,f:12,c:30}, variants:[{label:'250 г',w:250,price:600}]},
+  {id:6, name:'Порционные кусочки торта', cat:'torty', icon:'🍰', desc:'Идеально для пробы — кусочек любимого торта.', meal:'snack',
+    per100:{kcal:210,p:7,f:9,c:26}, variants:[{label:'250 г',w:250,price:550}]},
+  {id:7, name:'Десерт в стакане', cat:'torty', icon:'🥤', desc:'Порционный десерт в стакане — удобно и красиво.', meal:'snack',
+    per100:{kcal:180,p:6,f:8,c:22}, variants:[{label:'1 шт',w:200,price:350}]},
+
+  // ДЕСЕРТЫ
+  {id:8, name:'Чизкейк с манго', cat:'deserty', icon:'🥭', desc:'Нежный чизкейк с тропическим манго, без сахара.', meal:'snack',
+    per100:{kcal:230,p:8,f:13,c:22}, variants:[{label:'~800 г',w:800,price:2300}]},
+  {id:9, name:'Чизкейк с фундуком', cat:'deserty', icon:'🌰', desc:'Ореховый чизкейк — насыщенный вкус фундука.', meal:'snack',
+    per100:{kcal:260,p:9,f:16,c:22}, variants:[{label:'~800 г',w:800,price:2600}]},
+  {id:10, name:'Рулет меренговый', cat:'deserty', icon:'🍥', desc:'Воздушная меренга с кремом и ягодами.', meal:'snack',
+    per100:{kcal:185,p:6,f:7,c:26}, variants:[{label:'~600 г',w:600,price:1600}]},
+  {id:11, name:'Рулет миндальный', cat:'deserty', icon:'🥜', desc:'Миндальный рулет с нежной начинкой.', meal:'snack',
+    per100:{kcal:220,p:8,f:12,c:22}, variants:[{label:'~600 г',w:600,price:1800}]},
+
+  // КОНФЕТЫ
+  {id:12, name:'Конфеты «Сникерс»', cat:'konfety', icon:'🍫', desc:'ПП-версия легендарного Сникерса — арахис, карамель, шоколад без сахара.', meal:'snack',
+    per100:{kcal:340,p:12,f:20,c:30}, variants:[{label:'9 шт',w:270,price:1250}]},
+  {id:13, name:'Конфеты «Рафаэлло»', cat:'konfety', icon:'🥥', desc:'Кокос, миндаль, белый шоколад без сахара — нежнейшие.', meal:'snack',
+    per100:{kcal:360,p:10,f:22,c:32}, variants:[{label:'9 шт',w:270,price:1250}]},
+  {id:14, name:'Батончики', cat:'konfety', icon:'🍫', desc:'Протеиновые батончики — идеальный перекус.', meal:'snack',
+    per100:{kcal:320,p:14,f:16,c:30}, variants:[{label:'9 шт',w:270,price:1250}]},
+  {id:15, name:'Конфеты фундучные', cat:'konfety', icon:'🌰', desc:'Фундук в ПП-шоколаде — хрустящие и сытные.', meal:'snack',
+    per100:{kcal:370,p:10,f:24,c:28}, variants:[{label:'9 шт',w:270,price:1250}]},
+  {id:16, name:'Трюфель', cat:'konfety', icon:'🍫', desc:'Шоколадный трюфель без сахара — тает во рту.', meal:'snack',
+    per100:{kcal:350,p:8,f:22,c:30}, variants:[{label:'9 шт',w:270,price:1250}]},
+  {id:17, name:'Трюфель Дор блю', cat:'konfety', icon:'🧀', desc:'Авторский трюфель с голубым сыром — для гурманов.', meal:'snack',
+    per100:{kcal:360,p:10,f:24,c:28}, variants:[{label:'9 шт',w:270,price:1350}]},
+
+  // ПЕЧЕНЬЕ
+  {id:18, name:'Печенье протеиновое с арахисом', cat:'pechenie', icon:'🥜', desc:'Высокобелковое печенье с арахисом — идеальный перекус для спортсменов.', meal:'snack',
+    per100:{kcal:320,p:18,f:14,c:32}, variants:[{label:'1 шт (~40 г)',w:40,price:130}]},
+  {id:19, name:'Печенье морковное', cat:'pechenie', icon:'🥕', desc:'Мягкое морковное печенье — нежное и ароматное.', meal:'snack',
+    per100:{kcal:280,p:8,f:10,c:38}, variants:[{label:'150 г',w:150,price:350}]},
+  {id:20, name:'Печенье овсяное', cat:'pechenie', icon:'🍪', desc:'Классическое овсяное — подходит веганам.', meal:'snack',
+    per100:{kcal:300,p:8,f:10,c:44}, variants:[{label:'150 г',w:150,price:350}]},
+
+  // ПИЦЦА И КИШИ
+  {id:21, name:'Пицца курица + грибы', cat:'pizza', icon:'🍕', desc:'ПП-пицца на рисовом тесте с курицей и грибами.', meal:'lunch',
+    per100:{kcal:185,p:14,f:6,c:20}, variants:[{label:'500 г',w:500,price:900},{label:'1 кг',w:1000,price:1800}]},
+  {id:22, name:'Пицца с сёмгой и овощами', cat:'pizza', icon:'🐟', desc:'Пицца с сёмгой — Омега-3 в каждом кусочке.', meal:'lunch',
+    per100:{kcal:210,p:14,f:9,c:20}, variants:[{label:'500 г',w:500,price:1200},{label:'1 кг',w:1000,price:2400}]},
+  {id:23, name:'Пицца курица + ананас', cat:'pizza', icon:'🍍', desc:'Гавайская ПП — курица и ананас на рисовом тесте.', meal:'lunch',
+    per100:{kcal:180,p:13,f:5,c:22}, variants:[{label:'500 г',w:500,price:900},{label:'1 кг',w:1000,price:1800}]},
+  {id:24, name:'Киш с курицей и грибами', cat:'pizza', icon:'🥧', desc:'Открытый пирог с курицей и грибами — сытный и ароматный.', meal:'lunch',
+    per100:{kcal:200,p:13,f:9,c:18}, variants:[{label:'500 г',w:500,price:1200},{label:'1 кг',w:1000,price:2400}]},
+  {id:25, name:'Киш с сёмгой и овощами', cat:'pizza', icon:'🐟', desc:'Нежный киш с сёмгой — блюдо ресторанного уровня.', meal:'lunch',
+    per100:{kcal:220,p:14,f:11,c:17}, variants:[{label:'500 г',w:500,price:1600},{label:'1 кг',w:1000,price:3200}]},
+
+  // ВЫПЕЧКА И ХЛЕБ
+  {id:26, name:'Хачапури по-аджарски', cat:'vypechka', icon:'🧀', desc:'ПП-хачапури — сыр, яйцо, тесто на рисовой муке.', meal:'lunch',
+    per100:{kcal:210,p:11,f:9,c:22}, variants:[{label:'500 г',w:500,price:750}]},
+  {id:27, name:'Бургер ПП', cat:'vypechka', icon:'🍔', desc:'Сочный бургер на ПП-булке с котлетой из индейки.', meal:'lunch',
+    per100:{kcal:195,p:16,f:8,c:16}, variants:[{label:'400 г',w:400,price:650}]},
+  {id:28, name:'Хлеб безглютеновый', cat:'vypechka', icon:'🍞', desc:'Хлеб без глютена — мягкий, ароматный.', meal:'any',
+    per100:{kcal:200,p:6,f:3,c:38}, variants:[{label:'500 г',w:500,price:360}]},
+  {id:29, name:'Хлеб цельнозерновой', cat:'vypechka', icon:'🍞', desc:'На собственной закваске — максимум пользы.', meal:'any',
+    per100:{kcal:220,p:8,f:2,c:42}, variants:[{label:'800 г',w:800,price:640}]},
+  {id:30, name:'Блины сладкие', cat:'vypechka', icon:'🥞', desc:'Тонкие блинчики на рисовой муке.', meal:'breakfast',
+    per100:{kcal:175,p:8,f:4,c:28}, variants:[{label:'5 шт',w:300,price:550}]},
+  {id:31, name:'Блины со шпинатом', cat:'vypechka', icon:'🥬', desc:'Зелёные блинчики со шпинатом — необычно и полезно.', meal:'breakfast',
+    per100:{kcal:165,p:9,f:4,c:24}, variants:[{label:'5 шт',w:300,price:650}]},
+  {id:32, name:'Сочни с творогом', cat:'vypechka', icon:'🥟', desc:'Нежные сочни с творожной начинкой.', meal:'breakfast',
+    per100:{kcal:195,p:10,f:6,c:26}, variants:[{label:'5 шт',w:400,price:800}]},
+  {id:33, name:'Булочки чечевичные', cat:'vypechka', icon:'🫘', desc:'Высокобелковые булочки из чечевицы — много белка!', meal:'any',
+    per100:{kcal:210,p:14,f:3,c:32}, variants:[{label:'5 шт',w:350,price:550}]},
+  {id:34, name:'Пирожки белковые', cat:'vypechka', icon:'🥟', desc:'Начинки: лук+яйцо, курица, говядина, капуста.', meal:'lunch',
+    per100:{kcal:200,p:13,f:5,c:26}, variants:[{label:'5 шт',w:400,price:650}]},
+
+  // КЛАССИЧЕСКИЕ
+  {id:35, name:'Торт классический', cat:'classic', icon:'🎂', desc:'Классический торт с сахаром — для тех, кто хочет традиционный вкус.', meal:'snack',
+    per100:{kcal:320,p:5,f:16,c:40}, variants:[{label:'~1 кг',w:1000,price:2600}]},
+];
+
+// STATE
+let cart = [];
+let activeCategory = 'all';
+
+// RENDER CATALOG
+function renderTabs() {
+  const el = document.getElementById('catalogTabs');
+  el.innerHTML = CATEGORIES.map(c =>
+    `<span class="catalog-tab${c.id===activeCategory?' active':''}" onclick="filterCatalog('${c.id}')">${c.icon?c.icon+' ':''}${c.name}</span>`
+  ).join('');
+}
+
+function renderCatalog() {
+  const grid = document.getElementById('catalogGrid');
+  const items = activeCategory === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === activeCategory);
+  grid.innerHTML = items.map(p => {
+    const v0 = p.variants[0];
+    const multiVar = p.variants.length > 1;
+    const kPer100 = p.per100;
+    return `<div class="product-card">
+      <div class="product-card-img"><span class="cat-icon">${p.icon}</span></div>
+      <div class="product-card-body">
+        <h4>${p.name}</h4>
+        <p class="p-desc">${p.desc}</p>
+        <div class="p-kbzhu">
+          <span>${kPer100.kcal} ккал/100г</span>
+          <span>Б:${kPer100.p}</span>
+          <span>Ж:${kPer100.f}</span>
+          <span>У:${kPer100.c}</span>
+        </div>
+        ${multiVar ? `<div class="p-variants" data-pid="${p.id}">
+          ${p.variants.map((v,i) => `<span class="p-var${i===0?' active':''}" onclick="selectVariant(${p.id},${i},this)">${v.label} — ${fmtPrice(v.price)}</span>`).join('')}
+        </div>` : ''}
+        <div class="p-bottom">
+          <div class="p-price">${fmtPrice(v0.price)} ${!multiVar?`<small>/ ${v0.label}</small>`:''}</div>
+          <button class="btn-add" id="add-${p.id}" onclick="addToCart(${p.id})">В корзину</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterCatalog(catId) {
+  activeCategory = catId;
+  renderTabs();
+  renderCatalog();
+}
+
+function selectVariant(pid, idx, el) {
+  const card = el.closest('.p-variants');
+  card.querySelectorAll('.p-var').forEach(v => v.classList.remove('active'));
+  el.classList.add('active');
+  card.dataset.selectedVar = idx;
+  const p = PRODUCTS.find(x => x.id === pid);
+  const v = p.variants[idx];
+  const priceEl = card.parentElement.querySelector('.p-price');
+  priceEl.innerHTML = `${fmtPrice(v.price)}`;
+}
+
+function getSelectedVariant(pid) {
+  const varEl = document.querySelector(`.p-variants[data-pid="${pid}"]`);
+  if (!varEl) return 0;
+  return parseInt(varEl.dataset.selectedVar || '0');
+}
+
+// CART
+function addToCart(pid) {
+  const p = PRODUCTS.find(x => x.id === pid);
+  const vi = getSelectedVariant(pid);
+  const existing = cart.find(c => c.pid === pid && c.vi === vi);
+  if (existing) { existing.qty++; }
+  else { cart.push({pid, vi, qty:1}); }
+  updateCartUI();
+  const btn = document.getElementById('add-'+pid);
+  btn.textContent = '✓ Добавлено';
+  btn.classList.add('added');
+  setTimeout(() => { btn.textContent = 'В корзину'; btn.classList.remove('added'); }, 1200);
+}
+
+function removeFromCart(idx) {
+  cart.splice(idx, 1);
+  updateCartUI();
+}
+
+function changeQty(idx, delta) {
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) cart.splice(idx, 1);
+  updateCartUI();
+}
+
+function toggleCart() {
+  document.getElementById('cartOverlay').classList.toggle('open');
+  document.getElementById('cartDrawer').classList.toggle('open');
+}
+
+function updateCartUI() {
+  const badge = document.getElementById('cartBadge');
+  const body = document.getElementById('cartBody');
+  const footer = document.getElementById('cartFooter');
+  const totalItems = cart.reduce((s,c) => s+c.qty, 0);
+  badge.textContent = totalItems;
+  badge.classList.toggle('show', totalItems > 0);
+
+  if (cart.length === 0) {
+    body.innerHTML = '<div class="cart-empty">Корзина пуста — добавьте блюда из каталога</div>';
+    footer.style.display = 'none';
+    return;
+  }
+
+  footer.style.display = 'block';
+  let totalPrice = 0, totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
+
+  body.innerHTML = cart.map((item, idx) => {
+    const p = PRODUCTS.find(x => x.id === item.pid);
+    const v = p.variants[item.vi];
+    const price = v.price * item.qty;
+    const w = v.w * item.qty;
+    const kcal = Math.round(p.per100.kcal * w / 100);
+    const pr = Math.round(p.per100.p * w / 100);
+    const fat = Math.round(p.per100.f * w / 100);
+    const carb = Math.round(p.per100.c * w / 100);
+    totalPrice += price; totalKcal += kcal; totalP += pr; totalF += fat; totalC += carb;
+    return `<div class="cart-item">
+      <div class="cart-item-icon">${p.icon}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-detail">${v.label}${item.qty>1?' × '+item.qty:''} · ${kcal} ккал · Б:${pr} Ж:${fat} У:${carb}</div>
+        <div class="cart-item-qty">
+          <button onclick="changeQty(${idx},-1)">−</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty(${idx},1)">+</button>
+        </div>
+        <a class="cart-item-remove" onclick="removeFromCart(${idx})">удалить</a>
+      </div>
+      <div class="cart-item-price">${fmtPrice(price)}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('cartKcal').textContent = fmtNum(totalKcal);
+  document.getElementById('cartP').textContent = totalP + ' г';
+  document.getElementById('cartF').textContent = totalF + ' г';
+  document.getElementById('cartC').textContent = totalC + ' г';
+  document.getElementById('cartTotal').textContent = fmtPrice(totalPrice);
+}
+
+// PLANNER
+const KCAL_OPTIONS = [1300, 1500, 1800, 2000, 2500];
+const DAY_OPTIONS = [1, 2, 3, 4, 5, 7];
+let plannerKcal = 1500;
+let plannerDays = 3;
+const ALL_MEALS = [
+  {id:'breakfast', name:'Завтрак', emoji:'🌅', share:.25},
+  {id:'lunch', name:'Обед', emoji:'🌞', share:.35},
+  {id:'dinner', name:'Ужин', emoji:'🌙', share:.30},
+  {id:'snack', name:'Перекус', emoji:'🍪', share:.10},
+];
+let activeMeals = ['breakfast','lunch','dinner','snack'];
+
+function openPlanner() {
+  if (cart.length === 0) return;
+  document.getElementById('plannerOverlay').classList.add('open');
+  renderPlannerControls();
+  generatePlan();
+}
+
+function closePlanner() {
+  document.getElementById('plannerOverlay').classList.remove('open');
+}
+
+function renderPlannerControls() {
+  document.getElementById('plannerKcal').innerHTML = KCAL_OPTIONS.map(k =>
+    `<span class="planner-target${k===plannerKcal?' active':''}" onclick="setPlannerKcal(${k})">${fmtNum(k)} ккал</span>`
+  ).join('');
+
+  document.getElementById('plannerDays').innerHTML = DAY_OPTIONS.map(d =>
+    `<span class="planner-target${d===plannerDays?' active':''}" onclick="setPlannerDays(${d})">${d} ${declDaysShort(d)}</span>`
+  ).join('');
+
+  document.getElementById('plannerMeals').innerHTML = ALL_MEALS.map(m =>
+    `<span class="planner-meal-btn${activeMeals.includes(m.id)?' active':''}" onclick="toggleMeal('${m.id}')">${m.emoji} ${m.name}</span>`
+  ).join('');
+}
+
+function setPlannerKcal(k) { plannerKcal = k; renderPlannerControls(); generatePlan(); }
+function setPlannerDays(d) { plannerDays = d; renderPlannerControls(); generatePlan(); }
+
+function toggleMeal(mealId) {
+  if (activeMeals.includes(mealId)) {
+    if (activeMeals.length <= 1) return;
+    activeMeals = activeMeals.filter(m => m !== mealId);
+  } else {
+    activeMeals.push(mealId);
+  }
+  renderPlannerControls();
+  generatePlan();
+}
+
+function declDaysShort(n) {
+  const m = n % 10, m2 = n % 100;
+  if (m2 >= 11 && m2 <= 14) return 'дней';
+  if (m === 1) return 'день';
+  if (m >= 2 && m <= 4) return 'дня';
+  return 'дней';
+}
+
+function generatePlan() {
+  const content = document.getElementById('plannerContent');
+  const targetPerDay = plannerKcal;
+  const numDays = plannerDays;
+  const mealsOrder = ALL_MEALS.filter(m => activeMeals.includes(m.id));
+  if (mealsOrder.length === 0) { content.innerHTML = ''; return; }
+
+  const totalShare = mealsOrder.reduce((s, m) => s + m.share, 0);
+  const normMeals = mealsOrder.map(m => ({...m, norm: m.share / totalShare}));
+
+  const cartItems = cart.map(item => {
+    const p = PRODUCTS.find(x => x.id === item.pid);
+    const v = p.variants[item.vi];
+    const w = v.w * item.qty;
+    const kcal = p.per100.kcal * w / 100;
+    return {
+      name: p.name, icon: p.icon, hint: p.meal, totalW: w,
+      kcal, p: p.per100.p * w / 100, f: p.per100.f * w / 100, c: p.per100.c * w / 100,
+    };
   });
-});
 
-// Calculator interaction (visual only for now)
-document.querySelectorAll('.calc-options').forEach(group => {
-  group.querySelectorAll('.calc-opt').forEach(opt => {
-    opt.addEventListener('click', () => {
-      group.querySelectorAll('.calc-opt').forEach(o => o.classList.remove('active'));
-      opt.classList.add('active');
+  const totalCartKcal = cartItems.reduce((s, i) => s + i.kcal, 0);
+  const totalNeeded = targetPerDay * numDays;
+
+  const pool = cartItems.map(it => ({...it, left: 1.0}));
+
+  const hintPriority = {
+    breakfast: ['breakfast','any','snack','lunch','dinner'],
+    lunch: ['lunch','any','dinner','breakfast','snack'],
+    dinner: ['dinner','lunch','any','breakfast','snack'],
+    snack: ['snack','any','breakfast','dinner','lunch'],
+  };
+
+  function pullFromPool(targetKcal, mealId) {
+    let items = [];
+    let got = 0;
+
+    const prio = hintPriority[mealId] || ['any'];
+    const sorted = [...pool].sort((a, b) => {
+      const ai = prio.indexOf(a.hint); const bi = prio.indexOf(b.hint);
+      return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi);
     });
-  });
-});
 
-// Menu tabs (visual only)
-document.querySelectorAll('.menu-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
+    for (const src of sorted) {
+      if (src.left <= 0.001) continue;
+      const avail = src.kcal * src.left;
+      if (avail < 1) continue;
+
+      const need = targetKcal - got;
+      if (need <= 0) break;
+
+      const takeKcal = Math.min(avail, need);
+      const takeFrac = takeKcal / src.kcal;
+
+      src.left -= takeFrac;
+      if (src.left < 0.001) src.left = 0;
+
+      const w = Math.round(src.totalW * takeFrac);
+      items.push({
+        name: src.name, icon: src.icon, grams: w,
+        kcal: Math.round(takeKcal),
+        p: Math.round(src.p * takeFrac),
+        f: Math.round(src.f * takeFrac),
+        c: Math.round(src.c * takeFrac),
+      });
+      got += takeKcal;
+    }
+    return {items, kcal: Math.round(got)};
+  }
+
+  let days = [];
+
+  for (let d = 0; d < numDays; d++) {
+    const poolLeft = pool.reduce((s, p) => s + p.kcal * p.left, 0);
+    if (poolLeft < 10) break;
+
+    let dayMeals = {};
+    let dayKcal = 0;
+
+    for (const ml of normMeals) {
+      const mealTarget = targetPerDay * ml.norm;
+      const result = pullFromPool(mealTarget, ml.id);
+      if (result.items.length > 0) {
+        dayMeals[ml.id] = result;
+        dayKcal += result.kcal;
+      }
+    }
+
+    if (Object.keys(dayMeals).length > 0) {
+      days.push({meals: dayMeals, kcal: dayKcal});
+    }
+  }
+
+  const leftoverKcal = Math.round(pool.reduce((s, p) => s + p.kcal * p.left, 0));
+  const usedKcal = Math.round(totalCartKcal - leftoverKcal);
+  const actualDays = days.length;
+
+  let html = '';
+
+  if (totalCartKcal < targetPerDay) {
+    html += `<div class="planner-warn">В корзине ${fmtNum(Math.round(totalCartKcal))} ккал — этого не хватает даже на 1 день при ${fmtNum(targetPerDay)} ккал/день. Добавьте ещё блюд!</div>`;
+  } else if (actualDays < numDays) {
+    html += `<div class="planner-warn">Еды в корзине хватает на ${actualDays} ${declDaysShort(actualDays)} из ${numDays} при ${fmtNum(targetPerDay)} ккал/день. Добавьте ещё блюд для полного плана.</div>`;
+  }
+
+  if (leftoverKcal > 50 && actualDays === numDays) {
+    html += `<div class="planner-warn" style="background:rgba(91,111,94,.08);color:var(--sage-dark)">После распределения останется ~${fmtNum(leftoverKcal)} ккал — можно добавить ещё ${leftoverKcal >= targetPerDay ? Math.floor(leftoverKcal/targetPerDay)+' '+declDaysShort(Math.floor(leftoverKcal/targetPerDay)) : 'перекусов'}.</div>`;
+  }
+
+  const avgKcal = actualDays ? Math.round(days.reduce((s,d)=>s+d.kcal,0) / actualDays) : 0;
+  const totalUsedP = Math.round(cartItems.reduce((s,i)=>s+i.p,0) * usedKcal / Math.max(1, totalCartKcal));
+  const totalUsedF = Math.round(cartItems.reduce((s,i)=>s+i.f,0) * usedKcal / Math.max(1, totalCartKcal));
+  const totalUsedC = Math.round(cartItems.reduce((s,i)=>s+i.c,0) * usedKcal / Math.max(1, totalCartKcal));
+  const avgP = actualDays ? Math.round(totalUsedP / actualDays) : 0;
+  const avgF = actualDays ? Math.round(totalUsedF / actualDays) : 0;
+  const avgC = actualDays ? Math.round(totalUsedC / actualDays) : 0;
+  const pctP = avgKcal ? Math.round(avgP*4/avgKcal*100) : 0;
+  const pctF = avgKcal ? Math.round(avgF*9/avgKcal*100) : 0;
+  const pctC = avgKcal ? Math.round(avgC*4/avgKcal*100) : 0;
+
+  html += `<div class="planner-summary">
+    <div class="planner-days">${fmtNum(avgKcal)}</div>
+    <div class="planner-days-label">ккал в среднем за день · цель: ${fmtNum(targetPerDay)}</div>
+    <div class="planner-avg">
+      <div class="planner-avg-item"><span class="val">${avgP} г (${pctP}%)</span><span class="lbl">белки</span></div>
+      <div class="planner-avg-item"><span class="val">${avgF} г (${pctF}%)</span><span class="lbl">жиры</span></div>
+      <div class="planner-avg-item"><span class="val">${avgC} г (${pctC}%)</span><span class="lbl">углеводы</span></div>
+    </div>
+  </div>`;
+
+  days.forEach((day, di) => {
+    const dayOk = day.kcal >= targetPerDay * 0.85;
+    html += `<div class="planner-day">
+      <div class="planner-day-title">День ${di+1} <span class="planner-day-kcal" ${!dayOk?'style="color:var(--gold-dark)"':''}>${fmtNum(day.kcal)} ккал${!dayOk?' (не хватает)':''}</span></div>`;
+    for (const ml of normMeals) {
+      if (!day.meals[ml.id]) continue;
+      const m = day.meals[ml.id];
+      html += `<div class="planner-meal">
+        <div class="planner-meal-name">${ml.emoji} ${ml.name} <span style="font-family:'Cormorant Garamond',serif;font-size:.82rem;color:var(--text-muted)">${fmtNum(m.kcal)} ккал</span></div>`;
+      m.items.forEach(it => {
+        html += `<div class="planner-meal-items">${it.icon} ${it.name}${it.grams > 0 ? ' (~'+it.grams+' г)' : ''}</div>
+          <div class="planner-meal-kbzhu">${it.kcal} ккал · Б:${it.p} · Ж:${it.f} · У:${it.c}</div>`;
+      });
+      html += `</div>`;
+    }
+    html += `</div>`;
   });
-});
+
+  content.innerHTML = html;
+}
+
+// HELPERS
+function fmtPrice(n) { return n.toLocaleString('ru-RU') + ' ₽'; }
+function fmtNum(n) { return n.toLocaleString('ru-RU'); }
+function declDays(n) {
+  const m = n % 10, m2 = n % 100;
+  if (m2 >= 11 && m2 <= 14) return n + ' дней';
+  if (m === 1) return n + ' день';
+  if (m >= 2 && m <= 4) return n + ' дня';
+  return n + ' дней';
+}
+
+// INIT
+renderTabs();
+renderCatalog();
+
+const hdr = document.getElementById('header');
+window.addEventListener('scroll', () => hdr.classList.toggle('scrolled', window.scrollY > 10));
+document.querySelectorAll('#nav a').forEach(a => a.addEventListener('click', () => document.getElementById('nav').classList.remove('open')));
 </script>
 </body>
 </html>
