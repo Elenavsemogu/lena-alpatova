@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кулич ПП — ПП Фея Елена Алпатова</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+#lock-screen{position:fixed;inset:0;z-index:9999;background:var(--cream-light,#FAF8F3);display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Cormorant Garamond',serif}
+#lock-screen .lock-box{text-align:center;max-width:340px;padding:40px}
+#lock-screen h2{font-family:'Forum',cursive;font-size:1.6rem;color:#3E4E3F;margin-bottom:8px}
+#lock-screen p{font-size:.95rem;color:#5F6B63;margin-bottom:20px}
+#lock-screen input{width:100%;padding:12px 16px;border:2px solid #E0CFA0;border-radius:10px;font-size:1rem;font-family:'Cormorant Garamond',serif;text-align:center;outline:none;letter-spacing:.15em}
+#lock-screen input:focus{border-color:#5B6F5E}
+#lock-screen button{margin-top:14px;padding:10px 32px;background:#5B6F5E;color:#FAF8F3;border:none;border-radius:10px;font-family:'Forum',cursive;font-size:1rem;cursor:pointer;letter-spacing:.04em}
+#lock-screen button:hover{background:#3E4E3F}
+#lock-screen .lock-err{color:#A68D4B;font-size:.85rem;margin-top:10px;min-height:1.2em}
+.recipe-page{display:none}
+:root{
+  --sage:#5B6F5E;--sage-light:#6B7F6E;--sage-dark:#3E4E3F;
+  --gold:#C9AD6E;--gold-light:#E0CFA0;--gold-dark:#A68D4B;
+  --cream:#F5F0E6;--cream-light:#FAF8F3;--cream-dark:#E8E0D0;
+  --text:#1A1D1A;--text-sec:#3D4340;--text-muted:#5F6B63;
+}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:'Cormorant Garamond',serif;background:var(--cream-light);color:var(--text);line-height:1.6;font-size:16px;margin:0}
+h1,h2,h3,h4{font-family:'Forum',cursive;font-weight:400}
+.recipe-page{width:700px;margin:0 auto;background:var(--cream-light);overflow:hidden}
+.recipe-header{background:var(--sage);color:var(--cream);padding:28px 36px;display:flex;align-items:center;justify-content:space-between}
+.recipe-header h1{font-size:2rem;letter-spacing:.04em;color:var(--cream)}
+.recipe-header .badge{background:var(--gold);color:var(--sage-dark);font-family:'Forum',cursive;font-size:.78rem;letter-spacing:.1em;padding:6px 16px;border-radius:50px;text-transform:uppercase;white-space:nowrap}
+.recipe-hero{display:flex;border-bottom:2px solid var(--gold-light)}
+.recipe-photo{width:280px;min-height:260px;background:var(--cream-dark);flex-shrink:0;overflow:hidden}
+.recipe-photo img{width:100%;height:100%;object-fit:cover}
+.recipe-meta{flex:1;padding:24px 28px;display:flex;flex-direction:column;justify-content:center}
+.recipe-meta h2{font-size:1.5rem;color:var(--sage-dark);margin-bottom:4px}
+.recipe-meta .sub{font-size:.9rem;color:var(--text-muted);margin-bottom:16px;font-style:italic}
+.kbzhu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.kbzhu-box{background:var(--sage);color:var(--cream);border-radius:10px;text-align:center;padding:10px 4px}
+.kbzhu-box .val{font-family:'Forum',cursive;font-size:1.5rem;display:block;line-height:1.2}
+.kbzhu-box .lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;opacity:.8}
+.kbzhu-note{font-size:.75rem;color:var(--text-muted);margin-top:10px;text-align:center}
+.recipe-section{padding:24px 36px}
+.recipe-section h3{font-size:1.15rem;color:var(--sage-dark);margin-bottom:14px;padding-bottom:6px;border-bottom:1.5px solid var(--gold-light);letter-spacing:.06em}
+.ing-table{width:100%;border-collapse:collapse}
+.ing-table th{background:var(--sage);color:var(--cream);font-family:'Forum',cursive;font-weight:400;font-size:.85rem;letter-spacing:.06em;padding:8px 14px;text-align:left}
+.ing-table th:last-child{text-align:right;width:90px}
+.ing-table td{padding:7px 14px;font-size:.92rem;border-bottom:1px solid var(--cream-dark)}
+.ing-table td:last-child{text-align:right;color:var(--sage);font-family:'Forum',cursive;font-size:.95rem}
+.ing-table tr:nth-child(even) td{background:rgba(91,111,94,.03)}
+.ing-table tr:last-child td{border-bottom:none}
+.ing-sub{font-family:'Forum',cursive;font-size:.9rem;color:var(--gold-dark);padding:10px 14px 6px;background:rgba(201,173,110,.08);font-style:italic}
+.steps-list{list-style:none;counter-reset:step}
+.steps-list li{counter-increment:step;position:relative;padding:8px 0 8px 36px;font-size:.92rem;color:var(--text-sec);border-bottom:1px solid var(--cream-dark)}
+.steps-list li:last-child{border-bottom:none}
+.steps-list li::before{content:counter(step);position:absolute;left:0;top:8px;width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--sage-dark);font-family:'Forum',cursive;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.recipe-footer{background:var(--sage-dark);color:rgba(240,237,229,.6);padding:14px 36px;display:flex;align-items:center;justify-content:space-between;font-size:.78rem}
+.recipe-footer .brand{font-family:'Forum',cursive;font-size:.9rem;color:var(--gold-light);letter-spacing:.06em}
+.recipe-footer span:last-child{color:var(--gold-light)}
+.deco-line{height:3px;background:linear-gradient(90deg,var(--gold-light),var(--sage),var(--gold-light))}
+.storage{margin-top:12px;padding:10px 14px;background:rgba(201,173,110,.1);border-radius:8px;font-size:.85rem;color:var(--gold-dark);font-style:italic;text-align:center}
+@media print{
+  body{background:#fff}
+  .recipe-page{box-shadow:none;margin:0;width:100%}
+}
+</style>
+</head>
+<body>
+
+<div id="lock-screen">
+  <div class="lock-box">
+    <h2>Рецепт защищён</h2>
+    <p>Введите пароль для доступа</p>
+    <input type="password" id="lockPass" placeholder="Пароль" autofocus onkeydown="if(event.key==='Enter')unlock()">
+    <button onclick="unlock()">Войти</button>
+    <div class="lock-err" id="lockErr"></div>
+  </div>
+</div>
+
+<div class="recipe-page">
+  <div class="recipe-header">
+    <h1>Кулич ПП</h1>
+    <span class="badge">Без сахара</span>
+  </div>
+
+  <div class="recipe-hero">
+    <div class="recipe-photo">
+      <img src="kulich-photo.png" alt="ПП Кулич">
+    </div>
+    <div class="recipe-meta">
+      <h2>Пасхальный кулич</h2>
+      <p class="sub">Цельнозерновая мука · без сахара · форма 9 см</p>
+      <div class="kbzhu-grid">
+        <div class="kbzhu-box"><span class="val">198</span><span class="lbl">ккал</span></div>
+        <div class="kbzhu-box"><span class="val">12</span><span class="lbl">белки</span></div>
+        <div class="kbzhu-box"><span class="val">6</span><span class="lbl">жиры</span></div>
+        <div class="kbzhu-box"><span class="val">36</span><span class="lbl">углев.</span></div>
+      </div>
+      <p class="kbzhu-note">КБЖУ на 100 г · вес готового кулича ~450 г</p>
+    </div>
+  </div>
+
+  <div class="deco-line"></div>
+
+  <div class="recipe-section">
+    <h3>Ингредиенты</h3>
+    <table class="ing-table">
+      <tr><th>Продукт</th><th>Кол-во</th></tr>
+      <tr><td>Творог</td><td>100 г</td></tr>
+      <tr><td>Йогурт белый</td><td>60 г</td></tr>
+      <tr><td>Мука пшеничная цельнозерновая</td><td>60 г</td></tr>
+      <tr><td>Яйцо</td><td>1 шт</td></tr>
+      <tr><td>Цедра апельсина</td><td>8 г</td></tr>
+      <tr><td>Сок апельсина</td><td>15 г</td></tr>
+      <tr><td>Сода</td><td>2 г</td></tr>
+      <tr><td>Сахарозаменитель</td><td>4 г</td></tr>
+      <tr><td>Сухофрукты (курага, изюм и т.д.)</td><td>90 г</td></tr>
+      <tr><td>Грецкий орех</td><td>60 г</td></tr>
+    </table>
+
+    <p class="ing-sub">Глазурь</p>
+    <table class="ing-table">
+      <tr><th>Продукт</th><th>Кол-во</th></tr>
+      <tr><td>Сироп топинамбура</td><td>50 г</td></tr>
+      <tr><td>Желатин быстрорастворимый</td><td>3 г</td></tr>
+      <tr><td>Вода</td><td>25 г</td></tr>
+    </table>
+  </div>
+
+  <div class="deco-line"></div>
+
+  <div class="recipe-section">
+    <h3>Приготовление — тесто</h3>
+    <ol class="steps-list">
+      <li>Замочить в горячей воде сухофрукты, хорошо просушить и нарезать, если необходимо</li>
+      <li>Орехи мелко нарезать</li>
+      <li>Соединить творог, йогурт, яйцо, цедру апельсина и пробить блендером</li>
+      <li>Добавить сок апельсина, ещё раз перемешать</li>
+      <li>Смешать сухие ингредиенты: сода, мука, сахарозаменитель</li>
+      <li>Соединить обе массы, перемешать</li>
+      <li>Добавить орехи и сухофрукты, ещё раз перемешать</li>
+      <li>Форму смазать небольшим количеством масла и выложить тесто</li>
+      <li>Разогреть духовку до 180°C, поставить кулич и выпекать 20 минут</li>
+      <li>Снизить температуру до 160°C и выпекать ещё 45 минут. Проверить готовность шпажкой</li>
+      <li>Дать полностью остыть</li>
+    </ol>
+  </div>
+
+  <div class="recipe-section" style="padding-top:0">
+    <h3>Приготовление — глазурь</h3>
+    <ol class="steps-list">
+      <li>Замочить желатин в холодной воде</li>
+      <li>После набухания прогреть</li>
+      <li>Нагреть сироп топинамбура до кипения</li>
+      <li>Начать взбивать желатин насадкой-венчиком и одновременно влить в него сироп</li>
+      <li>При взбивании масса начнёт светлеть</li>
+      <li>Когда масса станет упругой — готово</li>
+      <li>Сразу покрыть шапку кулича</li>
+    </ol>
+    <div class="storage">Хранить в холодильнике · Срок годности: 72 часа</div>
+  </div>
+
+  <div class="recipe-footer">
+    <span class="brand">ПП Фея — Елена Алпатова</span>
+    <span>Max: +7 923 776-53-84</span>
+  </div>
+</div>
+
+<script>
+function unlock(){
+  var p=document.getElementById('lockPass').value;
+  if(p==='9237765384'){
+    document.getElementById('lock-screen').style.display='none';
+    document.querySelector('.recipe-page').style.display='block';
+  } else {
+    document.getElementById('lockErr').textContent='Неверный пароль';
+    document.getElementById('lockPass').value='';
+    document.getElementById('lockPass').focus();
+  }
+}
+</script>
+</body>
+</html>

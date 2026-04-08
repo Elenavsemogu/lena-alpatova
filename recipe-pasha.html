@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Творожная пасха — ПП Фея Елена Алпатова</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+#lock-screen{position:fixed;inset:0;z-index:9999;background:var(--cream-light,#FAF8F3);display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Cormorant Garamond',serif}
+#lock-screen .lock-box{text-align:center;max-width:340px;padding:40px}
+#lock-screen h2{font-family:'Forum',cursive;font-size:1.6rem;color:#3E4E3F;margin-bottom:8px}
+#lock-screen p{font-size:.95rem;color:#5F6B63;margin-bottom:20px}
+#lock-screen input{width:100%;padding:12px 16px;border:2px solid #E0CFA0;border-radius:10px;font-size:1rem;font-family:'Cormorant Garamond',serif;text-align:center;outline:none;letter-spacing:.15em}
+#lock-screen input:focus{border-color:#5B6F5E}
+#lock-screen button{margin-top:14px;padding:10px 32px;background:#5B6F5E;color:#FAF8F3;border:none;border-radius:10px;font-family:'Forum',cursive;font-size:1rem;cursor:pointer;letter-spacing:.04em}
+#lock-screen button:hover{background:#3E4E3F}
+#lock-screen .lock-err{color:#A68D4B;font-size:.85rem;margin-top:10px;min-height:1.2em}
+.recipe-page{display:none}
+:root{
+  --sage:#5B6F5E;--sage-light:#6B7F6E;--sage-dark:#3E4E3F;
+  --gold:#C9AD6E;--gold-light:#E0CFA0;--gold-dark:#A68D4B;
+  --cream:#F5F0E6;--cream-light:#FAF8F3;--cream-dark:#E8E0D0;
+  --text:#1A1D1A;--text-sec:#3D4340;--text-muted:#5F6B63;
+}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:'Cormorant Garamond',serif;background:var(--cream-light);color:var(--text);line-height:1.6;font-size:16px;margin:0}
+h1,h2,h3,h4{font-family:'Forum',cursive;font-weight:400}
+.recipe-page{width:700px;margin:0 auto;background:var(--cream-light);overflow:hidden}
+.recipe-header{background:var(--sage);color:var(--cream);padding:28px 36px;display:flex;align-items:center;justify-content:space-between}
+.recipe-header h1{font-size:2rem;letter-spacing:.04em;color:var(--cream)}
+.recipe-header .badge{background:var(--gold);color:var(--sage-dark);font-family:'Forum',cursive;font-size:.78rem;letter-spacing:.1em;padding:6px 16px;border-radius:50px;text-transform:uppercase;white-space:nowrap}
+.recipe-hero{display:flex;border-bottom:2px solid var(--gold-light)}
+.recipe-photo{width:280px;min-height:260px;background:var(--cream-dark);flex-shrink:0;overflow:hidden}
+.recipe-photo img{width:100%;height:100%;object-fit:cover}
+.recipe-meta{flex:1;padding:24px 28px;display:flex;flex-direction:column;justify-content:center}
+.recipe-meta h2{font-size:1.5rem;color:var(--sage-dark);margin-bottom:4px}
+.recipe-meta .sub{font-size:.9rem;color:var(--text-muted);margin-bottom:16px;font-style:italic}
+.kbzhu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.kbzhu-box{background:var(--sage);color:var(--cream);border-radius:10px;text-align:center;padding:10px 4px}
+.kbzhu-box .val{font-family:'Forum',cursive;font-size:1.5rem;display:block;line-height:1.2}
+.kbzhu-box .lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;opacity:.8}
+.kbzhu-note{font-size:.75rem;color:var(--text-muted);margin-top:10px;text-align:center}
+.recipe-section{padding:24px 36px}
+.recipe-section h3{font-size:1.15rem;color:var(--sage-dark);margin-bottom:14px;padding-bottom:6px;border-bottom:1.5px solid var(--gold-light);letter-spacing:.06em}
+.ing-table{width:100%;border-collapse:collapse}
+.ing-table th{background:var(--sage);color:var(--cream);font-family:'Forum',cursive;font-weight:400;font-size:.85rem;letter-spacing:.06em;padding:8px 14px;text-align:left}
+.ing-table th:last-child{text-align:right;width:90px}
+.ing-table td{padding:7px 14px;font-size:.92rem;border-bottom:1px solid var(--cream-dark)}
+.ing-table td:last-child{text-align:right;color:var(--sage);font-family:'Forum',cursive;font-size:.95rem}
+.ing-table tr:nth-child(even) td{background:rgba(91,111,94,.03)}
+.ing-table tr:last-child td{border-bottom:none}
+.steps-list{list-style:none;counter-reset:step}
+.steps-list li{counter-increment:step;position:relative;padding:8px 0 8px 36px;font-size:.92rem;color:var(--text-sec);border-bottom:1px solid var(--cream-dark)}
+.steps-list li:last-child{border-bottom:none}
+.steps-list li::before{content:counter(step);position:absolute;left:0;top:8px;width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--sage-dark);font-family:'Forum',cursive;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.recipe-footer{background:var(--sage-dark);color:rgba(240,237,229,.6);padding:14px 36px;display:flex;align-items:center;justify-content:space-between;font-size:.78rem}
+.recipe-footer .brand{font-family:'Forum',cursive;font-size:.9rem;color:var(--gold-light);letter-spacing:.06em}
+.recipe-footer span:last-child{color:var(--gold-light)}
+.deco-line{height:3px;background:linear-gradient(90deg,var(--gold-light),var(--sage),var(--gold-light))}
+.storage{margin-top:12px;padding:10px 14px;background:rgba(201,173,110,.1);border-radius:8px;font-size:.85rem;color:var(--gold-dark);font-style:italic;text-align:center}
+@media print{
+  body{background:#fff}
+  .recipe-page{box-shadow:none;margin:0;width:100%}
+}
+</style>
+</head>
+<body>
+
+<div id="lock-screen">
+  <div class="lock-box">
+    <h2>Рецепт защищён</h2>
+    <p>Введите пароль для доступа</p>
+    <input type="password" id="lockPass" placeholder="Пароль" autofocus onkeydown="if(event.key==='Enter')unlock()">
+    <button onclick="unlock()">Войти</button>
+    <div class="lock-err" id="lockErr"></div>
+  </div>
+</div>
+
+<div class="recipe-page">
+  <div class="recipe-header">
+    <h1>Творожная пасха</h1>
+    <span class="badge">Без сахара</span>
+  </div>
+
+  <div class="recipe-hero">
+    <div class="recipe-photo">
+      <img src="pasha-photo.png" alt="Творожная пасха">
+    </div>
+    <div class="recipe-meta">
+      <h2>Творожная пасха</h2>
+      <p class="sub">Рикотта · фундук · без выпечки</p>
+      <div class="kbzhu-grid">
+        <div class="kbzhu-box"><span class="val">230</span><span class="lbl">ккал</span></div>
+        <div class="kbzhu-box"><span class="val">9</span><span class="lbl">белки</span></div>
+        <div class="kbzhu-box"><span class="val">17</span><span class="lbl">жиры</span></div>
+        <div class="kbzhu-box"><span class="val">11</span><span class="lbl">углев.</span></div>
+      </div>
+      <p class="kbzhu-note">КБЖУ на 100 г</p>
+    </div>
+  </div>
+
+  <div class="deco-line"></div>
+
+  <div class="recipe-section">
+    <h3>Ингредиенты</h3>
+    <table class="ing-table">
+      <tr><th>Продукт</th><th>Кол-во</th></tr>
+      <tr><td>Рикотта</td><td>250 г</td></tr>
+      <tr><td>Творожный сыр</td><td>120 г</td></tr>
+      <tr><td>Мягкий творог 5%</td><td>80 г</td></tr>
+      <tr><td>Изюм</td><td>40 г</td></tr>
+      <tr><td>Фундук</td><td>50 г</td></tr>
+      <tr><td>Фит парад №7 или Пребиосвит Фитнес</td><td>6 г</td></tr>
+      <tr><td>Сироп топинамбура</td><td>30 г</td></tr>
+      <tr><td>Ваниль</td><td>1 г</td></tr>
+    </table>
+  </div>
+
+  <div class="deco-line"></div>
+
+  <div class="recipe-section">
+    <h3>Приготовление</h3>
+    <ol class="steps-list">
+      <li>Смешать рикотту, творожный сыр, мягкий творог, сироп топинамбура, сахарозаменитель и пробить блендером (не долго, главное — чтобы масса объединилась)</li>
+      <li>Фундук обжарить, очистить, порубить. Изюм обдать кипятком, вытереть насухо бумажной салфеткой</li>
+      <li>Смешать изюм и орехи с сырной массой</li>
+      <li>Марлю намочить, отжать, сложить в два слоя и застелить ей форму. Выложить сырную массу. Завернуть концы марли, сверху поставить плоскую тарелку и убрать на 12 часов в холодильник под пресс</li>
+      <li>Готовую пасху аккуратно переложить в тарелку, снять марлю и украсить по желанию</li>
+    </ol>
+    <div class="storage">Хранить в холодильнике · Под прессом 12 часов</div>
+  </div>
+
+  <div class="recipe-footer">
+    <span class="brand">ПП Фея — Елена Алпатова</span>
+    <span>Max: +7 923 776-53-84</span>
+  </div>
+</div>
+
+<script>
+function unlock(){
+  var p=document.getElementById('lockPass').value;
+  if(p==='9237765384'){
+    document.getElementById('lock-screen').style.display='none';
+    document.querySelector('.recipe-page').style.display='block';
+  } else {
+    document.getElementById('lockErr').textContent='Неверный пароль';
+    document.getElementById('lockPass').value='';
+    document.getElementById('lockPass').focus();
+  }
+}
+</script>
+</body>
+</html>
