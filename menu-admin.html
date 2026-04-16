@@ -3,85 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Меню — Админ-панель</title>
+<title>Меню — База блюд</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Forum&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --sage:#5B6F5E;--sage-light:#6B7F6E;--sage-dark:#3E4E3F;
+  --sage:#5B6F5E;--sage-light:#8BA08E;--sage-dark:#3E4E3F;--sage-bg:#E8EDE9;
   --gold:#C9AD6E;--gold-light:#E0CFA0;--gold-dark:#A68D4B;
-  --cream:#F5F0E6;--cream-light:#FAF8F3;--cream-dark:#E8E0D0;
+  --cream:#F5F0E6;--cream-light:#FAFAF7;--cream-dark:#E8E0D0;
   --red:#C25B56;--green:#5B8C5A;--orange:#D4A24E;
-  --text:#1A1D1A;--text-sec:#3D4340;--text-muted:#5F6B63;
+  --text:#1E1E1E;--text2:#444;--text3:#888;
 }
-body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);font-size:14px;line-height:1.5}
+body{font-family:'Inter',sans-serif;background:#F0EDE6;color:var(--text);font-size:14px}
 
+/* LOCK */
 #lock-screen{position:fixed;inset:0;z-index:9999;background:var(--cream-light);display:flex;align-items:center;justify-content:center}
 #lock-screen .lock-box{text-align:center;max-width:340px;padding:40px}
 #lock-screen h2{font-family:'Forum',cursive;font-size:1.6rem;color:var(--sage-dark);margin-bottom:8px}
-#lock-screen p{font-size:.9rem;color:var(--text-muted);margin-bottom:20px}
+#lock-screen p{font-size:.9rem;color:var(--text3);margin-bottom:20px}
 #lock-screen input{width:100%;padding:12px 16px;border:2px solid var(--gold-light);border-radius:10px;font-size:1rem;text-align:center;outline:none;letter-spacing:.15em}
 #lock-screen input:focus{border-color:var(--sage)}
-#lock-screen button{margin-top:14px;padding:10px 32px;background:var(--sage);color:var(--cream-light);border:none;border-radius:10px;font-family:'Forum',cursive;font-size:1rem;cursor:pointer}
-#lock-screen button:hover{background:var(--sage-dark)}
+#lock-screen button{margin-top:14px;padding:10px 32px;background:var(--sage);color:#fff;border:none;border-radius:10px;font-family:'Forum',cursive;font-size:1rem;cursor:pointer}
 #lock-screen .lock-err{color:var(--red);font-size:.85rem;margin-top:10px;min-height:1.2em}
 
 #app{display:none}
 
-.topbar{background:var(--sage-dark);color:var(--cream);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.topbar h1{font-family:'Forum',cursive;font-size:1.3rem;letter-spacing:.04em}
-.topbar-actions{display:flex;gap:10px}
-.topbar-actions button{padding:8px 16px;border:1.5px solid var(--gold-light);background:transparent;color:var(--gold-light);border-radius:8px;font-size:.8rem;cursor:pointer;font-weight:500;transition:.2s}
-.topbar-actions button:hover{background:var(--gold-light);color:var(--sage-dark)}
-.topbar-actions button.primary{background:var(--gold);color:var(--sage-dark);border-color:var(--gold)}
+/* TOPBAR */
+.topbar{
+  background:var(--sage-dark);color:#fff;padding:14px 20px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  position:sticky;top:0;z-index:200;
+}
+.topbar h1{font-family:'Forum',cursive;font-size:1.15rem;letter-spacing:.03em;white-space:nowrap}
+.topbar input{
+  flex:1;min-width:160px;padding:7px 12px;border:none;border-radius:6px;
+  font-size:.82rem;outline:none;background:rgba(255,255,255,.15);color:#fff;
+}
+.topbar input::placeholder{color:rgba(255,255,255,.5)}
+.topbar select{
+  padding:7px 10px;border:none;border-radius:6px;font-size:.82rem;
+  background:rgba(255,255,255,.15);color:#fff;outline:none;
+}
+.topbar select option{color:#333;background:#fff}
+.topbar .stats{font-size:.75rem;color:rgba(255,255,255,.6);white-space:nowrap}
+.topbar .btn{
+  padding:7px 14px;border:1px solid rgba(255,255,255,.3);background:transparent;
+  color:#fff;border-radius:6px;font-size:.75rem;cursor:pointer;white-space:nowrap;
+}
+.topbar .btn:hover{background:rgba(255,255,255,.1)}
 
-.toolbar{background:var(--cream-light);padding:12px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--cream-dark)}
-.toolbar input[type=text]{flex:1;min-width:200px;padding:8px 14px;border:1.5px solid var(--cream-dark);border-radius:8px;font-size:.85rem;outline:none}
-.toolbar input:focus{border-color:var(--sage)}
-.toolbar select{padding:8px 12px;border:1.5px solid var(--cream-dark);border-radius:8px;font-size:.85rem;outline:none;background:#fff}
-.toolbar .stats{margin-left:auto;font-size:.8rem;color:var(--text-muted)}
+/* TABLE */
+.table-wrap{overflow-x:auto;padding:0 8px 60px}
+table{width:100%;border-collapse:separate;border-spacing:0;min-width:900px}
+thead{position:sticky;top:48px;z-index:100}
+th{
+  background:var(--sage);color:#fff;padding:10px 12px;
+  font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;
+  text-align:left;font-weight:600;white-space:nowrap;
+  border-bottom:3px solid var(--gold);
+}
+th:first-child{border-radius:8px 0 0 0}
+th:last-child{border-radius:0 8px 0 0}
+th.r{text-align:right}
+th.c{text-align:center}
+th.kbju-group{background:var(--sage-dark);text-align:center;min-width:120px}
 
-.badge-ok{background:var(--green);color:#fff;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600}
-.badge-warn{background:var(--orange);color:#fff;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600}
-.badge-miss{background:var(--red);color:#fff;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600}
-.badge-cat{background:var(--sage);color:var(--cream);padding:2px 8px;border-radius:10px;font-size:.7rem}
-.badge-removed{background:#999;color:#fff;padding:2px 8px;border-radius:10px;font-size:.7rem;text-decoration:line-through}
+td{
+  padding:10px 12px;font-size:.82rem;vertical-align:middle;
+  border-bottom:1px solid #E5E0D5;background:var(--cream-light);
+}
+tr:nth-child(even) td{background:#F5F2EB}
+tr:hover td{background:#EBE8DF}
+tr.removed td{opacity:.4;text-decoration:line-through}
+td.r{text-align:right;font-variant-numeric:tabular-nums}
+td.c{text-align:center}
+td.name{font-weight:600;font-size:.85rem;max-width:220px}
+td.name .cat{display:block;font-weight:400;font-size:.7rem;color:var(--sage);margin-top:2px}
+td.price{font-weight:700;font-size:.9rem;color:var(--sage-dark);white-space:nowrap}
 
-.table-wrap{overflow-x:auto;padding:0 12px 40px}
-table{width:100%;border-collapse:collapse;min-width:1400px}
-thead{position:sticky;top:56px;z-index:50}
-th{background:var(--sage);color:var(--cream);padding:10px 8px;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;text-align:left;white-space:nowrap;font-weight:600;cursor:pointer;user-select:none}
-th:hover{background:var(--sage-light)}
-th.private{background:var(--sage-dark)}
-td{padding:8px;border-bottom:1px solid var(--cream-dark);font-size:.82rem;vertical-align:top}
-tr:hover td{background:rgba(91,111,94,.04)}
-tr.removed td{opacity:.5;text-decoration:line-through}
-td.num{text-align:right;font-variant-numeric:tabular-nums}
-td.private{background:rgba(201,173,110,.06)}
-td.name-cell{font-weight:600;max-width:200px}
-td.name-cell .sub{font-weight:400;color:var(--text-muted);font-size:.75rem}
-td.comp{max-width:250px;font-size:.75rem;color:var(--text-sec)}
-td.notes{max-width:180px;font-size:.75rem;color:var(--text-muted);font-style:italic}
+/* KBJU cells */
+td.kbju{
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+  font-size:.8rem;text-align:center;
+}
+td.kbju .k{font-weight:700;color:var(--sage-dark);font-size:.88rem}
+td.kbju .bju{color:var(--text2);font-size:.72rem;margin-top:1px}
+td.kbju.empty{color:var(--text3);font-style:italic;font-size:.72rem}
 
-.legend{padding:16px 24px;background:var(--cream-light);border-bottom:1px solid var(--cream-dark);display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;align-items:center}
-.legend span{display:flex;align-items:center;gap:4px}
+/* STATUS */
+.st{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle}
+.st-ok{background:var(--green)}
+.st-miss{background:var(--red)}
 
-.gs-info{padding:16px 24px;background:rgba(201,173,110,.1);border-bottom:1px solid var(--gold-light);font-size:.82rem;color:var(--text-sec)}
-.gs-info code{background:rgba(0,0,0,.05);padding:2px 6px;border-radius:4px;font-size:.78rem}
-.gs-info a{color:var(--sage);font-weight:500}
+/* COMPOSITION */
+td.comp{font-size:.72rem;color:var(--text2);max-width:260px;line-height:1.4}
+td.notes-cell{font-size:.72rem;color:var(--text3);max-width:180px;font-style:italic}
 
+/* RESPONSIVE */
 @media(max-width:768px){
-  .topbar h1{font-size:1rem}
-  .toolbar{flex-direction:column}
-  .toolbar .stats{margin-left:0}
+  .topbar{padding:10px 12px}
+  .topbar h1{font-size:.95rem}
+  th,td{padding:8px 6px}
 }
 @media print{
   #lock-screen{display:none!important}
   #app{display:block!important}
-  .topbar,.toolbar,.topbar-actions,.legend,.gs-info{display:none}
-  td.private,th.private{display:none}
+  .topbar{position:relative;background:#333;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  thead{position:relative}
 }
 </style>
 </head>
@@ -89,7 +119,7 @@ td.notes{max-width:180px;font-size:.75rem;color:var(--text-muted);font-style:ita
 
 <div id="lock-screen">
   <div class="lock-box">
-    <h2>Меню — Админ</h2>
+    <h2>База блюд</h2>
     <p>Введите пароль</p>
     <input type="password" id="lockPass" placeholder="Пароль" autofocus onkeydown="if(event.key==='Enter')unlock()">
     <button onclick="unlock()">Войти</button>
@@ -99,39 +129,16 @@ td.notes{max-width:180px;font-size:.75rem;color:var(--text-muted);font-style:ita
 
 <div id="app">
   <div class="topbar">
-    <h1>Меню ПП Феи — полная база</h1>
-    <div class="topbar-actions">
-      <button onclick="togglePrivate()">Скрыть/показать приватные</button>
-      <button onclick="exportCSV()" class="primary">Экспорт CSV → Google Sheets</button>
-    </div>
-  </div>
-
-  <div class="gs-info" id="gsInfo">
-    <strong>Google Sheets:</strong> Нажмите «Экспорт CSV» → импортируйте в Google Таблицу → опубликуйте (<em>Файл → Поделиться → Опубликовать</em> как CSV) → вставьте URL в поле ниже.<br>
-    <input type="text" id="gsUrl" placeholder="URL опубликованной Google Таблицы" style="margin-top:8px;width:100%;max-width:600px;padding:6px 10px;border:1.5px solid var(--cream-dark);border-radius:6px;font-size:.82rem">
-    <button onclick="syncFromSheet()" style="margin-left:8px;padding:6px 14px;background:var(--sage);color:#fff;border:none;border-radius:6px;font-size:.82rem;cursor:pointer">Синхронизировать</button>
-  </div>
-
-  <div class="legend">
-    <strong>Статус КБЖУ:</strong>
-    <span><span class="badge-ok">ОК</span> подтверждено Леной</span>
-    <span><span class="badge-warn">~</span> оценка / неточно</span>
-    <span><span class="badge-miss">?</span> нет данных</span>
-    <span style="margin-left:16px"><span style="background:rgba(201,173,110,.15);padding:2px 6px;border-radius:4px;font-size:.72rem">жёлтый фон</span> приватные столбцы (не для клиентов)</span>
-  </div>
-
-  <div class="toolbar">
-    <input type="text" id="search" placeholder="Поиск по названию..." oninput="renderTable()">
-    <select id="catFilter" onchange="renderTable()">
-      <option value="all">Все категории</option>
+    <h1>База блюд ПП Феи</h1>
+    <input type="text" id="search" placeholder="Поиск..." oninput="render()">
+    <select id="catFilter" onchange="render()"></select>
+    <select id="statusFilter" onchange="render()">
+      <option value="all">Все</option>
+      <option value="confirmed">КБЖУ есть</option>
+      <option value="missing">КБЖУ нет</option>
     </select>
-    <select id="statusFilter" onchange="renderTable()">
-      <option value="all">Все статусы КБЖУ</option>
-      <option value="confirmed">Подтверждено</option>
-      <option value="estimate">Оценка</option>
-      <option value="missing">Нет данных</option>
-    </select>
-    <div class="stats" id="stats"></div>
+    <span class="stats" id="stats"></span>
+    <button class="btn" onclick="exportCSV()">Скачать CSV</button>
   </div>
 
   <div class="table-wrap">
@@ -161,380 +168,172 @@ const CATS = {
 };
 
 const MENU = [
-  // === ТОРТЫ ПП ===
-  {id:1, name:'Бенто-торт', cat:'torty', variant:'750 г', w:750, price:2400,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'', active:true},
-  {id:2, name:'Бенто-торт макси', cat:'torty', variant:'1.1 кг', w:1100, price:3200,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'', active:true},
-  {id:3, name:'Торт ПП', cat:'torty', variant:'1 кг', w:1000, price:2600,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'', active:true},
-  {id:4, name:'Муссовые торты', cat:'torty', variant:'1 кг', w:1000, price:2800,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'Нежнейший мусс, начинка ягодная по желанию, бисквит, покрытие велюр', recipe:'',
-    status:'missing', notes:'Цена за кг. Форма на выбор. Декор индивидуально.', active:true},
-  {id:5, name:'Муссовый торт Три шоколада', cat:'torty', variant:'1 кг', w:1000, price:3800,
-    kcal:239,p:8,f:16,c:15, meal:'перекус', type:'ПП',
-    composition:'Мука полбяная, мука соевая, разрыхлитель, яйца, алкализованный какао, какао масло, молоко, желатин, эритоитол, суркалоза, сухое обезжиренное молоко, ванильный экстракт, горький шоколад б/с, молочный шоколад б/с',
-    recipe:'', status:'confirmed', notes:'КБЖУ 238,8/8,3/16,1/15,4 (округлено)', active:true},
-  {id:6, name:'Торт медовик ПП', cat:'torty', variant:'1 кг', w:1000, price:2400,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'Крем на основе арахисовой пасты', recipe:'',
-    status:'missing', notes:'Цена за кг. Мин. заказ от 2 кг.', active:true},
-  {id:7, name:'Торт ПП Наполеон', cat:'torty', variant:'1 кг', w:1000, price:2400,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'Цена за кг. Мин. заказ от 2 кг.', active:true},
-  {id:8, name:'Торт молочная девочка', cat:'torty', variant:'—', w:null, price:null,
-    kcal:149,p:10,f:5,c:15, meal:'перекус', type:'ПП',
-    composition:'Нежные молочные коржи, творожно-заварной крем. Начинка любая (банан и др.)', recipe:'',
-    status:'confirmed', notes:'КБЖУ 149/9,9/5,4/14,9. Цена и вес уточнить.', active:true},
-  {id:9, name:'Веган торт', cat:'torty', variant:'1 кг', w:1000, price:2800,
-    kcal:228,p:9,f:11,c:19, meal:'перекус', type:'Веган',
-    composition:'Шоколадный бисквит, солёная карамель с арахисом, заварной арахисовый крем. Миндальная мука, полбяная мука, пюре из груш, яблочный уксус, разрыхлитель, сироп топинамбура, овсяное молоко, кокосовые сливки, арахис, кокосовый сахар, кокосовое масло, эритритол, кукурузный крахмал',
-    recipe:'', status:'confirmed', notes:'Цена от 2800 р/кг. Также порционно: 360 г = 760 р.', active:true},
-  {id:10, name:'Чизкейк с манго', cat:'torty', variant:'—', w:null, price:null,
-    kcal:138,p:11,f:3,c:12, meal:'перекус', type:'ПП',
-    composition:'Творог, яйца, манго, ц/з мука, эритрит, виноградное масло', recipe:'',
-    status:'confirmed', notes:'Цена в новом прайсе не указана. В старом: 2300 р.', active:true},
-  {id:11, name:'Чизкейк (мандариновый)', cat:'torty', variant:'—', w:null, price:null,
-    kcal:163,p:11,f:9,c:18, meal:'перекус', type:'ПП',
-    composition:'Песочная основа, мандариновое компоте, нежный творожно-сливочный чиз', recipe:'',
-    status:'confirmed', notes:'Из Instagram. Цена/вес уточнить.', active:true},
-  {id:12, name:'Чизкейк с фундуком', cat:'torty', variant:'—', w:null, price:null,
-    kcal:199,p:9,f:10,c:19, meal:'перекус', type:'ПП',
-    composition:'Шоколадная основа из печенья собственного приготовления, сырно-сливочная основа, карамель с обжаренным фундуком. Кокосовое масло, молоко рисовое, агар агар, топинамбур, полбяная мука, эритритол, разрыхлитель, какао алкализованный, яйца, сыр рикотта лайт, ванильный экстракт, фундук, изомальт',
-    recipe:'', status:'confirmed', notes:'Он же «Чизкейк Нью-Йорк». Цена/вес уточнить. В старом прайсе: 2600 р.', active:true},
+  {id:1, name:'Бенто-торт', cat:'torty', variant:'750 г', w:750, price:2400, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
+  {id:2, name:'Бенто-торт макси', cat:'torty', variant:'1.1 кг', w:1100, price:3200, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
+  {id:3, name:'Торт ПП', cat:'torty', variant:'1 кг', w:1000, price:2600, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
+  {id:4, name:'Муссовые торты', cat:'torty', variant:'1 кг', w:1000, price:2800, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'Мусс, ягодная начинка, бисквит, велюр', recipe:'', status:'missing', notes:'Цена за кг. Форма на выбор.', active:true},
+  {id:5, name:'Муссовый Три шоколада', cat:'torty', variant:'1 кг', w:1000, price:3800, kcal:239,p:8,f:16,c:15, meal:'перекус', type:'ПП', composition:'Мука полбяная, соевая, яйца, какао, какао масло, молоко, желатин, эритритол, суркалоза, СОМ, ванильный экстракт, горький и молочный шоколад б/с', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:6, name:'Торт медовик ПП', cat:'torty', variant:'1 кг', w:1000, price:2400, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'Крем на основе арахисовой пасты', recipe:'', status:'missing', notes:'Цена за кг. Мин. от 2 кг.', active:true},
+  {id:7, name:'Торт Наполеон ПП', cat:'torty', variant:'1 кг', w:1000, price:2400, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'', recipe:'', status:'missing', notes:'Цена за кг. Мин. от 2 кг.', active:true},
+  {id:8, name:'Торт молочная девочка', cat:'torty', variant:'—', w:null, price:null, kcal:149,p:10,f:5,c:15, meal:'перекус', type:'ПП', composition:'Молочные коржи, творожно-заварной крем, начинка любая', recipe:'', status:'confirmed', notes:'Цена и вес уточнить', active:true},
+  {id:9, name:'Веган торт', cat:'torty', variant:'1 кг', w:1000, price:2800, kcal:228,p:9,f:11,c:19, meal:'перекус', type:'Веган', composition:'Шоколадный бисквит, карамель с арахисом, арахисовый крем. Миндальная мука, полбяная мука, пюре из груш, яблочный уксус, сироп топинамбура, овсяное молоко, кокосовые сливки, арахис, кокосовое масло, эритритол', recipe:'', status:'confirmed', notes:'Также порционно: 360 г = 760 р', active:true},
+  {id:10, name:'Чизкейк с манго', cat:'torty', variant:'—', w:null, price:null, kcal:138,p:11,f:3,c:12, meal:'перекус', type:'ПП', composition:'Творог, яйца, манго, ц/з мука, эритрит, виноградное масло', recipe:'', status:'confirmed', notes:'Цена уточнить (старый прайс: 2300)', active:true},
+  {id:11, name:'Чизкейк мандариновый', cat:'torty', variant:'—', w:null, price:null, kcal:163,p:11,f:9,c:18, meal:'перекус', type:'ПП', composition:'Песочная основа, мандариновое компоте, творожно-сливочный чиз', recipe:'', status:'confirmed', notes:'Цена и вес уточнить', active:true},
+  {id:12, name:'Чизкейк с фундуком', cat:'torty', variant:'—', w:null, price:null, kcal:199,p:9,f:10,c:19, meal:'перекус', type:'ПП', composition:'Шоколадная основа, сырно-сливочная основа, карамель с фундуком. Кокосовое масло, рисовое молоко, агар, полбяная мука, эритритол, какао, яйца, рикотта лайт, фундук, изомальт', recipe:'', status:'confirmed', notes:'Он же Нью-Йорк. Цена уточнить (старый: 2600)', active:true},
 
-  // === ДЕСЕРТЫ / РУЛЕТЫ ===
-  {id:14, name:'Рулет меренговый', cat:'deserty', variant:'900 г', w:900, price:2400,
-    kcal:113,p:7,f:6,c:5, meal:'перекус', type:'ПП',
-    composition:'Яичный белок, кукурузный крахмал, камедь рожкового дерева, эритрит, мягкий творог, творожный сыр, ягоды, фрукты',
-    recipe:'', status:'confirmed', notes:'', active:true},
-  {id:15, name:'Рулет молочная девочка с томлённой грушей', cat:'deserty', variant:'1 кг', w:1000, price:2600,
-    kcal:164,p:10,f:7,c:16, meal:'перекус', type:'ПП',
-    composition:'Сухое обезжиренное молоко, кукурузный крахмал, рисовая ц/з мука, эритритол, яйца, натуральный йогурт, груша, банан, сыр рикотта, мягкий творог, карамель веган',
-    recipe:'', status:'confirmed', notes:'', active:true},
-  {id:16, name:'Шоколадный рулет', cat:'deserty', variant:'1 кг', w:1000, price:2400,
-    kcal:156,p:11,f:6,c:13, meal:'перекус', type:'ПП',
-    composition:'Пшеничная ц/з мука, яйца, эритритол, алкализованный какао, молочный шоколад без сахара, рикотта, мягкий творог, арахис',
-    recipe:'', status:'confirmed', notes:'', active:true},
-  {id:17, name:'Рулет с маком белковый', cat:'deserty', variant:'450 г', w:450, price:930,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'', active:true},
-  {id:18, name:'Пирожные', cat:'deserty', variant:'150 г / шт', w:150, price:320,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'Вкусы: шоколадные, ванильные, красный бархат. Начинка: ягодная, фруктовая, карамель-сникерс', recipe:'',
-    status:'missing', notes:'Цена за штуку', active:true},
-  {id:19, name:'Десерт в стакане', cat:'deserty', variant:'350 г', w:350, price:650,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'Вкусы: шоколадные, ванильные, красный бархат. Начинка: ягодная, фруктовая, карамель-сникерс', recipe:'',
-    status:'missing', notes:'', active:true},
-  {id:20, name:'Пирожное картошка', cat:'deserty', variant:'50 г / шт', w:50, price:420,
-    kcal:175,p:8,f:7,c:12, meal:'перекус', type:'ПП',
-    composition:'Овсяная мука, мука бурого риса, яйца, эритритол, ряженка, алкализованный какао, молочный шоколад без сахара, какао масло',
-    recipe:'', status:'confirmed', notes:'В шоколаде. Мин. от 5 шт.', active:true},
-  {id:21, name:'Эклеры', cat:'deserty', variant:'100 г / шт', w:100, price:380,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'Крем на выбор', recipe:'', status:'missing', notes:'Мин. от 5 шт.', active:true},
-  {id:22, name:'Брауни', cat:'deserty', variant:'800 г', w:800, price:2400,
-    kcal:161,p:11,f:3,c:23, meal:'перекус', type:'ПП',
-    composition:'Мука бурого риса, льняная мука, яйца, обезжиренный мягкий творог, яблочное пюре без сахара, алкализованный какао, шоколад молочный без сахара, грецкий орех',
-    recipe:'', status:'confirmed', notes:'', active:true},
-  {id:23, name:'Панна котта с персиками и кокосом', cat:'deserty', variant:'баночка', w:null, price:420,
-    kcal:82,p:3,f:2,c:14, meal:'перекус', type:'ПП',
-    composition:'Молоко, йогурт греческий, сироп топинамбур, кокосовый урбеч, кокосовая стружка, желатин, персики, эритритол. Возможна веган версия.',
-    recipe:'', status:'confirmed', notes:'Вес баночки не указан — уточнить', active:true},
-  {id:24, name:'Шарлотка ПП', cat:'deserty', variant:'500 г', w:500, price:850,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'', active:true},
-  {id:25, name:'Штолен кекс', cat:'deserty', variant:'800 г', w:800, price:1800,
-    kcal:210,p:10,f:5,c:30, meal:'перекус', type:'ПП',
-    composition:'Полбяная мука, овсяная мука, кокосовая мука, яйца, творог, эритритол, сироп топинамбура, клюква, изюм, апельсин, кокосовое масло',
-    recipe:'', status:'confirmed', notes:'', active:true},
-  {id:26, name:'Пирог с персиками', cat:'deserty', variant:'650 г', w:650, price:1400,
-    kcal:150,p:6,f:5,c:20, meal:'перекус', type:'ПП',
-    composition:'Яйца, мука бурого риса, эритритол, персики, сироп топинамбура, мягкий творог',
-    recipe:'', status:'confirmed', notes:'', active:true},
-  {id:27, name:'Сырники с арахисовой пастой', cat:'deserty', variant:'360 г порция', w:360, price:760,
-    kcal:null,p:null,f:null,c:null, meal:'завтрак', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'', active:true},
-  {id:28, name:'Ватрушка с грушей и сыром бри', cat:'deserty', variant:'420 г', w:420, price:780,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'', active:true},
+  // ДЕСЕРТЫ
+  {id:14, name:'Рулет меренговый', cat:'deserty', variant:'900 г', w:900, price:2400, kcal:113,p:7,f:6,c:5, meal:'перекус', type:'ПП', composition:'Яичный белок, кукурузный крахмал, камедь рожкового дерева, эритрит, мягкий творог, творожный сыр, ягоды, фрукты', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:15, name:'Рулет молочная девочка', cat:'deserty', variant:'1 кг', w:1000, price:2600, kcal:164,p:10,f:7,c:16, meal:'перекус', type:'ПП', composition:'СОМ, кукурузный крахмал, рисовая ц/з мука, эритритол, яйца, йогурт, груша, банан, рикотта, мягкий творог, карамель веган', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:16, name:'Шоколадный рулет', cat:'deserty', variant:'1 кг', w:1000, price:2400, kcal:156,p:11,f:6,c:13, meal:'перекус', type:'ПП', composition:'Пшеничная ц/з мука, яйца, эритритол, какао, молочный шоколад б/с, рикотта, мягкий творог, арахис', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:17, name:'Рулет с маком белковый', cat:'deserty', variant:'450 г', w:450, price:930, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
+  {id:18, name:'Пирожные', cat:'deserty', variant:'150 г/шт', w:150, price:320, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'Шоколадные / ванильные / красный бархат. Начинка: ягоды, фрукты, карамель-сникерс', recipe:'', status:'missing', notes:'Цена за 1 шт', active:true},
+  {id:19, name:'Десерт в стакане', cat:'deserty', variant:'350 г', w:350, price:650, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'Шоколадные / ванильные / красный бархат. Начинка: ягоды, фрукты, карамель-сникерс', recipe:'', status:'missing', notes:'', active:true},
+  {id:20, name:'Пирожное картошка', cat:'deserty', variant:'50 г/шт', w:50, price:420, kcal:175,p:8,f:7,c:12, meal:'перекус', type:'ПП', composition:'Овсяная мука, мука бурого риса, яйца, эритритол, ряженка, какао, молочный шоколад б/с, какао масло', recipe:'', status:'confirmed', notes:'Мин. от 5 шт', active:true},
+  {id:21, name:'Эклеры', cat:'deserty', variant:'100 г/шт', w:100, price:380, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'Крем на выбор', recipe:'', status:'missing', notes:'Мин. от 5 шт', active:true},
+  {id:22, name:'Брауни', cat:'deserty', variant:'800 г', w:800, price:2400, kcal:161,p:11,f:3,c:23, meal:'перекус', type:'ПП', composition:'Мука бурого риса, льняная мука, яйца, мягкий творог, яблочное пюре б/с, какао, молочный шоколад б/с, грецкий орех', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:23, name:'Панна котта (персик+кокос)', cat:'deserty', variant:'баночка', w:null, price:420, kcal:82,p:3,f:2,c:14, meal:'перекус', type:'ПП', composition:'Молоко, йогурт греческий, сироп топинамбура, кокосовый урбеч, кокосовая стружка, желатин, персики, эритритол', recipe:'', status:'confirmed', notes:'Вес уточнить. Есть веган версия.', active:true},
+  {id:24, name:'Шарлотка ПП', cat:'deserty', variant:'500 г', w:500, price:850, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
+  {id:25, name:'Штолен кекс', cat:'deserty', variant:'800 г', w:800, price:1800, kcal:210,p:10,f:5,c:30, meal:'перекус', type:'ПП', composition:'Полбяная, овсяная, кокосовая мука, яйца, творог, эритритол, сироп топинамбура, клюква, изюм, апельсин, кокосовое масло', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:26, name:'Пирог с персиками', cat:'deserty', variant:'650 г', w:650, price:1400, kcal:150,p:6,f:5,c:20, meal:'перекус', type:'ПП', composition:'Яйца, мука бурого риса, эритритол, персики, сироп топинамбура, мягкий творог', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:27, name:'Сырники с арахисовой пастой', cat:'deserty', variant:'360 г', w:360, price:760, kcal:null,p:null,f:null,c:null, meal:'завтрак', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
+  {id:28, name:'Ватрушка с грушей и бри', cat:'deserty', variant:'420 г', w:420, price:780, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
 
-  // === КОНФЕТЫ ===
-  {id:29, name:'Конфеты Трайфлы Сникерс', cat:'konfety', variant:'9 шт', w:150, price:2250,
-    kcal:145,p:11,f:6,c:14, meal:'перекус', type:'ПП',
-    composition:'Мега шоколадный бисквит, заварной сливочный крем, карамель, соленый арахис, арахисовый крем. Алкализованный какао, СОМ, кукурузный крахмал, сыр рикотта, ряженка, яйца, цикорий, арахис, молоко, эритритол',
-    recipe:'', status:'confirmed', notes:'~17 г/конфета. 9 шт ≈ 150 г (расчёт по аналогии с трюфелем)', active:true},
-  {id:30, name:'Батончик Сникерс', cat:'konfety', variant:'9 шт', w:null, price:2250,
-    kcal:417,p:32,f:19,c:37, meal:'перекус', type:'ПП',
-    composition:'Яблочное пюре, кокосовое масло, кокосовые сливки, кокосовый сахар, молочный шоколад без сахара, миндальная мука, рисовая ц/з мука, арахис, какао масло, сироп топинамбура',
-    recipe:'', status:'confirmed', notes:'Батончик — другой формат, не трайфл. Уточнить: тот же набор 9шт/2250р или отдельная позиция?', active:true},
-  {id:31, name:'Конфеты Раффаэлло', cat:'konfety', variant:'9 шт', w:null, price:2250,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'КБЖУ и вес набора не указаны', active:true},
-  {id:32, name:'Конфеты Трюфель', cat:'konfety', variant:'9 шт', w:150, price:2250,
-    kcal:238,p:11,f:10,c:26, meal:'перекус', type:'ПП',
-    composition:'Сыр рикотта, алкализованный какао, эритритол, шоколад без сахара молочный, СОМ',
-    recipe:'', status:'confirmed', notes:'1 конфета ~17 г: 40 ккал / 2Б / 2Ж / 4,5У', active:true},
-  {id:33, name:'Конфеты Трюфель Дор Блю', cat:'konfety', variant:'9 шт', w:null, price:2250,
-    kcal:316,p:22,f:14,c:12, meal:'перекус', type:'ПП',
-    composition:'Сыр с плесенью, белый шоколад без сахара, какао масло, сироп топинамбур, кокосовые сливки',
-    recipe:'', status:'confirmed', notes:'', active:true},
-  {id:34, name:'Конфеты батончик Рот Фронт', cat:'konfety', variant:'—', w:null, price:null,
-    kcal:256,p:9,f:14,c:22, meal:'перекус', type:'ПП',
-    composition:'Мука зеленой гречки, мука кокосовая, алкализованный какао, арахисовая и фундуковая паста, молочный шоколад без сахара, какао масло',
-    recipe:'', status:'confirmed', notes:'Цена не указана', active:true},
+  // КОНФЕТЫ
+  {id:29, name:'Трайфлы Сникерс', cat:'konfety', variant:'9 шт', w:150, price:2250, kcal:145,p:11,f:6,c:14, meal:'перекус', type:'ПП', composition:'Шоколадный бисквит, сливочный крем, карамель, арахис. Какао, СОМ, крахмал, рикотта, ряженка, яйца, цикорий, арахис, молоко, эритритол', recipe:'', status:'confirmed', notes:'~17 г/шт', active:true},
+  {id:30, name:'Батончик Сникерс', cat:'konfety', variant:'9 шт', w:null, price:2250, kcal:417,p:32,f:19,c:37, meal:'перекус', type:'ПП', composition:'Яблочное пюре, кокосовое масло, кокосовые сливки, кокосовый сахар, молочный шоколад б/с, миндальная мука, рисовая ц/з мука, арахис, какао масло, сироп топинамбура', recipe:'', status:'confirmed', notes:'Уточнить: тот же набор или отдельная позиция?', active:true},
+  {id:31, name:'Конфеты Раффаэлло', cat:'konfety', variant:'9 шт', w:null, price:2250, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
+  {id:32, name:'Конфеты Трюфель', cat:'konfety', variant:'9 шт', w:150, price:2250, kcal:238,p:11,f:10,c:26, meal:'перекус', type:'ПП', composition:'Рикотта, какао, эритритол, молочный шоколад б/с, СОМ', recipe:'', status:'confirmed', notes:'1 шт ~17 г = 40 ккал', active:true},
+  {id:33, name:'Трюфель Дор Блю', cat:'konfety', variant:'9 шт', w:null, price:2250, kcal:316,p:22,f:14,c:12, meal:'перекус', type:'ПП', composition:'Сыр с плесенью, белый шоколад б/с, какао масло, сироп топинамбура, кокосовые сливки', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:34, name:'Батончик Рот Фронт', cat:'konfety', variant:'—', w:null, price:null, kcal:256,p:9,f:14,c:22, meal:'перекус', type:'ПП', composition:'Мука зелёной гречки, кокосовая мука, какао, арахисовая и фундуковая паста, молочный шоколад б/с, какао масло', recipe:'', status:'confirmed', notes:'Цена не указана', active:true},
 
-  // === ПЕЧЕНЬЕ ===
-  {id:35, name:'Печенье протеиновое с арахисом', cat:'pechenie', variant:'125 г', w:125, price:350,
-    kcal:176,p:15,f:13,c:19, meal:'перекус', type:'ПП',
-    composition:'Мука ц/з пшеничная, протеин, яйца, натуральный йогурт, масло виноградной косточки, эритритол, арахисовая паста',
-    recipe:'', status:'confirmed', notes:'Мин. заказ 500 г. Содержание белка 15%.', active:true},
-  {id:36, name:'Миндальное кето печенье', cat:'pechenie', variant:'100 г', w:100, price:360,
-    kcal:431,p:20,f:32,c:5, meal:'перекус', type:'Кето',
-    composition:'Мука миндальная, эритрит, эритритол, яйца',
-    recipe:'', status:'confirmed', notes:'Мин. заказ 500 г. 1 печенье 35 г = 129 ккал.', active:true},
-  {id:37, name:'Печенье сырное гужеры', cat:'pechenie', variant:'100 г', w:100, price:320,
-    kcal:126,p:5,f:9,c:11, meal:'перекус', type:'ПП',
-    composition:'Молоко, масло гхи, яйца, сыр, мука бурого риса',
-    recipe:'', status:'confirmed', notes:'', active:true},
-  {id:38, name:'Овсяное печенье', cat:'pechenie', variant:'—', w:null, price:null,
-    kcal:263,p:6,f:8,c:29, meal:'перекус', type:'ПП',
-    composition:'Овсянка, овсяное молоко, кокосовое масло, эритритол, полбяная мука',
-    recipe:'', status:'confirmed', notes:'Цена/вес порции в новом прайсе не указаны. В старом: 350 р / 150 г.', active:true},
-  {id:39, name:'Морковное печенье', cat:'pechenie', variant:'—', w:null, price:null,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'УБРАТЬ ИЗ МЕНЮ (по просьбе Лены)', active:false},
+  // ПЕЧЕНЬЕ
+  {id:35, name:'Протеиновое с арахисом', cat:'pechenie', variant:'125 г', w:125, price:350, kcal:176,p:15,f:13,c:19, meal:'перекус', type:'ПП', composition:'Мука ц/з пшеничная, протеин, яйца, йогурт, масло виноградной косточки, эритритол, арахисовая паста', recipe:'', status:'confirmed', notes:'Мин. заказ 500 г. Белка 15%.', active:true},
+  {id:36, name:'Миндальное кето', cat:'pechenie', variant:'100 г', w:100, price:360, kcal:431,p:20,f:32,c:5, meal:'перекус', type:'Кето', composition:'Мука миндальная, эритрит, эритритол, яйца', recipe:'', status:'confirmed', notes:'Мин. 500 г. 1 шт=35 г=129 ккал', active:true},
+  {id:37, name:'Сырное гужеры', cat:'pechenie', variant:'100 г', w:100, price:320, kcal:126,p:5,f:9,c:11, meal:'перекус', type:'ПП', composition:'Молоко, масло гхи, яйца, сыр, мука бурого риса', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:38, name:'Овсяное', cat:'pechenie', variant:'—', w:null, price:null, kcal:263,p:6,f:8,c:29, meal:'перекус', type:'ПП', composition:'Овсянка, овсяное молоко, кокосовое масло, эритритол, полбяная мука', recipe:'', status:'confirmed', notes:'Цена уточнить (старый: 350/150 г)', active:true},
+  {id:39, name:'Морковное', cat:'pechenie', variant:'—', w:null, price:null, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'', recipe:'', status:'missing', notes:'Убрано из меню', active:false},
 
-  // === ПИЦЦА И КИШИ ===
-  {id:40, name:'Пицца ПП (курица)', cat:'pizza', variant:'950 г', w:950, price:2100,
-    kcal:115,p:15,f:4.5,c:4, meal:'обед', type:'ПП',
-    composition:'Основа: творог 2%, мука ц/з рисовая, яйца, разрыхлитель, соль, нат. йогурт. Начинка: курица, шампиньоны, перец, базилик, сыр моцарелла, лёгкий сыр, творожный сыр, нат. йогурт',
-    recipe:'', status:'confirmed', notes:'КБЖУ 115/14,6/4,47/3,84', active:true},
-  {id:41, name:'Пицца с морепродуктами', cat:'pizza', variant:'950 г', w:950, price:2400,
-    kcal:null,p:null,f:null,c:null, meal:'обед', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'', active:true},
-  {id:42, name:'Киш с курицей, грибами и капустой', cat:'pizza', variant:'1 кг', w:1000, price:2600,
-    kcal:121,p:7,f:4,c:15, meal:'обед', type:'ПП',
-    composition:'Творог, масло гхи, зелень, яйца, мука рисовая, полбяная, пшеничная ц/з, сыр моцарелла, курица, грибы, нат. йогурт',
-    recipe:'', status:'confirmed', notes:'', active:true},
-  {id:43, name:'Киш с неркой (сёмгой), брокколи и сыром', cat:'pizza', variant:'1 кг', w:1000, price:3200,
-    kcal:134,p:7,f:5,c:15, meal:'обед', type:'ПП',
-    composition:'Творог, мука ц/з рисовая, пшеничная, масло гхи, зелень, сёмга, брокколи, брюссельская капуста, стручковая фасоль, яйца, натуральный йогурт, сыр моцарелла, лёгкий сыр',
-    recipe:'', status:'confirmed', notes:'КБЖУ 133,6/7/4,7/14,6', active:true},
+  // ПИЦЦА И КИШИ
+  {id:40, name:'Пицца ПП (курица)', cat:'pizza', variant:'950 г', w:950, price:2100, kcal:115,p:15,f:4.5,c:4, meal:'обед', type:'ПП', composition:'Основа: творог 2%, рисовая мука, яйца, соль, йогурт. Начинка: курица, шампиньоны, перец, базилик, моцарелла, творожный сыр', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:41, name:'Пицца с морепродуктами', cat:'pizza', variant:'950 г', w:950, price:2400, kcal:null,p:null,f:null,c:null, meal:'обед', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
+  {id:42, name:'Киш курица+грибы+капуста', cat:'pizza', variant:'1 кг', w:1000, price:2600, kcal:121,p:7,f:4,c:15, meal:'обед', type:'ПП', composition:'Творог, масло гхи, зелень, яйца, мука рисовая, полбяная, пшеничная ц/з, моцарелла, курица, грибы, йогурт', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:43, name:'Киш нерка+брокколи+сыр', cat:'pizza', variant:'1 кг', w:1000, price:3200, kcal:134,p:7,f:5,c:15, meal:'обед', type:'ПП', composition:'Творог, рисовая и пшеничная мука, масло гхи, зелень, сёмга, брокколи, брюссельская капуста, стручковая фасоль, яйца, йогурт, моцарелла, лёгкий сыр', recipe:'', status:'confirmed', notes:'', active:true},
 
-  // === ВЫПЕЧКА ===
-  {id:44, name:'Хачапури белковая по-аджарски', cat:'vypechka', variant:'550 г', w:550, price:1050,
-    kcal:157,p:17,f:7,c:8, meal:'обед', type:'ПП',
-    composition:'Сыр, творог, яйца, рисовая мука, зелень, соль',
-    recipe:'', status:'confirmed', notes:'КБЖУ 157/17/6,5/7,6', active:true},
-  {id:45, name:'Пирожки белковые', cat:'vypechka', variant:'120 г / шт', w:120, price:330,
-    kcal:null,p:null,f:null,c:null, meal:'обед', type:'ПП',
-    composition:'Начинки: лук/сыр/яйцо; курица/грибы/сыр', recipe:'',
-    status:'missing', notes:'Цена за штуку. Мин. от 5 шт.', active:true},
-  {id:46, name:'Булочки чечевичные', cat:'vypechka', variant:'90 г / шт', w:90, price:140,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'Мин. от 10 шт.', active:true},
+  // ВЫПЕЧКА
+  {id:44, name:'Хачапури по-аджарски', cat:'vypechka', variant:'550 г', w:550, price:1050, kcal:157,p:17,f:7,c:8, meal:'обед', type:'ПП', composition:'Сыр, творог, яйца, рисовая мука, зелень, соль', recipe:'', status:'confirmed', notes:'', active:true},
+  {id:45, name:'Пирожки белковые', cat:'vypechka', variant:'120 г/шт', w:120, price:330, kcal:null,p:null,f:null,c:null, meal:'обед', type:'ПП', composition:'Начинки: лук/сыр/яйцо или курица/грибы/сыр', recipe:'', status:'missing', notes:'Мин. от 5 шт', active:true},
+  {id:46, name:'Булочки чечевичные', cat:'vypechka', variant:'90 г/шт', w:90, price:140, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'ПП', composition:'', recipe:'', status:'missing', notes:'Мин. от 10 шт', active:true},
 
-  // === БЛИНЫ ===
-  {id:47, name:'Блины крем-чиз ПП + банан', cat:'bliny', variant:'120 г / шт', w:120, price:330,
-    kcal:null,p:null,f:null,c:null, meal:'завтрак', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'', active:true},
-  {id:48, name:'Блины курица + грибы', cat:'bliny', variant:'130 г / шт', w:130, price:340,
-    kcal:null,p:null,f:null,c:null, meal:'обед', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'Мин. от 5 шт.', active:true},
-  {id:49, name:'Блины тунец + яйцо', cat:'bliny', variant:'130 г / шт', w:130, price:340,
-    kcal:null,p:null,f:null,c:null, meal:'обед', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'Мин. от 5 шт. В другом месте PDF: 440 р/шт — уточнить', active:true},
-  {id:50, name:'Блины протеиновые (тесто без начинки)', cat:'bliny', variant:'100 г', w:100, price:null,
-    kcal:224,p:9,f:4,c:19, meal:'завтрак', type:'ПП',
-    composition:'Мука пшеничная цельнозерновая, яйца, эритритол, изолят белка, молоко (альтернативное по запросу)',
-    recipe:'', status:'confirmed', notes:'КБЖУ за тесто без начинки. Цена зависит от начинки.', active:true},
+  // БЛИНЫ
+  {id:47, name:'Блины крем-чиз+банан', cat:'bliny', variant:'120 г/шт', w:120, price:330, kcal:null,p:null,f:null,c:null, meal:'завтрак', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
+  {id:48, name:'Блины курица+грибы', cat:'bliny', variant:'130 г/шт', w:130, price:340, kcal:null,p:null,f:null,c:null, meal:'обед', type:'ПП', composition:'', recipe:'', status:'missing', notes:'Мин. от 5 шт', active:true},
+  {id:49, name:'Блины тунец+яйцо', cat:'bliny', variant:'130 г/шт', w:130, price:340, kcal:null,p:null,f:null,c:null, meal:'обед', type:'ПП', composition:'', recipe:'', status:'missing', notes:'Мин. от 5 шт', active:true},
+  {id:50, name:'Блины протеиновые (тесто)', cat:'bliny', variant:'100 г', w:100, price:null, kcal:224,p:9,f:4,c:19, meal:'завтрак', type:'ПП', composition:'Мука пшеничная ц/з, яйца, эритритол, изолят белка, молоко', recipe:'', status:'confirmed', notes:'КБЖУ за тесто. Цена зависит от начинки.', active:true},
 
-  // === ХЛЕБ ===
-  {id:51, name:'Хлеб пшеничный на собственной закваске', cat:'hleb', variant:'900 г', w:900, price:970,
-    kcal:null,p:null,f:null,c:null, meal:'любой', type:'ПП',
-    composition:'', recipe:'', status:'missing', notes:'', active:true},
-  {id:52, name:'Хлеб безглютеновый', cat:'hleb', variant:'450 г', w:450, price:670,
-    kcal:221,p:6,f:5,c:36, meal:'любой', type:'БГ',
-    composition:'Мука бурого риса, оливковое масло, соль, закваска безглютеновая, вода питьевая, псиллиум, кукурузная мука, нутовая мука, мука зелёной гречки',
-    recipe:'', status:'confirmed', notes:'', active:true},
+  // ХЛЕБ
+  {id:51, name:'Хлеб на закваске', cat:'hleb', variant:'900 г', w:900, price:970, kcal:null,p:null,f:null,c:null, meal:'любой', type:'ПП', composition:'', recipe:'', status:'missing', notes:'', active:true},
+  {id:52, name:'Хлеб безглютеновый', cat:'hleb', variant:'450 г', w:450, price:670, kcal:221,p:6,f:5,c:36, meal:'любой', type:'БГ', composition:'Мука бурого риса, оливковое масло, соль, БГ закваска, вода, псиллиум, кукурузная мука, нутовая мука, мука зелёной гречки', recipe:'', status:'confirmed', notes:'', active:true},
 
-  // === КЛАССИКА (НЕ ПП) ===
-  {id:53, name:'Торт классический', cat:'classic', variant:'1 кг', w:1000, price:2400,
-    kcal:null,p:null,f:null,c:null, meal:'перекус', type:'Классика',
-    composition:'', recipe:'', status:'missing', notes:'Цена за кг. Мин. вес от 2.5 кг.', active:true},
+  // КЛАССИКА
+  {id:53, name:'Торт классический', cat:'classic', variant:'1 кг', w:1000, price:2400, kcal:null,p:null,f:null,c:null, meal:'перекус', type:'Классика', composition:'', recipe:'', status:'missing', notes:'Цена за кг. Мин. от 2.5 кг.', active:true},
 
-  // === СЕЗОННОЕ (Пасха 2026) ===
-  {id:54, name:'Кулич ПП', cat:'season', variant:'450 г', w:450, price:null,
-    kcal:198,p:12,f:6,c:36, meal:'перекус', type:'ПП',
-    composition:'Творог, йогурт белый, мука пшеничная ц/з, яйцо, цедра апельсина, сок апельсина, сода, сахарозаменитель, сухофрукты, грецкий орех. Глазурь: сироп топинамбура, желатин',
-    recipe:'Творог 100г, Йогурт белый 60г, Мука пш. ц/з 60г, Яйцо 1шт, Цедра апельсина 8г, Сок апельсина 15г, Сода 2г, Сах.зам 4г, Сухофрукты 90г, Грецкий орех 60г. Глазурь: Сироп топинамбура 50г, Желатин 3г, Вода 25г',
-    status:'confirmed', notes:'Пасха 2026. Форма 9 см. Цена уточнить.', active:true},
-  {id:55, name:'Творожная пасха', cat:'season', variant:'—', w:null, price:null,
-    kcal:230,p:9,f:17,c:11, meal:'перекус', type:'ПП',
-    composition:'Рикотта, творожный сыр, мягкий творог 5%, изюм, фундук, Фит парад №7, сироп топинамбура, ваниль',
-    recipe:'Рикотта 250г, Творожный сыр 120г, Мягкий творог 5% 80г, Изюм 40г, Фундук 50г, Фит парад №7 6г, Сироп топинамбура 30г, Ваниль 1г',
-    status:'confirmed', notes:'Пасха 2026. Вес и цена уточнить.', active:true},
-];
-
-let showPrivate = true;
-
-const COLS = [
-  {key:'id', label:'#', w:'36px'},
-  {key:'name', label:'Название', w:'200px'},
-  {key:'cat', label:'Категория', w:'100px'},
-  {key:'variant', label:'Порция', w:'100px'},
-  {key:'w', label:'Вес (г)', w:'70px', num:true},
-  {key:'price', label:'Цена ₽', w:'80px', num:true},
-  {key:'kcal', label:'Ккал/100г', w:'80px', num:true},
-  {key:'p', label:'Б/100г', w:'60px', num:true},
-  {key:'f', label:'Ж/100г', w:'60px', num:true},
-  {key:'c', label:'У/100г', w:'60px', num:true},
-  {key:'kcalP', label:'Ккал/порц', w:'80px', num:true, calc:true},
-  {key:'pP', label:'Б/порц', w:'60px', num:true, calc:true},
-  {key:'fP', label:'Ж/порц', w:'60px', num:true, calc:true},
-  {key:'cP', label:'У/порц', w:'60px', num:true, calc:true},
-  {key:'meal', label:'Приём', w:'80px'},
-  {key:'type', label:'Тип', w:'60px'},
-  {key:'status', label:'Статус', w:'70px'},
-  {key:'composition', label:'Состав (публ.)', w:'200px', priv:false},
-  {key:'recipe', label:'Рецептура (граммовки)', w:'250px', priv:true},
-  {key:'notes', label:'Примечания', w:'180px', priv:true},
+  // СЕЗОННОЕ
+  {id:54, name:'Кулич ПП', cat:'season', variant:'450 г', w:450, price:null, kcal:198,p:12,f:6,c:36, meal:'перекус', type:'ПП', composition:'Творог, йогурт, мука ц/з, яйцо, цедра и сок апельсина, сода, сахарозаменитель, сухофрукты, грецкий орех. Глазурь: сироп топинамбура, желатин', recipe:'Творог 100г, Йогурт 60г, Мука 60г, Яйцо 1шт, Цедра 8г, Сок 15г, Сода 2г, Сах.зам 4г, Сухофрукты 90г, Орех 60г. Глазурь: Сироп 50г, Желатин 3г, Вода 25г', status:'confirmed', notes:'Пасха 2026. Цена уточнить.', active:true},
+  {id:55, name:'Творожная пасха', cat:'season', variant:'—', w:null, price:null, kcal:230,p:9,f:17,c:11, meal:'перекус', type:'ПП', composition:'Рикотта, творожный сыр, мягкий творог, изюм, фундук, Фит парад, сироп топинамбура, ваниль', recipe:'Рикотта 250г, Творожный сыр 120г, Творог 80г, Изюм 40г, Фундук 50г, Фит парад 6г, Сироп 30г, Ваниль 1г', status:'confirmed', notes:'Пасха 2026. Вес и цена уточнить.', active:true},
 ];
 
 function init(){
-  const catSel = document.getElementById('catFilter');
-  Object.entries(CATS).forEach(([k,v]) => {
-    const o = document.createElement('option'); o.value=k; o.textContent=v; catSel.appendChild(o);
-  });
-  renderTable();
+  const sel = document.getElementById('catFilter');
+  sel.innerHTML = '<option value="all">Все категории</option>' +
+    Object.entries(CATS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  render();
 }
 
-function getFiltered(){
+function render(){
   const q = document.getElementById('search').value.toLowerCase();
   const cat = document.getElementById('catFilter').value;
   const st = document.getElementById('statusFilter').value;
-  return MENU.filter(item => {
-    if(q && !item.name.toLowerCase().includes(q)) return false;
+  const items = MENU.filter(item => {
+    if(q && !item.name.toLowerCase().includes(q) && !(item.composition||'').toLowerCase().includes(q)) return false;
     if(cat !== 'all' && item.cat !== cat) return false;
     if(st === 'confirmed' && item.status !== 'confirmed') return false;
-    if(st === 'estimate' && item.status !== 'estimate') return false;
     if(st === 'missing' && item.status !== 'missing') return false;
     return true;
   });
-}
 
-function renderTable(){
-  const items = getFiltered();
-  const thead = document.getElementById('thead');
-  const tbody = document.getElementById('tbody');
+  document.getElementById('thead').innerHTML = `<tr>
+    <th style="width:30px">#</th>
+    <th style="width:200px">Блюдо</th>
+    <th class="r" style="width:80px">Цена</th>
+    <th style="width:80px">Порция</th>
+    <th class="c" style="width:26px"></th>
+    <th class="kbju-group" style="width:130px">КБЖУ / 100 г</th>
+    <th class="kbju-group" style="width:130px">КБЖУ / порция</th>
+    <th style="width:70px">Приём</th>
+    <th style="min-width:200px">Состав</th>
+    <th style="width:160px">Заметки</th>
+  </tr>`;
 
-  thead.innerHTML = '<tr>' + COLS.map(c => {
-    if(c.priv && !showPrivate) return '';
-    return `<th${c.priv?' class="private"':''} style="width:${c.w||'auto'}">${c.label}</th>`;
-  }).join('') + '</tr>';
+  document.getElementById('tbody').innerHTML = items.map(item => {
+    const rc = !item.active ? ' class="removed"' : '';
+    const cat_label = CATS[item.cat] || item.cat;
 
-  tbody.innerHTML = items.map(item => {
-    const kcalP = (item.kcal != null && item.w) ? Math.round(item.kcal * item.w / 100) : null;
-    const pP = (item.p != null && item.w) ? Math.round(item.p * item.w / 100) : null;
-    const fP = (item.f != null && item.w) ? Math.round(item.f * item.w / 100) : null;
-    const cP = (item.c != null && item.w) ? Math.round(item.c * item.w / 100) : null;
+    const hasK = item.kcal != null;
+    const kbju100 = hasK
+      ? `<span class="k">${item.kcal}</span><span class="bju">Б ${item.p} · Ж ${item.f} · У ${item.c}</span>`
+      : 'нет данных';
+    const kbjuCls100 = hasK ? 'kbju' : 'kbju empty';
 
-    const statusBadge = item.status === 'confirmed' ? '<span class="badge-ok">ОК</span>'
-      : item.status === 'estimate' ? '<span class="badge-warn">~</span>'
-      : '<span class="badge-miss">?</span>';
+    const hasP = hasK && item.w;
+    const kbjuP = hasP
+      ? `<span class="k">${Math.round(item.kcal*item.w/100)}</span><span class="bju">Б ${Math.round(item.p*item.w/100)} · Ж ${Math.round(item.f*item.w/100)} · У ${Math.round(item.c*item.w/100)}</span>`
+      : (item.w ? 'нет КБЖУ' : 'нет веса');
+    const kbjuClsP = hasP ? 'kbju' : 'kbju empty';
 
-    const rowClass = !item.active ? ' class="removed"' : '';
+    const stDot = item.status === 'confirmed'
+      ? '<span class="st st-ok" title="КБЖУ подтверждено"></span>'
+      : '<span class="st st-miss" title="КБЖУ нет"></span>';
 
-    return `<tr${rowClass}>` + COLS.map(c => {
-      if(c.priv && !showPrivate) return '';
-      const cls = (c.num ? ' num' : '') + (c.priv ? ' private' : '') +
-        (c.key==='name' ? ' name-cell' : '') + (c.key==='composition' ? ' comp' : '') +
-        (c.key==='notes'||c.key==='recipe' ? ' notes' : '');
-      let v;
-      switch(c.key){
-        case 'cat': v = '<span class="badge-cat">'+(CATS[item.cat]||item.cat)+'</span>'; break;
-        case 'price': v = item.price != null ? item.price.toLocaleString('ru-RU') : '<span class="badge-miss">?</span>'; break;
-        case 'w': v = item.w != null ? item.w : '—'; break;
-        case 'kcal': case 'p': case 'f': case 'c':
-          v = item[c.key] != null ? item[c.key] : '—'; break;
-        case 'kcalP': v = kcalP != null ? kcalP.toLocaleString('ru-RU') : '—'; break;
-        case 'pP': v = pP != null ? pP : '—'; break;
-        case 'fP': v = fP != null ? fP : '—'; break;
-        case 'cP': v = cP != null ? cP : '—'; break;
-        case 'status': v = statusBadge; break;
-        case 'name':
-          v = item.name + (!item.active ? ' <span class="badge-removed">убрано</span>' : '');
-          break;
-        default: v = item[c.key] || '—';
-      }
-      return `<td class="${cls}">${v}</td>`;
-    }).join('') + '</tr>';
+    const priceStr = item.price != null
+      ? `<strong>${item.price.toLocaleString('ru-RU')}</strong> ₽`
+      : '<span style="color:var(--text3)">—</span>';
+
+    return `<tr${rc}>
+      <td class="c" style="color:var(--text3);font-size:.72rem">${item.id}</td>
+      <td class="name">${item.name}<span class="cat">${cat_label}${item.type!=='ПП'?' · '+item.type:''}</span></td>
+      <td class="r price">${priceStr}</td>
+      <td>${item.variant}</td>
+      <td class="c">${stDot}</td>
+      <td class="${kbjuCls100}">${kbju100}</td>
+      <td class="${kbjuClsP}">${kbjuP}</td>
+      <td style="font-size:.75rem;color:var(--text2)">${item.meal}</td>
+      <td class="comp">${item.composition || '<span style="color:var(--text3)">—</span>'}</td>
+      <td class="notes-cell">${item.notes || '—'}</td>
+    </tr>`;
   }).join('');
 
   const total = MENU.filter(i=>i.active).length;
-  const confirmed = MENU.filter(i=>i.active && i.status==='confirmed').length;
-  const missing = MENU.filter(i=>i.active && i.status==='missing').length;
-  document.getElementById('stats').innerHTML =
-    `Всего: <strong>${total}</strong> · КБЖУ подтверждено: <strong>${confirmed}</strong> · Нет данных: <strong>${missing}</strong> · Показано: ${items.length}`;
-}
-
-function togglePrivate(){
-  showPrivate = !showPrivate;
-  renderTable();
+  const ok = MENU.filter(i=>i.active && i.status==='confirmed').length;
+  document.getElementById('stats').textContent =
+    `${items.length} из ${total} · КБЖУ: ${ok}/${total}`;
 }
 
 function exportCSV(){
-  const BOM = '\uFEFF';
-  const sep = ';';
-  const headers = ['ID','Название','Категория','Вариант порции','Вес (г)','Цена (₽)',
-    'Ккал/100г','Б/100г','Ж/100г','У/100г','Ккал/порция','Б/порция','Ж/порция','У/порция',
-    'Приём пищи','Тип','Статус КБЖУ','Состав (публичный)','Рецептура (ПРИВАТНО)','Примечания','В меню'];
-  const rows = MENU.map(item => {
-    const kcalP = (item.kcal!=null && item.w) ? Math.round(item.kcal*item.w/100) : '';
-    const pP = (item.p!=null && item.w) ? Math.round(item.p*item.w/100) : '';
-    const fP = (item.f!=null && item.w) ? Math.round(item.f*item.w/100) : '';
-    const cP = (item.c!=null && item.w) ? Math.round(item.c*item.w/100) : '';
-    return [
-      item.id, q(item.name), CATS[item.cat]||item.cat, q(item.variant), item.w||'', item.price||'',
-      item.kcal!=null?item.kcal:'', item.p!=null?item.p:'', item.f!=null?item.f:'', item.c!=null?item.c:'',
-      kcalP, pP, fP, cP,
-      item.meal, item.type, item.status==='confirmed'?'подтверждено':item.status==='estimate'?'оценка':'нет данных',
-      q(item.composition), q(item.recipe), q(item.notes), item.active?'да':'нет'
-    ].join(sep);
+  const BOM = '\uFEFF'; const sep = ';';
+  const h = ['ID','Название','Категория','Порция','Вес (г)','Цена (₽)','Ккал/100г','Б/100г','Ж/100г','У/100г','Ккал/порц','Б/порц','Ж/порц','У/порц','Приём пищи','Тип','Статус','Состав','Рецептура','Заметки','Активно'];
+  const rows = MENU.map(i => {
+    const kP=(i.kcal!=null&&i.w)?Math.round(i.kcal*i.w/100):'';
+    const pP=(i.p!=null&&i.w)?Math.round(i.p*i.w/100):'';
+    const fP=(i.f!=null&&i.w)?Math.round(i.f*i.w/100):'';
+    const cP=(i.c!=null&&i.w)?Math.round(i.c*i.w/100):'';
+    return [i.id,q(i.name),CATS[i.cat]||i.cat,q(i.variant),i.w||'',i.price||'',i.kcal!=null?i.kcal:'',i.p!=null?i.p:'',i.f!=null?i.f:'',i.c!=null?i.c:'',kP,pP,fP,cP,i.meal,i.type,i.status==='confirmed'?'да':'нет',q(i.composition),q(i.recipe),q(i.notes),i.active?'да':'нет'].join(sep);
   });
-  const csv = BOM + headers.join(sep) + '\n' + rows.join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const csv = BOM + h.join(sep)+'\n'+rows.join('\n');
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'menu-pp-feya.csv';
-  a.click();
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download = 'menu-pp-feya.csv'; a.click();
 }
 function q(s){return '"'+(s||'').replace(/"/g,'""')+'"'}
-
-function syncFromSheet(){
-  const url = document.getElementById('gsUrl').value.trim();
-  if(!url){alert('Вставьте URL опубликованной таблицы'); return;}
-  let csvUrl = url;
-  if(url.includes('/pub')){
-    csvUrl = url.replace(/\/pub.*/, '/gviz/tq?tqx=out:csv');
-  } else if(url.includes('spreadsheets/d/')){
-    const m = url.match(/spreadsheets\/d\/([^/]+)/);
-    if(m) csvUrl = 'https://docs.google.com/spreadsheets/d/'+m[1]+'/gviz/tq?tqx=out:csv';
-  }
-  fetch(csvUrl)
-    .then(r => r.text())
-    .then(text => {
-      alert('Данные получены! ('+text.split('\n').length+' строк). Интеграция готова к подключению.');
-      console.log('Google Sheet CSV:', text);
-    })
-    .catch(e => alert('Ошибка загрузки: '+e.message));
-}
 
 init();
 </script>
