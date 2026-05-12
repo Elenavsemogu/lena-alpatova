@@ -584,7 +584,7 @@ const CATEGORIES = [
 
 const PRODUCTS = [
   // ТОРТЫ ПП
-  {id:1, name:'Бенто-торт', cat:'torty', icon:'🎂', desc:'Торт-открытка с персональной надписью. ПП, без сахара.', meal:'snack',
+  {id:1, name:'Бенто-торт', cat:'torty', icon:'🎂', photo:'bento-pp.jpg', desc:'Торт-открытка с персональной надписью. ПП, без сахара.', meal:'snack',
     per100:{kcal:145,p:8,f:8,c:15}, kbjuFrom:true, variants:[{label:'~450 г',w:450,price:1400}]},
   {id:2, name:'Муссовый торт', cat:'torty', icon:'🎂', photo:'tort-mussoviy.jpg', desc:'Бисквит, ягодная начинка, мусс, велюр — нежный торт без сахара.', meal:'snack',
     per100:{kcal:150,p:8,f:4,c:13}, variants:[{label:'~1 кг',w:1000,price:2800}]},
@@ -636,17 +636,17 @@ const PRODUCTS = [
     per100:{kcal:360,p:10,f:24,c:28}, variants:[{label:'9 шт',w:270,price:1350}]},
 
   // ПЕЧЕНЬЕ
-  {id:18, name:'Печенье протеиновое с арахисом', cat:'pechenie', icon:'🥜', desc:'Высокобелковое печенье с арахисом — идеальный перекус для спортсменов.', meal:'snack',
+  {id:18, name:'Печенье протеиновое с арахисом', cat:'pechenie', icon:'🥜', photo:'pechenie-arahis.jpg', desc:'Высокобелковое печенье с арахисом — идеальный перекус для спортсменов.', meal:'snack',
     per100:{kcal:320,p:18,f:14,c:32}, variants:[{label:'1 шт (~40 г)',w:40,price:130}]},
   {id:20, name:'Печенье овсяное', cat:'pechenie', icon:'🍪', photo:'pechenie-ovsyanoe.jpg', desc:'Классическое овсяное — подходит веганам.', meal:'snack',
     per100:{kcal:263,p:6,f:8,c:29}, variants:[{label:'150 г',w:150,price:350}]},
   {id:48, name:'Сырные гужеры', cat:'pechenie', icon:'🧀', photo:'gugery.jpg', desc:'Лёгкое сырное печенье на муке бурого риса — идеально к чаю или вину.', meal:'snack',
     per100:{kcal:126,p:5,f:9,c:11}, variants:[{label:'100 г',w:100,price:320}]},
-  {id:49, name:'Кето-печенье', cat:'pechenie', icon:'🍪', photo:'pechenie-pesochnoe.jpg', desc:'Хрустящее кето-печенье без сахара.', meal:'snack',
-    per100:{kcal:280,p:6,f:10,c:38}, kbjuFrom:true, variants:[{label:'150 г',w:150,price:380}]},
+  {id:49, name:'Миндальное кето-печенье', cat:'pechenie', icon:'🍪', photo:'pechenie-pesochnoe.jpg', desc:'Миндальная мука, эритрит, эритритол, яйца. Нежное, воздушное — тает во рту. 1 печенье ≈35 г / 129 ккал.', meal:'snack',
+    per100:{kcal:431,p:20,f:32,c:5}, variants:[{label:'150 г',w:150,price:380}]},
 
   // ПИЦЦА И КИШИ
-  {id:21, name:'Пицца курица + грибы', cat:'pizza', icon:'🍕', desc:'ПП-пицца на твороге и рисовой муке: курица, шампиньоны, моцарелла.', meal:'lunch',
+  {id:21, name:'Пицца курица + грибы', cat:'pizza', icon:'🍕', photo:'pizza-kurica-griby.jpg', desc:'ПП-пицца на твороге и рисовой муке: курица, шампиньоны, моцарелла.', meal:'lunch',
     per100:{kcal:115,p:15,f:4.5,c:4}, variants:[{label:'~950 г',w:950,price:2100}]},
   {id:22, name:'Пицца с морепродуктами', cat:'pizza', icon:'🦐', desc:'Нерка или лосось, креветки, оливки, перец — на ПП-тесте.', meal:'lunch',
     per100:{kcal:140,p:16,f:3,c:12}, variants:[{label:'~950 г',w:950,price:2400}]},
