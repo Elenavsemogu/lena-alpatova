@@ -47,14 +47,33 @@ nav a:hover::after{width:100%}
 .burger span{width:24px;height:2px;background:var(--sage-dark);border-radius:2px;transition:all .3s}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(91,111,94,.05) 0%,transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(201,173,110,.05) 0%,transparent 60%)}
-.hero-content{position:relative;z-index:2;max-width:700px}
-.hero-badge{display:inline-block;font-family:'Forum',cursive;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);border:1px solid var(--gold-light);padding:6px 20px;border-radius:50px;margin-bottom:24px}
-.hero h1{font-size:3.2rem;color:var(--sage-dark);margin-bottom:16px;letter-spacing:.02em}
+.hero{min-height:100vh;display:flex;align-items:center;padding:118px 0 82px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 18% 24%,rgba(91,111,94,.10) 0%,transparent 48%),radial-gradient(ellipse at 78% 58%,rgba(201,173,110,.14) 0%,transparent 54%),linear-gradient(135deg,rgba(245,242,235,.72),rgba(255,255,255,.12))}
+.hero::after{content:'';position:absolute;right:-120px;top:12%;width:360px;height:360px;border:1px solid rgba(201,173,110,.32);border-radius:50%;box-shadow:0 0 0 24px rgba(201,173,110,.05),0 0 0 54px rgba(91,111,94,.04)}
+.hero .container{position:relative;z-index:2}
+.hero-layout{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr);gap:62px;align-items:center}
+.hero-content{position:relative;z-index:2;max-width:650px}
+.hero-mark{width:72px;height:auto;margin-bottom:22px;opacity:.72}
+.hero-badge{display:inline-block;font-family:'Forum',cursive;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);border:1px solid var(--gold-light);padding:6px 20px;border-radius:50px;margin-bottom:24px;background:rgba(255,255,255,.55)}
+.hero h1{font-size:3.65rem;color:var(--sage-dark);margin-bottom:18px;letter-spacing:.01em}
 .hero h1 em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;color:var(--gold-dark)}
-.hero p{font-size:1.2rem;color:var(--text-sec);margin-bottom:36px;max-width:560px;margin-left:auto;margin-right:auto}
-.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.hero p{font-size:1.22rem;color:var(--text-sec);margin-bottom:30px;max-width:600px}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap}
+.hero-points{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:34px;max-width:610px}
+.hero-point{border:1px solid var(--border-light);border-radius:14px;background:rgba(255,255,255,.66);padding:14px 16px;box-shadow:0 10px 30px rgba(62,78,63,.05)}
+.hero-point strong{display:block;font-family:'Forum',cursive;font-size:1.05rem;color:var(--sage-dark);line-height:1.25;margin-bottom:4px}
+.hero-point span{display:block;font-size:.82rem;line-height:1.35;color:var(--text-muted)}
+.hero-visual{position:relative;min-height:520px;display:flex;align-items:center;justify-content:center}
+.hero-plate{position:relative;width:min(440px,100%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 44%,#fff 0 47%,#F5F2EB 48% 63%,rgba(201,173,110,.16) 64% 70%,transparent 71%);display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 24px 45px rgba(62,78,63,.18))}
+.hero-plate::before{content:'';position:absolute;inset:34px;border:1px solid rgba(201,173,110,.48);border-radius:50%}
+.hero-food{width:76%;height:76%;border-radius:50%;object-fit:cover;box-shadow:0 18px 38px rgba(62,78,63,.18)}
+.hero-orbit{position:absolute;border-radius:999px;background:rgba(255,255,255,.88);border:1px solid var(--border-light);box-shadow:var(--shadow);padding:10px 16px;font-family:'Forum',cursive;color:var(--sage-dark);font-size:.95rem;letter-spacing:.04em}
+.hero-orbit small{display:block;font-family:'Cormorant Garamond',serif;font-size:.72rem;color:var(--text-muted);letter-spacing:0;line-height:1.15}
+.hero-orbit-1{left:0;top:70px}
+.hero-orbit-2{right:4px;top:156px}
+.hero-orbit-3{left:34px;bottom:88px}
+.hero-quote{position:absolute;right:22px;bottom:22px;max-width:230px;background:var(--sage-deep);color:#F0EDE5;border-radius:16px;padding:18px 20px;box-shadow:var(--shadow-lg);font-size:.96rem;line-height:1.45}
+.hero-quote span{display:block;font-family:'Forum',cursive;color:var(--gold);font-size:.86rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:50px;font-family:'Forum',cursive;font-size:1rem;letter-spacing:.06em;cursor:pointer;border:2px solid transparent;transition:all .3s}
 .btn-primary{background:var(--sage);color:#fff;border-color:var(--sage)}
 .btn-primary:hover{background:var(--sage-dark);border-color:var(--sage-dark);color:#fff}
@@ -73,6 +92,35 @@ nav a:hover::after{width:100%}
 .section-heading p{font-size:1.05rem;color:var(--text-muted);max-width:540px;margin:0 auto}
 .section-sage .section-heading p{color:rgba(240,237,229,.65)}
 .section-line{width:48px;height:2px;background:var(--gold);margin:12px auto 0;border-radius:1px}
+
+/* STORY BLOCKS */
+.story-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.story-card{background:var(--bg-alt);border:1px solid var(--border-light);border-radius:var(--radius);padding:26px 24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.story-card::before{content:'';position:absolute;top:0;left:24px;right:24px;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.story-card .num{font-family:'Forum',cursive;color:var(--gold-dark);font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px}
+.story-card h3{font-size:1.22rem;color:var(--sage-dark);margin-bottom:10px}
+.story-card p{font-size:.95rem;color:var(--text-sec);line-height:1.55}
+.manifesto{background:var(--bg-warm);position:relative;overflow:hidden}
+.manifesto::before{content:'';position:absolute;left:-90px;bottom:-120px;width:280px;height:280px;border-radius:50%;background:rgba(91,111,94,.06)}
+.manifesto-lead{max-width:850px;margin:0 auto 42px;text-align:center}
+.manifesto-kicker{font-family:'Forum',cursive;color:var(--gold-dark);letter-spacing:.18em;text-transform:uppercase;font-size:.82rem;margin-bottom:12px}
+.manifesto-lead h2{font-size:2.55rem;color:var(--sage-dark);margin-bottom:14px}
+.manifesto-lead p{font-size:1.18rem;color:var(--text-sec)}
+.feature-split{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center}
+.feature-copy h2{font-size:2.35rem;color:var(--sage-dark);margin-bottom:16px}
+.feature-copy p{color:var(--text-sec);margin-bottom:16px}
+.feature-list{display:grid;gap:12px;margin-top:24px}
+.feature-item{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:12px;background:rgba(91,111,94,.06);color:var(--text-sec)}
+.feature-item b{font-family:'Forum',cursive;color:var(--sage-dark);font-weight:400}
+.feature-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);margin-top:11px;flex-shrink:0}
+.feature-image{border-radius:28px;background:linear-gradient(145deg,#fff,var(--bg-warm));padding:26px;box-shadow:var(--shadow-lg);position:relative}
+.feature-image::before{content:'';position:absolute;inset:12px;border:1px solid rgba(201,173,110,.38);border-radius:22px;pointer-events:none}
+.feature-image img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:20px}
+.order-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.order-step{background:var(--bg-alt);border-radius:var(--radius);padding:28px;border:1px solid var(--border-light);box-shadow:var(--shadow)}
+.order-step span{display:inline-flex;width:40px;height:40px;border-radius:50%;background:rgba(201,173,110,.18);align-items:center;justify-content:center;font-family:'Forum',cursive;color:var(--gold-dark);margin-bottom:16px}
+.order-step h3{font-size:1.25rem;color:var(--sage-dark);margin-bottom:10px}
+.order-step p{font-size:.97rem;color:var(--text-sec)}
 
 /* CATALOG TABS */
 .catalog-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:36px;flex-wrap:wrap}
@@ -236,6 +284,19 @@ nav a:hover::after{width:100%}
 
 /* RESPONSIVE */
 @media(max-width:900px){
+  .hero{padding-top:100px}
+  .hero-layout{grid-template-columns:1fr;gap:34px}
+  .hero-content{text-align:center;margin:0 auto}
+  .hero-mark{margin-left:auto;margin-right:auto}
+  .hero-btns{justify-content:center}
+  .hero-points{margin-left:auto;margin-right:auto}
+  .hero-visual{min-height:430px}
+  .hero-orbit-1{left:4px;top:42px}
+  .hero-orbit-2{right:4px;top:120px}
+  .hero-orbit-3{left:12px;bottom:68px}
+  .story-grid{grid-template-columns:repeat(2,1fr)}
+  .feature-split{grid-template-columns:1fr;gap:34px}
+  .order-steps{grid-template-columns:1fr}
   .about-grid{grid-template-columns:1fr;gap:32px}
   .about-img{max-width:400px;margin:0 auto}
   .marathon-grid{grid-template-columns:1fr;gap:24px}
@@ -253,7 +314,19 @@ nav a:hover::after{width:100%}
   .planner-modal{padding:20px}
 }
 @media(max-width:480px){
-  .hero h1{font-size:1.7rem}
+  .hero{padding:96px 0 58px}
+  .hero h1{font-size:1.85rem}
+  .hero p{font-size:1.05rem}
+  .hero-points{grid-template-columns:1fr}
+  .hero-visual{min-height:360px}
+  .hero-plate{width:min(320px,92vw)}
+  .hero-orbit{font-size:.82rem;padding:8px 12px}
+  .hero-orbit-1{top:18px}
+  .hero-orbit-2{top:82px;right:0}
+  .hero-orbit-3{bottom:54px;left:0}
+  .hero-quote{position:relative;right:auto;bottom:auto;margin:18px auto 0}
+  .story-grid{grid-template-columns:1fr}
+  .manifesto-lead h2,.feature-copy h2{font-size:1.85rem}
   .hero-btns{flex-direction:column;align-items:center}
   .btn{padding:12px 24px;font-size:.9rem}
   .catalog-grid{grid-template-columns:1fr 1fr;gap:12px}
@@ -279,6 +352,7 @@ nav a:hover::after{width:100%}
     </a>
     <nav id="nav">
       <a href="#catalog">Каталог</a>
+      <a href="#principles">Принципы</a>
       <a href="#about">Обо мне</a>
       <a href="#marathon">Марафон</a>
       <a href="#reviews">Отзывы</a>
@@ -299,14 +373,98 @@ nav a:hover::after{width:100%}
 
 <!-- HERO -->
 <section class="hero" id="hero">
-  <div class="hero-content">
-    <img src="Fairytrue.svg" alt="" style="width:110px;height:auto;margin:0 auto 24px;opacity:.65">
-    <div class="hero-badge">Натурально · Штучно · С любовью</div>
-    <h1>Десерты и выпечка<br><em>из 100% натуральных</em> ингредиентов</h1>
-    <p>Торты, конфеты, пицца, хлеб и блюда на каждый день — без сахара и белой муки, с точным КБЖУ. Собери заказ и узнай полную раскладку по нутриентам.</p>
-    <div class="hero-btns">
-      <a href="#catalog" class="btn btn-primary">Смотреть каталог</a>
-      <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" class="btn btn-outline" target="_blank">Написать мне</a>
+  <div class="container hero-layout">
+    <div class="hero-content">
+      <img class="hero-mark" src="Fairytrue.svg" alt="ПП Фея">
+      <div class="hero-badge">Натурально · Штучно · Под вашу задачу</div>
+      <h1>Чистая сбалансированная еда<br><em>и десерты без компромиссов</em></h1>
+      <p>ПП-торты, конфеты, хлеб, пицца, киши и хачапури по-аджарски — из понятных ингредиентов, с заботой о вкусе, ограничениях в питании и точном КБЖУ.</p>
+      <div class="hero-btns">
+        <a href="#catalog" class="btn btn-primary">Собрать заказ</a>
+        <a href="#principles" class="btn btn-outline">Как я готовлю</a>
+      </div>
+      <div class="hero-points" aria-label="Преимущества">
+        <div class="hero-point"><strong>Без белой муки</strong><span>рисовая, овсяная, полбяная и закваски</span></div>
+        <div class="hero-point"><strong>Без сахара</strong><span>эритритол, шоколад без сахара, ягоды</span></div>
+        <div class="hero-point"><strong>С КБЖУ</strong><span>карточки блюд и умная корзина считают заказ</span></div>
+      </div>
+    </div>
+    <div class="hero-visual" aria-label="Хачапури по-аджарски как центральный акцент">
+      <div class="hero-plate">
+        <img class="hero-food" src="images/menu/hachapuri.jpg" alt="Хачапури по-аджарски от Елены Алпатовой">
+      </div>
+      <div class="hero-orbit hero-orbit-1">штучно<small>готовлю под заказ</small></div>
+      <div class="hero-orbit hero-orbit-2">для ЗОЖ<small>и ограничений</small></div>
+      <div class="hero-orbit hero-orbit-3">Барнаул<small>доставка и самовывоз</small></div>
+      <div class="hero-quote"><span>ПП Фея</span>«Пространство, где творится чистая сбалансированная еда и десерты»</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPLES -->
+<section class="section manifesto" id="principles">
+  <div class="container">
+    <div class="manifesto-lead">
+      <div class="manifesto-kicker">Философия Елены</div>
+      <h2>Не «диетическая замена», а настоящая вкусная еда</h2>
+      <p>В основе сайта теперь не только каталог, а понятная история бренда: что можно заказать, кому это подходит и почему ПП-выпечка может быть красивой, праздничной и честной по составу.</p>
+    </div>
+    <div class="story-grid">
+      <article class="story-card">
+        <div class="num">01 · состав</div>
+        <h3>100% натуральные ингредиенты</h3>
+        <p>Без усилителей и лишних добавок: творог, рикотта, орехи, ягоды, шоколад без сахара, мука бурого риса, полба и овсяная мука.</p>
+      </article>
+      <article class="story-card">
+        <div class="num">02 · забота</div>
+        <h3>Под ограничения в питании</h3>
+        <p>Для людей с повышенным сахаром, аллергиями, ЗОЖ-задачами, спортсменов и веганов — Лена уточняет состав, вес, дату, доставку и декор.</p>
+      </article>
+      <article class="story-card">
+        <div class="num">03 · вкус</div>
+        <h3>ПП, которое не похоже на наказание</h3>
+        <p>Можно заказать торт «как Прага», муссовый десерт, конфеты, пиццу, киш или хачапури — красиво, сытно и без ощущения запрета.</p>
+      </article>
+      <article class="story-card">
+        <div class="num">04 · система</div>
+        <h3>Каталог с КБЖУ и ценами</h3>
+        <p>Каждая карточка хранит фото, описание, цену и нутриенты. Корзина складывает заказ и показывает калории, белки, жиры и углеводы.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE -->
+<section class="section" id="for-whom">
+  <div class="container feature-split">
+    <div class="feature-image">
+      <img src="images/menu/bento-pp.jpg" alt="ПП бенто-торт без сахара">
+    </div>
+    <div class="feature-copy">
+      <div class="manifesto-kicker">Для кого</div>
+      <h2>Когда хочется сладкого, но важно понимать, из чего оно сделано</h2>
+      <p>Лена делает десерты и несладкую выпечку для реальной жизни: день рождения, семейный ужин, перекус после тренировки, подарок, рацион без сахара или меню с индивидуальными ограничениями.</p>
+      <div class="feature-list">
+        <div class="feature-item"><span class="feature-dot"></span><div><b>Для людей с ограничениями.</b> Подберём вариант без сахара, без белой муки, веганский или с учётом аллергий.</div></div>
+        <div class="feature-item"><span class="feature-dot"></span><div><b>Для спортсменов и ЗОЖ.</b> В карточках есть КБЖУ, а в корзине — итоговая раскладка всего заказа.</div></div>
+        <div class="feature-item"><span class="feature-dot"></span><div><b>Для тех, кто любит «как обычное».</b> Вкус, текстура и красота остаются — меняется только подход к составу.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FLOW -->
+<section class="section section-alt" id="order-flow">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Как собрать заказ</h2>
+      <p>Каталог остаётся главным инструментом сайта: выберите позиции, посмотрите КБЖУ и отправьте заявку Елене</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="order-steps">
+      <article class="order-step"><span>1</span><h3>Выберите формат</h3><p>Торт, конфеты, печенье, пицца, киш, хлеб, блины или хачапури — можно собрать один праздник или набор на несколько дней.</p></article>
+      <article class="order-step"><span>2</span><h3>Добавьте в корзину</h3><p>Сайт посчитает общую стоимость и КБЖУ. Если позиций много, планировщик предложит распределение по приёмам пищи.</p></article>
+      <article class="order-step"><span>3</span><h3>Уточните детали</h3><p>Дата, время, доставка, декор, надпись, ограничения и предоплата — Елена подтверждает заказ лично, без конвейера.</p></article>
     </div>
   </div>
 </section>
