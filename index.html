@@ -1131,7 +1131,7 @@ function catSortKey(cat) {
 
 // ===== INTEGRATION: SITE -> APPS SCRIPT (orders/forms) =====
 // Вставь сюда URL Web App деплоя Apps Script (см. integrations/apps-script/README.md)
-const ORDER_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwuP5qSGmAqEC5BNapix9A3nObp4t6q--rSX1St6aPkbEmGkfoDK-gmE9WzAuCeAQTzRQ/exec';
+const ORDER_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxKFJp0R0stEy0R412e-R7nKtqMbgytge0YoXF4LJi7Mpzv8DD9dB34u9zjyKlnp5BM6w/exec';
 
 const PRODUCTS = [
   // ТОРТЫ ПП
@@ -1318,6 +1318,47 @@ function buildOrderPayload() {
   };
 }
 
+function saveOrderDraftToGas(payload) {
+  const body = JSON.stringify(payload);
+  return new Promise((resolve) => {
+    const frameName = 'gas_order_' + Date.now();
+    const iframe = document.createElement('iframe');
+    iframe.name = frameName;
+    iframe.style.cssText = 'position:absolute;width:0;height:0;border:0;visibility:hidden';
+    document.body.appendChild(iframe);
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = ORDER_WEBHOOK_URL;
+    form.target = frameName;
+    form.style.display = 'none';
+
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'data';
+    input.value = body;
+    form.appendChild(input);
+
+    document.body.appendChild(form);
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      form.remove();
+      iframe.remove();
+      resolve();
+    };
+    iframe.addEventListener('load', () => setTimeout(finish, 400));
+    form.submit();
+    setTimeout(finish, 2500);
+  }).then(() => {
+    if (body.length > 1800) return;
+    const q = new URLSearchParams({ type: 'order_draft', data: body });
+    const img = new Image();
+    img.src = ORDER_WEBHOOK_URL + '?' + q.toString();
+  });
+}
+
 async function submitOrder() {
   const status = document.getElementById('cmStatus');
   status.style.display = 'block';
@@ -1331,24 +1372,9 @@ async function submitOrder() {
   status.textContent = 'Формируем заказ…';
 
   try {
-    // Самый надёжный способ для кросс-доменных отправок без CORS.
-    // Если доступен sendBeacon — используем его.
-    const body = JSON.stringify(payload);
-    if (navigator && typeof navigator.sendBeacon === 'function') {
-      const ok = navigator.sendBeacon(ORDER_WEBHOOK_URL, new Blob([body], { type: 'text/plain;charset=UTF-8' }));
-      if (!ok) throw new Error('sendBeacon failed');
-    } else {
-      // Фолбэк: no-cors fetch (ответ прочитать нельзя).
-      await fetch(ORDER_WEBHOOK_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-        body
-      });
-    }
-    // Даём Apps Script секунду сохранить черновик, чтобы бот нашёл заказ.
-    await new Promise((r) => setTimeout(r, 1000));
-    const deeplink = `https://t.me/pp_fairy_bot?start=order_${encodeURIComponent(payload.orderId)}`;
+    await saveOrderDraftToGas(payload);
+    await new Promise((r) => setTimeout(r, 2000));
+    const deeplink = `https://t.me/pp_fairy_bot?start=order_${payload.orderId}`;
     status.textContent = 'Откройте бота, чтобы проверить и подтвердить заказ ✅';
 
     try {

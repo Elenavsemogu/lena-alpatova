@@ -24,15 +24,27 @@ function getMiniAppUrl_() {
   return PropertiesService.getScriptProperties().getProperty("MINI_APP_URL") || DEFAULT_MINI_APP_URL;
 }
 
+function normalizeOrderId_(orderId) {
+  var id = String(orderId || "").trim();
+  while (id.indexOf("order_") === 0) id = id.slice("order_".length);
+  return id;
+}
+
 function saveOrderDraftCache_(orderId, payload) {
+  var json = JSON.stringify(payload);
   try {
-    CacheService.getScriptCache().put("order:" + orderId, JSON.stringify(payload), 21600);
+    CacheService.getScriptCache().put("order:" + orderId, json, 21600);
+  } catch (_) {}
+  try {
+    PropertiesService.getScriptProperties().setProperty("draft:" + orderId, json);
   } catch (_) {}
 }
 
 function loadOrderDraftCache_(orderId) {
+  orderId = normalizeOrderId_(orderId);
   try {
     var raw = CacheService.getScriptCache().get("order:" + orderId);
+    if (!raw) raw = PropertiesService.getScriptProperties().getProperty("draft:" + orderId);
     if (!raw) return null;
     var p = JSON.parse(raw);
     return {
@@ -48,13 +60,43 @@ function loadOrderDraftCache_(orderId) {
 
 // Telegram при setWebhook / проверках может обращаться GET-запросом.
 // Чтобы не получать 405 Method Not Allowed — отвечаем 200 OK.
+function parseIncomingPayload_(e) {
+  if (!e) return {};
+  if (e.postData && e.postData.contents) {
+    try { return JSON.parse(e.postData.contents); } catch (_) {}
+  }
+  var p = e.parameter || {};
+  if (p.data) {
+    try { return JSON.parse(String(p.data)); } catch (_) {}
+  }
+  if (p.payload) {
+    try { return JSON.parse(String(p.payload)); } catch (_) {}
+  }
+  return {};
+}
+
 function doGet(e) {
+  var payload = parseIncomingPayload_(e);
+  if (payload && payload.type === "order_draft") {
+    return handleOrderDraft_(payload);
+  }
+  if (e && e.parameter && e.parameter.type === "order_draft" && e.parameter.data) {
+    try {
+      payload = JSON.parse(String(e.parameter.data));
+      return handleOrderDraft_(payload);
+    } catch (err) {
+      return json_(200, { ok: false, error: String(err) });
+    }
+  }
   return json_(200, { ok: true, ts: new Date().toISOString() });
 }
 
 function doPost(e) {
   try {
-    var payload = JSON.parse(e.postData && e.postData.contents ? e.postData.contents : "{}");
+    var payload = parseIncomingPayload_(e);
+    if (!payload || !Object.keys(payload).length) {
+      payload = JSON.parse(e.postData && e.postData.contents ? e.postData.contents : "{}");
+    }
     // Telegram updates приходят без нашего поля type — у них есть update_id
     if (payload && payload.update_id) return handleTelegramUpdate_(payload);
 
@@ -79,7 +121,7 @@ function handleOrderDraft_(p) {
   var sheetName = PropertiesService.getScriptProperties().getProperty("SHEET_ORDERS") || "Orders";
 
   var ts = new Date();
-  var orderId = p.orderId || ("ord_" + Utilities.getUuid().replace(/-/g, "").slice(0, 16));
+  var orderId = normalizeOrderId_(p.orderId || ("ord_" + Utilities.getUuid().replace(/-/g, "").slice(0, 16)));
   var source = p.source || "web";
   var client = p.client || {};
   var items = p.items || [];
@@ -476,6 +518,7 @@ function setupBotUi() {
 }
 
 function tgStartOrder_(token, chatId, orderId) {
+  orderId = normalizeOrderId_(orderId);
   var order = findOrderById_(orderId);
   if (!order) {
     tgSend_(token, String(chatId), "Не нашла заказ. Возможно, ссылка устарела. Попробуйте оформить заказ ещё раз на сайте.", {});
@@ -537,6 +580,7 @@ function tgHandleCallback_(token, cq) {
 }
 
 function findOrderById_(orderId) {
+  orderId = normalizeOrderId_(orderId);
   var cached = loadOrderDraftCache_(orderId);
   if (cached) return cached;
 
@@ -555,7 +599,7 @@ function findOrderById_(orderId) {
   var lastRow = sh.getLastRow();
   var values = sh.getRange(2, 1, lastRow, sh.getLastColumn()).getValues();
   for (var r = 0; r < values.length; r++) {
-    if (String(values[r][idx.order_id]) === String(orderId)) {
+    if (normalizeOrderId_(values[r][idx.order_id]) === orderId) {
       return {
         row: r + 2,
         createdAt: values[r][idx.created_at],
