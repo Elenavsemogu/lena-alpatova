@@ -42,7 +42,7 @@ function handleOrderDraft_(p) {
   var sheetName = props.getProperty("SHEET_ORDERS") || "Orders";
 
   var ts = new Date();
-  var orderId = "ord_" + Utilities.getUuid().replace(/-/g, "").slice(0, 16);
+  var orderId = p.orderId || ("ord_" + Utilities.getUuid().replace(/-/g, "").slice(0, 16));
   var source = p.source || "web";
   var client = p.client || {};
   var items = p.items || [];
