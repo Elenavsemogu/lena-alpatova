@@ -13,6 +13,38 @@
 
 // Токен уже прописан здесь как запасной вариант (если нет Script Property BOT_TOKEN)
 var HARDCODED_BOT_TOKEN = "8708408440:AAHVJZOI4dAKShpcMX-oqJ8aY2R6GZvdrB8";
+var HARDCODED_SHEET_ID = "1d4vyOwUcHbAYS9mFc0oUWjbghYqcDrlQ8xS23m8E1to";
+var DEFAULT_MINI_APP_URL = "https://xn--e1atau0d.xn--p1ai/"; // ппфея.рф
+
+function getSheetId_() {
+  return PropertiesService.getScriptProperties().getProperty("SHEET_ID") || HARDCODED_SHEET_ID;
+}
+
+function getMiniAppUrl_() {
+  return PropertiesService.getScriptProperties().getProperty("MINI_APP_URL") || DEFAULT_MINI_APP_URL;
+}
+
+function saveOrderDraftCache_(orderId, payload) {
+  try {
+    CacheService.getScriptCache().put("order:" + orderId, JSON.stringify(payload), 21600);
+  } catch (_) {}
+}
+
+function loadOrderDraftCache_(orderId) {
+  try {
+    var raw = CacheService.getScriptCache().get("order:" + orderId);
+    if (!raw) return null;
+    var p = JSON.parse(raw);
+    return {
+      items: p.items || [],
+      totals: p.totals || {},
+      client: p.client || {},
+      source: p.source || "web"
+    };
+  } catch (_) {
+    return null;
+  }
+}
 
 // Telegram при setWebhook / проверках может обращаться GET-запросом.
 // Чтобы не получать 405 Method Not Allowed — отвечаем 200 OK.
@@ -43,9 +75,8 @@ function doPost(e) {
  * Затем сайт открывает бота: https://t.me/pp_fairy_bot?start=order_<orderId>
  */
 function handleOrderDraft_(p) {
-  var props = PropertiesService.getScriptProperties();
-  var sheetId = props.getProperty("SHEET_ID");
-  var sheetName = props.getProperty("SHEET_ORDERS") || "Orders";
+  var sheetId = getSheetId_();
+  var sheetName = PropertiesService.getScriptProperties().getProperty("SHEET_ORDERS") || "Orders";
 
   var ts = new Date();
   var orderId = p.orderId || ("ord_" + Utilities.getUuid().replace(/-/g, "").slice(0, 16));
@@ -53,6 +84,8 @@ function handleOrderDraft_(p) {
   var client = p.client || {};
   var items = p.items || [];
   var totals = p.totals || {};
+
+  saveOrderDraftCache_(orderId, { orderId: orderId, source: source, client: client, items: items, totals: totals, ts: ts });
 
   if (sheetId) {
     var ss = SpreadsheetApp.openById(sheetId);
@@ -328,28 +361,118 @@ function tgCall_(token, method, payload) {
 function handleTelegramUpdate_(u) {
   var props = PropertiesService.getScriptProperties();
   var botToken = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var chatId = u.message && u.message.chat ? u.message.chat.id : (u.callback_query && u.callback_query.message ? u.callback_query.message.chat.id : null);
 
-  // /start order_xxx
   if (u.message && u.message.text) {
-    var text = String(u.message.text || "");
-    if (text.indexOf("/start") === 0) {
-      var parts = text.split(" ");
+    var text = String(u.message.text || "").trim();
+
+    if (text.indexOf("/start") === 0 || text === "/catalog") {
+      var parts = text.split(/\s+/);
       var param = parts.length > 1 ? parts[1] : "";
       if (param && param.indexOf("order_") === 0) {
-        return tgStartOrder_(botToken, u.message.chat.id, param.replace(/^order_/, ""));
+        return tgStartOrder_(botToken, chatId, param.replace(/^order_/, ""));
       }
-      // просто старт
-      tgSend_(botToken, String(u.message.chat.id), "Привет! Я «ПП Фея» ✨\nЧтобы подтвердить заказ, откройте ссылку из сайта (корзины).", {});
+      tgSendWelcome_(botToken, chatId);
+      return json_(200, { ok: true });
+    }
+    if (text === "/faq") {
+      tgSendFaqMenu_(botToken, chatId);
+      return json_(200, { ok: true });
+    }
+
+    if (text === "❓ Частые вопросы") {
+      tgSendFaqMenu_(botToken, chatId);
+      return json_(200, { ok: true });
+    }
+    if (text === "📦 Мой заказ") {
+      tgSend_(botToken, String(chatId), "Оформите заказ в каталоге — после отправки я покажу состав и кнопку «Подтвердить» ✅", { reply_markup: getMainReplyKeyboard_() });
+      return json_(200, { ok: true });
+    }
+    if (text === "💬 Написать Елене") {
+      tgSend_(botToken, String(chatId), "Напишите Елене: @elenappdeserty\nИли откройте каталог и оформите заказ через кнопку ниже 👇", { reply_markup: getMainReplyKeyboard_() });
+      return json_(200, { ok: true });
+    }
+    if (text === "📝 Анкета") {
+      tgSend_(botToken, String(chatId), "Анкета по ограничениям скоро будет в боте.\nПока напишите пожелания Елене: @elenappdeserty", { reply_markup: getMainReplyKeyboard_() });
       return json_(200, { ok: true });
     }
   }
 
-  // callback кнопок
   if (u.callback_query && u.callback_query.data) {
     return tgHandleCallback_(botToken, u.callback_query);
   }
 
   return json_(200, { ok: true });
+}
+
+function getMainReplyKeyboard_() {
+  var url = getMiniAppUrl_();
+  return {
+    keyboard: [
+      [{ text: "🍰 Открыть каталог и заказать", web_app: { url: url } }],
+      [{ text: "❓ Частые вопросы" }, { text: "📦 Мой заказ" }],
+      [{ text: "💬 Написать Елене" }, { text: "📝 Анкета" }]
+    ],
+    resize_keyboard: true,
+    is_persistent: true
+  };
+}
+
+function tgSendWelcome_(token, chatId) {
+  var lines = [];
+  lines.push("Здравствуйте! Я помощник Елены — «ПП Фея» 🧁");
+  lines.push("");
+  lines.push("Торты, десерты, конфеты и выпечка из натуральных ингредиентов.");
+  lines.push("Без сахара · Без белой муки · Барнаул");
+  lines.push("");
+  lines.push("Нажмите «🍰 Открыть каталог и заказать» — это сайт прямо в Telegram.");
+  tgCall_(token, "sendMessage", {
+    chat_id: chatId,
+    text: lines.join("\n"),
+    reply_markup: getMainReplyKeyboard_()
+  });
+}
+
+function tgSendFaqMenu_(token, chatId) {
+  var kb = {
+    inline_keyboard: [
+      [{ text: "Из чего готовите?", callback_data: "faq:ingredients" }],
+      [{ text: "Как оплатить?", callback_data: "faq:pay" }],
+      [{ text: "Доставка и самовывоз", callback_data: "faq:delivery" }],
+      [{ text: "Можно на сегодня?", callback_data: "faq:today" }],
+      [{ text: "Для диабетиков", callback_data: "faq:diabetes" }],
+      [{ text: "Без молока / глютена", callback_data: "faq:allergy" }],
+      [{ text: "← Назад", callback_data: "menu:back" }]
+    ]
+  };
+  tgCall_(token, "sendMessage", { chat_id: chatId, text: "Частые вопросы — выберите тему:", reply_markup: kb });
+}
+
+function getFaqText_(key) {
+  var map = {
+    ingredients: "Только натуральные ингредиенты:\n\n🌾 Мука: бурого риса, полбяная, овсяная, цельнозерновая\n🍯 Вместо сахара: эритритол (ГИ = 0)\n🍫 Шоколад без сахара\n🍞 Хлеб на закваске\n\nБез добавок и усилителей вкуса.",
+    pay: "💳 Оплата:\n\n• Предоплата 1 000–2 000 ₽ при оформлении\n• Перевод на карту (реквизиты пришлём после заказа)\n• Остаток — при получении",
+    delivery: "🚚 Доставка по Барнаулу: 300–500 ₽, время по договорённости.\n\n📍 Самовывоз: Павловский тракт 229",
+    today: "⏰ Часто можем приготовить и привезти уже сегодня — зависит от загрузки. Чем раньше закажете, тем больше вариантов!",
+    diabetes: "✅ Да! Эритритол (ГИ = 0) вместо сахара, мука с низким ГИ.",
+    allergy: "✅ Делаем без молока (веган) и без глютена — уточните при заказе в комментарии."
+  };
+  return map[key] || "Выберите вопрос из меню.";
+}
+
+function setupBotUi() {
+  var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var url = getMiniAppUrl_();
+  tgCall_(token, "setChatMenuButton", {
+    menu_button: { type: "web_app", text: "🍰 Каталог", web_app: { url: url } }
+  });
+  tgCall_(token, "setMyCommands", {
+    commands: [
+      { command: "start", description: "Главное меню" },
+      { command: "catalog", description: "Открыть каталог" },
+      { command: "faq", description: "Частые вопросы" }
+    ]
+  });
 }
 
 function tgStartOrder_(token, chatId, orderId) {
@@ -363,7 +486,7 @@ function tgStartOrder_(token, chatId, orderId) {
   var kb = {
     inline_keyboard: [
       [{ text: "✅ Подтвердить заказ", callback_data: "confirm:" + orderId }],
-      [{ text: "✏️ Редактировать (на сайте)", url: "https://еленалпатова.рф/?editOrder=" + encodeURIComponent(orderId) }]
+      [{ text: "✏️ Редактировать (на сайте)", url: getMiniAppUrl_() + "?editOrder=" + encodeURIComponent(orderId) }]
     ]
   };
 
@@ -373,6 +496,8 @@ function tgStartOrder_(token, chatId, orderId) {
 
 function tgHandleCallback_(token, cq) {
   var data = String(cq.data || "");
+  var chatId = cq.message && cq.message.chat ? cq.message.chat.id : null;
+
   if (data.indexOf("confirm:") === 0) {
     var orderId = data.replace(/^confirm:/, "");
     var order = findOrderById_(orderId);
@@ -384,7 +509,26 @@ function tgHandleCallback_(token, cq) {
     markOrderStatus_(orderId, "CONFIRMED");
     var finalText = formatOrderForClient_(order.items, order.totals) + "\n\nЕсли нужно что-то изменить — напишите Елене, пожалуйста.";
     tgCall_(token, "answerCallbackQuery", { callback_query_id: cq.id, text: "Принято ✅" });
-    tgCall_(token, "sendMessage", { chat_id: cq.message.chat.id, text: finalText, disable_web_page_preview: true });
+    tgCall_(token, "sendMessage", { chat_id: chatId, text: finalText, disable_web_page_preview: true, reply_markup: getMainReplyKeyboard_() });
+
+    var lenaChatId = PropertiesService.getScriptProperties().getProperty("LENA_CHAT_ID");
+    if (lenaChatId) {
+      var lenaText = formatOrderForLena_(new Date(), order.source || "web", order.client || {}, order.items, order.totals);
+      tgSend_(token, lenaChatId, lenaText, { parse_mode: "HTML", disable_web_page_preview: true });
+    }
+    return json_(200, { ok: true });
+  }
+
+  if (data.indexOf("faq:") === 0) {
+    var key = data.replace(/^faq:/, "");
+    tgCall_(token, "answerCallbackQuery", { callback_query_id: cq.id });
+    tgCall_(token, "sendMessage", { chat_id: chatId, text: getFaqText_(key), reply_markup: getMainReplyKeyboard_() });
+    return json_(200, { ok: true });
+  }
+
+  if (data === "menu:back") {
+    tgCall_(token, "answerCallbackQuery", { callback_query_id: cq.id });
+    tgSendWelcome_(token, chatId);
     return json_(200, { ok: true });
   }
 
@@ -393,9 +537,11 @@ function tgHandleCallback_(token, cq) {
 }
 
 function findOrderById_(orderId) {
-  var props = PropertiesService.getScriptProperties();
-  var sheetId = props.getProperty("SHEET_ID");
-  var sheetName = props.getProperty("SHEET_ORDERS") || "Orders";
+  var cached = loadOrderDraftCache_(orderId);
+  if (cached) return cached;
+
+  var sheetId = getSheetId_();
+  var sheetName = PropertiesService.getScriptProperties().getProperty("SHEET_ORDERS") || "Orders";
   if (!sheetId) return null;
   var ss = SpreadsheetApp.openById(sheetId);
   var sh = ss.getSheetByName(sheetName);
@@ -406,7 +552,8 @@ function findOrderById_(orderId) {
   header.forEach(function (h, i) { idx[String(h || "").trim()] = i; });
   if (idx.order_id == null) return null;
 
-  var values = sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).getValues();
+  var lastRow = sh.getLastRow();
+  var values = sh.getRange(2, 1, lastRow, sh.getLastColumn()).getValues();
   for (var r = 0; r < values.length; r++) {
     if (String(values[r][idx.order_id]) === String(orderId)) {
       return {
@@ -507,7 +654,14 @@ function enableTelegramPolling() {
     if (t.getHandlerFunction() === "pollTelegramUpdates") ScriptApp.deleteTrigger(t);
   });
   ScriptApp.newTrigger("pollTelegramUpdates").timeBased().everyMinutes(1).create();
-  Logger.log("Polling включён: webhook удалён, триггер pollTelegramUpdates каждую минуту.");
+  setupBotUi();
+  Logger.log("Polling включён: webhook удалён, триггер pollTelegramUpdates каждую минуту, меню бота обновлено.");
+}
+
+/** Один раз после обновления кода: Run → setupBotUi */
+function setupBotUiPublic() {
+  setupBotUi();
+  Logger.log("Меню и кнопка Mini App обновлены. URL: " + getMiniAppUrl_());
 }
 
 function pollTelegramUpdates() {

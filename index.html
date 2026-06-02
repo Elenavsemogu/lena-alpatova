@@ -7,6 +7,7 @@
 <meta name="description" content="ПП Фея Елена Алпатова — авторские десерты, несладкая выпечка, торты и блюда из 100% натуральных ингредиентов. Каталог с КБЖУ, умная корзина, доставка по Барнаулу.">
 <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="favicon.png">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Forum&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -1345,6 +1346,8 @@ async function submitOrder() {
         body
       });
     }
+    // Даём Apps Script секунду сохранить черновик, чтобы бот нашёл заказ.
+    await new Promise((r) => setTimeout(r, 1000));
     const deeplink = `https://t.me/pp_fairy_bot?start=order_${encodeURIComponent(payload.orderId)}`;
     status.textContent = 'Откройте бота, чтобы проверить и подтвердить заказ ✅';
 
@@ -2032,7 +2035,17 @@ function initHeroCarousel() {
   scheduleHeroAutoplay(HERO_FIRST_DELAY_MS);
 }
 
+function initTgWebApp() {
+  try {
+    const tg = window.Telegram && window.Telegram.WebApp;
+    if (!tg) return;
+    tg.ready();
+    tg.expand();
+  } catch (_) {}
+}
+
 // INIT
+initTgWebApp();
 initHeroCarousel();
 renderTabs();
 renderCatalog();
