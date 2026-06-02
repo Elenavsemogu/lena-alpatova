@@ -1399,22 +1399,26 @@ async function submitOrder() {
 
   try {
     await saveOrderDraftToGas(payload);
-    await new Promise((r) => setTimeout(r, 2000));
+    // Показываем подтверждение на сайте, без автоматического перехода в Telegram
+    const itemsLines = payload.items.map((it) => `— ${it.name} (${it.variant}) × ${it.qty}`).join('<br>');
     const deeplink = `https://t.me/pp_fairy_bot?start=order_${payload.orderId}`;
-    status.textContent = 'Откройте бота, чтобы проверить и подтвердить заказ ✅';
 
-    try {
-      const tg = window.Telegram && window.Telegram.WebApp;
-      if (tg && typeof tg.openTelegramLink === 'function') {
-        tg.openTelegramLink(deeplink);
-      } else {
-        window.open(deeplink, '_blank', 'noopener');
-      }
-    } catch (_) {
-      window.open(deeplink, '_blank', 'noopener');
-    }
+    status.innerHTML = `
+      <div style="font-weight:700;margin-bottom:6px">Спасибо! Заказ принят ✅</div>
+      <div style="margin-bottom:10px">Номер заказа: <b>${payload.orderId}</b></div>
+      <div style="margin-bottom:8px">Позиции:</div>
+      <div style="margin-bottom:10px;line-height:1.5">${itemsLines}</div>
+      <div style="margin-bottom:12px">Сумма: <b>${payload.totals.price} ₽</b></div>
+      <div style="margin-bottom:12px">Свяжемся с вами скоро по телефону, чтобы согласовать детали.</div>
+      <a class="btn btn-outline" href="${deeplink}" target="_blank" rel="noopener" style="justify-content:center;width:100%">Отслеживать заказ в Telegram</a>
+    `;
+
+    // Очищаем корзину после отправки
+    cart = [];
+    updateCartUI();
+    closeCheckout();
   } catch (e) {
-    status.textContent = 'Не получилось отправить автоматически. Откройте бота по ссылке и продублируйте заказ, если нужно.';
+    status.textContent = 'Не получилось отправить автоматически. Попробуйте ещё раз или напишите Елене в Telegram.';
   }
 }
 

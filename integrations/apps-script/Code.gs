@@ -138,6 +138,7 @@ function handleOrderDraft_(p) {
     var ss = SpreadsheetApp.openById(sheetId);
     var sh = ss.getSheetByName(sheetName) || ss.insertSheet(sheetName);
     ensureOrdersHeader_(sh);
+    var rowIndex = sh.getLastRow() + 1; // 1-based, включая header
     sh.appendRow([
       ts,
       source,
@@ -157,6 +158,17 @@ function handleOrderDraft_(p) {
       "DRAFT"
     ]);
   }
+
+  // Невидимое для клиента: уведомляем Лену сразу, без редиректа в Telegram.
+  try {
+    var botToken = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+    var lenaChatId = getLenaChatId_();
+    if (botToken && lenaChatId) {
+      var lenaText = formatOrderForLena_(ts, source, client, items, totals);
+      lenaText += "\n\n<b>Номер заказа:</b> " + esc_(String(orderId));
+      tgSend_(botToken, lenaChatId, lenaText, { parse_mode: "HTML", disable_web_page_preview: true });
+    }
+  } catch (_) {}
 
   return json_(200, { ok: true, orderId: orderId });
 }
