@@ -14,7 +14,12 @@
 // Токен уже прописан здесь как запасной вариант (если нет Script Property BOT_TOKEN)
 var HARDCODED_BOT_TOKEN = "8708408440:AAHVJZOI4dAKShpcMX-oqJ8aY2R6GZvdrB8";
 var HARDCODED_SHEET_ID = "1d4vyOwUcHbAYS9mFc0oUWjbghYqcDrlQ8xS23m8E1to";
+var HARDCODED_LENA_CHAT_ID = "6336708488"; // chat_id Лены (из /myid), лучше дублировать в Script Properties
 var DEFAULT_MINI_APP_URL = "https://xn--e1atau0d.xn--p1ai/"; // ппфея.рф
+
+function getLenaChatId_() {
+  return PropertiesService.getScriptProperties().getProperty("LENA_CHAT_ID") || HARDCODED_LENA_CHAT_ID;
+}
 
 function getSheetId_() {
   return PropertiesService.getScriptProperties().getProperty("SHEET_ID") || HARDCODED_SHEET_ID;
@@ -159,8 +164,8 @@ function handleOrderDraft_(p) {
 function handleOrder_(p) {
   var props = PropertiesService.getScriptProperties();
   var botToken = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
-  var lenaChatId = props.getProperty("LENA_CHAT_ID");
-  var sheetId = props.getProperty("SHEET_ID");
+  var lenaChatId = getLenaChatId_();
+  var sheetId = getSheetId_();
   var sheetName = props.getProperty("SHEET_ORDERS") || "Orders";
 
   var ts = new Date();
@@ -209,8 +214,8 @@ function handleOrder_(p) {
 function handleQuestionnaire_(p) {
   var props = PropertiesService.getScriptProperties();
   var botToken = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
-  var lenaChatId = props.getProperty("LENA_CHAT_ID");
-  var sheetId = props.getProperty("SHEET_ID");
+  var lenaChatId = getLenaChatId_();
+  var sheetId = getSheetId_();
   var sheetName = props.getProperty("SHEET_FORMS") || "Forms";
 
   var ts = new Date();
@@ -593,7 +598,7 @@ function tgHandleCallback_(token, cq) {
     tgCall_(token, "answerCallbackQuery", { callback_query_id: cq.id, text: "Принято ✅" });
     tgCall_(token, "sendMessage", { chat_id: chatId, text: finalText, disable_web_page_preview: true, reply_markup: getMainReplyKeyboard_() });
 
-    var lenaChatId = PropertiesService.getScriptProperties().getProperty("LENA_CHAT_ID");
+    var lenaChatId = getLenaChatId_();
     if (lenaChatId) {
       var lenaText = formatOrderForLena_(new Date(), order.source || "web", order.client || {}, order.items, order.totals);
       tgSend_(token, lenaChatId, lenaText, { parse_mode: "HTML", disable_web_page_preview: true });
@@ -805,8 +810,8 @@ function getMyLenaChatId() {
  */
 function testSendToLena() {
   var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
-  var chatId = PropertiesService.getScriptProperties().getProperty("LENA_CHAT_ID");
-  if (!chatId) { Logger.log("LENA_CHAT_ID не задан в Script Properties"); return; }
+  var chatId = getLenaChatId_();
+  if (!chatId) { Logger.log("LENA_CHAT_ID не задан"); return; }
   tgSend_(token, chatId, "✅ Тест пройден! Сайт ПП Феи успешно связан с ботом.", {});
   Logger.log("Сообщение отправлено на " + chatId);
 }

@@ -81,7 +81,7 @@ const ORDER_WEBHOOK_URL = 'https://script.google.com/macros/s/ВАШ_ID/exec';
 
 ## Включить бота (без webhook)
 
-1. В Script Properties добавь `LENA_CHAT_ID` (число Лены; **для теста** можно временно `473640248` — аккаунт Елены, потом заменить на chat_id Лены).
+1. В Script Properties добавь `LENA_CHAT_ID` = **`6336708488`** (chat_id Лены из `/myid`).
 2. В редакторе: в списке функций сверху выбери **`enableTelegramPolling`** → **▶ Выполнить** → разреши доступ.
 3. Готово: бот будет опрашивать Telegram раз в минуту и отвечать на `/start` и кнопки.
 
