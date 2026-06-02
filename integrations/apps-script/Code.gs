@@ -450,6 +450,10 @@ function handleTelegramUpdate_(u) {
       tgSendFaqMenu_(botToken, chatId);
       return json_(200, { ok: true });
     }
+    if (text === "/myid") {
+      tgSend_(botToken, String(chatId), "Ваш chat_id: " + chatId + "\n\nЕсли вы Лена — отправьте это число Елене, она внесёт его в настройки бота.", { reply_markup: getMainReplyKeyboard_() });
+      return json_(200, { ok: true });
+    }
 
     if (text === "❓ Частые вопросы") {
       tgSendFaqMenu_(botToken, chatId);
@@ -541,9 +545,15 @@ function setupBotUi() {
     commands: [
       { command: "start", description: "Главное меню" },
       { command: "catalog", description: "Открыть каталог" },
-      { command: "faq", description: "Частые вопросы" }
+      { command: "faq", description: "Частые вопросы" },
+      { command: "myid", description: "Узнать свой chat_id" }
     ]
   });
+}
+
+/** Run → listChatsFromSheet — последние, кто писал боту (лист Chats в таблице). */
+function listChatsFromSheet() {
+  getMyLenaChatId();
 }
 
 function tgStartOrder_(token, chatId, orderId) {
