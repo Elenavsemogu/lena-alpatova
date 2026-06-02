@@ -1399,9 +1399,13 @@ async function submitOrder() {
 
   try {
     await saveOrderDraftToGas(payload);
-    // Показываем подтверждение на сайте, без автоматического перехода в Telegram
     const itemsLines = payload.items.map((it) => `— ${it.name} (${it.variant}) × ${it.qty}`).join('<br>');
+    const inTg = !!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user);
     const deeplink = `https://t.me/pp_fairy_bot?start=order_${payload.orderId}`;
+    const tgNote = inTg
+      ? '<div style="margin-bottom:12px;color:var(--text-muted)">Детали заказа отправлены вам в этот чат Telegram.</div>'
+      : `<div style="margin-bottom:12px">Свяжемся с вами скоро по телефону, чтобы согласовать детали.</div>
+         <a class="btn btn-outline" href="${deeplink}" target="_blank" rel="noopener" style="justify-content:center;width:100%">Отслеживать заказ в Telegram</a>`;
 
     status.innerHTML = `
       <div style="font-weight:700;margin-bottom:6px">Спасибо! Заказ принят ✅</div>
@@ -1409,8 +1413,7 @@ async function submitOrder() {
       <div style="margin-bottom:8px">Позиции:</div>
       <div style="margin-bottom:10px;line-height:1.5">${itemsLines}</div>
       <div style="margin-bottom:12px">Сумма: <b>${payload.totals.price} ₽</b></div>
-      <div style="margin-bottom:12px">Свяжемся с вами скоро по телефону, чтобы согласовать детали.</div>
-      <a class="btn btn-outline" href="${deeplink}" target="_blank" rel="noopener" style="justify-content:center;width:100%">Отслеживать заказ в Telegram</a>
+      ${tgNote}
     `;
 
     // Очищаем корзину после отправки

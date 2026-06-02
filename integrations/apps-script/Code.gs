@@ -53,10 +53,15 @@ function loadOrderDraftCache_(orderId) {
     if (!raw) return null;
     var p = JSON.parse(raw);
     return {
+      orderId: p.orderId || orderId,
       items: p.items || [],
       totals: p.totals || {},
       client: p.client || {},
-      source: p.source || "web"
+      source: p.source || "web",
+      status: p.status || "",
+      lenaNotified: !!p.lenaNotified,
+      clientNotified: !!p.clientNotified,
+      processed: !!p.processed
     };
   } catch (_) {
     return null;
@@ -118,13 +123,9 @@ function doPost(e) {
 }
 
 /**
- * Черновик заказа: записываем в Google Sheets и возвращаем orderId.
- * Затем сайт открывает бота: https://t.me/pp_fairy_bot?start=order_<orderId>
+ * Заказ с сайта / Mini App: таблица + одно уведомление Лене + (опционально) одно сообщение клиенту в TG.
  */
 function handleOrderDraft_(p) {
-  var sheetId = getSheetId_();
-  var sheetName = PropertiesService.getScriptProperties().getProperty("SHEET_ORDERS") || "Orders";
-
   var ts = new Date();
   var orderId = normalizeOrderId_(p.orderId || ("ord_" + Utilities.getUuid().replace(/-/g, "").slice(0, 16)));
   var source = p.source || "web";
@@ -132,45 +133,77 @@ function handleOrderDraft_(p) {
   var items = p.items || [];
   var totals = p.totals || {};
 
-  saveOrderDraftCache_(orderId, { orderId: orderId, source: source, client: client, items: items, totals: totals, ts: ts });
-
-  if (sheetId) {
-    var ss = SpreadsheetApp.openById(sheetId);
-    var sh = ss.getSheetByName(sheetName) || ss.insertSheet(sheetName);
-    ensureOrdersHeader_(sh);
-    var rowIndex = sh.getLastRow() + 1; // 1-based, включая header
-    sh.appendRow([
-      ts,
-      source,
-      client.tgUserId || "",
-      client.username || "",
-      client.firstName || "",
-      client.lastName || "",
-      client.phone || "",
-      client.comment || "",
-      items.map(function (it) { return it.name + " (" + it.variant + ") × " + it.qty; }).join("\n"),
-      totals.price || "",
-      totals.kcal || "",
-      totals.p || "",
-      totals.f || "",
-      totals.c || "",
-      orderId,
-      "DRAFT"
-    ]);
+  var existing = loadOrderDraftCache_(orderId);
+  if (existing && existing.processed) {
+    return json_(200, { ok: true, orderId: orderId, duplicate: true });
   }
 
-  // Невидимое для клиента: уведомляем Лену сразу, без редиректа в Telegram.
-  try {
-    var botToken = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
-    var lenaChatId = getLenaChatId_();
-    if (botToken && lenaChatId) {
-      var lenaText = formatOrderForLena_(ts, source, client, items, totals);
-      lenaText += "\n\n<b>Номер заказа:</b> " + esc_(String(orderId));
-      tgSend_(botToken, lenaChatId, lenaText, { parse_mode: "HTML", disable_web_page_preview: true });
-    }
-  } catch (_) {}
+  appendOrderRow_(ts, source, client, items, totals, orderId, "ACCEPTED");
+  processSiteOrderNotifications_(orderId, ts, source, client, items, totals);
 
   return json_(200, { ok: true, orderId: orderId });
+}
+
+function appendOrderRow_(ts, source, client, items, totals, orderId, status) {
+  var sheetId = getSheetId_();
+  var sheetName = PropertiesService.getScriptProperties().getProperty("SHEET_ORDERS") || "Orders";
+  if (!sheetId) return;
+  var ss = SpreadsheetApp.openById(sheetId);
+  var sh = ss.getSheetByName(sheetName) || ss.insertSheet(sheetName);
+  ensureOrdersHeader_(sh);
+  sh.appendRow([
+    ts,
+    source,
+    client.tgUserId || "",
+    client.username || "",
+    client.firstName || "",
+    client.lastName || "",
+    client.phone || "",
+    client.comment || "",
+    items.map(function (it) { return it.name + " (" + it.variant + ") × " + it.qty; }).join("\n"),
+    totals.price || "",
+    totals.kcal || "",
+    totals.p || "",
+    totals.f || "",
+    totals.c || "",
+    orderId,
+    status || "ACCEPTED"
+  ]);
+}
+
+/** Одно сообщение Лене; одно клиенту — только если заказ из Mini App (есть tgUserId). */
+function processSiteOrderNotifications_(orderId, ts, source, client, items, totals) {
+  var cached = loadOrderDraftCache_(orderId) || {};
+  var lenaNotified = !!cached.lenaNotified;
+  var clientNotified = !!cached.clientNotified;
+  var botToken = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var lenaChatId = getLenaChatId_();
+  var clientId = client.tgUserId ? String(client.tgUserId) : "";
+
+  if (!lenaNotified && botToken && lenaChatId) {
+    var lenaText = formatOrderForLena_(ts, source, client, items, totals);
+    lenaText += "\n\n<b>Номер заказа:</b> " + esc_(String(orderId));
+    tgSend_(botToken, lenaChatId, lenaText, { parse_mode: "HTML", disable_web_page_preview: true });
+    lenaNotified = true;
+  }
+
+  if (!clientNotified && clientId && botToken) {
+    tgSend_(botToken, clientId, formatOrderAcceptedForClient_(orderId, items, totals, client.phone), { disable_web_page_preview: true });
+    clientNotified = true;
+  }
+
+  saveOrderDraftCache_(orderId, {
+    orderId: orderId,
+    source: source,
+    client: client,
+    items: items,
+    totals: totals,
+    ts: ts,
+    status: "ACCEPTED",
+    lenaNotified: lenaNotified,
+    clientNotified: clientNotified,
+    processed: true
+  });
 }
 
 function handleOrder_(p) {
@@ -336,17 +369,42 @@ function ensureFormsHeader_(sh) {
 }
 
 function formatOrderForClient_(items, totals) {
+  return formatOrderAcceptedForClient_("", items, totals, "");
+}
+
+function formatOrderAcceptedForClient_(orderId, items, totals, phone) {
   var lines = [];
-  lines.push("Спасибо! Мы увидели ваш заказ и уже взяли в работу ✅");
-  lines.push("");
-  lines.push("Свяжемся с вами в течение 10 минут, чтобы согласовать детали.");
+  lines.push("Спасибо! Ваш заказ принят и уже в обработке ✅");
+  if (orderId) lines.push("Номер заказа: " + orderId);
   lines.push("");
   lines.push("В вашем заказе:");
-  items.forEach(function (it) {
+  (items || []).forEach(function (it) {
     lines.push("— " + it.name + " (" + it.variant + ") × " + it.qty);
   });
   lines.push("");
   lines.push("Сумма: " + (totals.price || 0) + " ₽");
+  lines.push("");
+  if (phone) {
+    lines.push("Свяжемся с вами скоро по телефону " + phone + ", чтобы согласовать детали.");
+  } else {
+    lines.push("Свяжемся с вами скоро, чтобы согласовать детали.");
+  }
+  return lines.join("\n");
+}
+
+function formatOrderStatusInBot_(order) {
+  var lines = [];
+  lines.push("Ваш заказ уже принят на сайте ✅");
+  if (order.orderId) lines.push("Номер: " + order.orderId);
+  lines.push("");
+  lines.push("Позиции:");
+  (order.items || []).forEach(function (it) {
+    lines.push("— " + it.name + (it.variant ? " (" + it.variant + ")" : "") + " × " + it.qty);
+  });
+  lines.push("");
+  lines.push("Сумма: " + (order.totals && order.totals.price ? order.totals.price : 0) + " ₽");
+  lines.push("");
+  lines.push("Если нужно что-то изменить — напишите Елене.");
   return lines.join("\n");
 }
 
@@ -577,19 +635,14 @@ function tgStartOrder_(token, chatId, orderId) {
   orderId = normalizeOrderId_(orderId);
   var order = findOrderById_(orderId);
   if (!order) {
-    tgSend_(token, String(chatId), "Не нашла заказ. Возможно, ссылка устарела. Попробуйте оформить заказ ещё раз на сайте.", {});
+    tgSend_(token, String(chatId), "Не нашла заказ. Возможно, ссылка устарела. Попробуйте оформить заказ ещё раз на сайте.", { reply_markup: getMainReplyKeyboard_() });
     return json_(200, { ok: true });
   }
 
-  var txt = formatDraftForClient_(order);
-  var kb = {
-    inline_keyboard: [
-      [{ text: "✅ Подтвердить заказ", callback_data: "confirm:" + orderId }],
-      [{ text: "✏️ Редактировать (на сайте)", url: getMiniAppUrl_() + "?editOrder=" + encodeURIComponent(orderId) }]
-    ]
-  };
-
-  tgCall_(token, "sendMessage", { chat_id: chatId, text: txt, reply_markup: kb });
+  order.orderId = order.orderId || orderId;
+  // Заказ уже принят на сайте — только статус, без повторного подтверждения и без второго сообщения Лене.
+  var txt = formatOrderStatusInBot_(order);
+  tgCall_(token, "sendMessage", { chat_id: chatId, text: txt, reply_markup: getMainReplyKeyboard_() });
   return json_(200, { ok: true });
 }
 
@@ -598,22 +651,11 @@ function tgHandleCallback_(token, cq) {
   var chatId = cq.message && cq.message.chat ? cq.message.chat.id : null;
 
   if (data.indexOf("confirm:") === 0) {
-    var orderId = data.replace(/^confirm:/, "");
+    var orderId = normalizeOrderId_(data.replace(/^confirm:/, ""));
     var order = findOrderById_(orderId);
-    if (!order) {
-      tgCall_(token, "answerCallbackQuery", { callback_query_id: cq.id, text: "Заказ не найден" });
-      return json_(200, { ok: true });
-    }
-
-    markOrderStatus_(orderId, "CONFIRMED");
-    var finalText = formatOrderForClient_(order.items, order.totals) + "\n\nЕсли нужно что-то изменить — напишите Елене, пожалуйста.";
-    tgCall_(token, "answerCallbackQuery", { callback_query_id: cq.id, text: "Принято ✅" });
-    tgCall_(token, "sendMessage", { chat_id: chatId, text: finalText, disable_web_page_preview: true, reply_markup: getMainReplyKeyboard_() });
-
-    var lenaChatId = getLenaChatId_();
-    if (lenaChatId) {
-      var lenaText = formatOrderForLena_(new Date(), order.source || "web", order.client || {}, order.items, order.totals);
-      tgSend_(token, lenaChatId, lenaText, { parse_mode: "HTML", disable_web_page_preview: true });
+    tgCall_(token, "answerCallbackQuery", { callback_query_id: cq.id, text: "Заказ уже принят ✅" });
+    if (order) {
+      tgCall_(token, "sendMessage", { chat_id: chatId, text: formatOrderStatusInBot_(order), reply_markup: getMainReplyKeyboard_() });
     }
     return json_(200, { ok: true });
   }
@@ -658,8 +700,11 @@ function findOrderById_(orderId) {
     if (normalizeOrderId_(values[r][idx.order_id]) === orderId) {
       return {
         row: r + 2,
+        orderId: orderId,
         createdAt: values[r][idx.created_at],
         source: values[r][idx.source],
+        status: idx.status != null ? String(values[r][idx.status] || "") : "ACCEPTED",
+        clientNotified: idx.status != null && String(values[r][idx.status] || "").indexOf("ACCEPTED") >= 0,
         client: {
           tgUserId: values[r][idx.tg_user_id],
           username: values[r][idx.username],
@@ -697,9 +742,10 @@ function markOrderStatus_(orderId, status) {
   header.forEach(function (h, i) { idx[String(h || "").trim()] = i + 1; }); // 1-based
   if (!idx.order_id || !idx.status) return;
 
-  var values = sh.getRange(2, idx.order_id, sh.getLastRow() - 1, 1).getValues();
+  var lastRow = sh.getLastRow();
+  var values = sh.getRange(2, idx.order_id, lastRow, 1).getValues();
   for (var r = 0; r < values.length; r++) {
-    if (String(values[r][0]) === String(orderId)) {
+    if (normalizeOrderId_(values[r][0]) === normalizeOrderId_(orderId)) {
       sh.getRange(r + 2, idx.status).setValue(status);
       return;
     }
