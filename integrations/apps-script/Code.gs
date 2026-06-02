@@ -400,10 +400,39 @@ function tgCall_(token, method, payload) {
   try { return JSON.parse(res.getContentText()); } catch (_) { return { ok: false, raw: res.getContentText() }; }
 }
 
+function logTelegramContact_(msg) {
+  if (!msg || !msg.from || !msg.chat) return;
+  try {
+    var sheetId = getSheetId_();
+    if (!sheetId) return;
+    var ss = SpreadsheetApp.openById(sheetId);
+    var sh = ss.getSheetByName("Chats") || ss.insertSheet("Chats");
+    if (sh.getLastRow() === 0) {
+      sh.appendRow(["created_at", "chat_id", "username", "first_name", "last_name", "text"]);
+    }
+    sh.appendRow([
+      new Date(),
+      msg.chat.id,
+      msg.from.username || "",
+      msg.from.first_name || "",
+      msg.from.last_name || "",
+      String(msg.text || "").slice(0, 200)
+    ]);
+
+    var lenaUser = PropertiesService.getScriptProperties().getProperty("LENA_USERNAME");
+    if (lenaUser && msg.from.username &&
+        String(msg.from.username).toLowerCase() === String(lenaUser).toLowerCase()) {
+      PropertiesService.getScriptProperties().setProperty("LENA_CHAT_ID", String(msg.chat.id));
+    }
+  } catch (_) {}
+}
+
 function handleTelegramUpdate_(u) {
   var props = PropertiesService.getScriptProperties();
   var botToken = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
   var chatId = u.message && u.message.chat ? u.message.chat.id : (u.callback_query && u.callback_query.message ? u.callback_query.message.chat.id : null);
+
+  if (u.message) logTelegramContact_(u.message);
 
   if (u.message && u.message.text) {
     var text = String(u.message.text || "").trim();
@@ -731,17 +760,31 @@ function pollTelegramUpdates() {
  * Работает только если webhook выключен (deleteWebhook или enableTelegramPolling).
  */
 function getMyLenaChatId() {
+  var sheetId = getSheetId_();
+  if (sheetId) {
+    var ss = SpreadsheetApp.openById(sheetId);
+    var sh = ss.getSheetByName("Chats");
+    if (sh && sh.getLastRow() > 1) {
+      var rows = sh.getRange(Math.max(2, sh.getLastRow() - 19), 1, sh.getLastRow() - Math.max(2, sh.getLastRow() - 19) + 1, 5).getValues();
+      Logger.log("Последние контакты (лист Chats):");
+      rows.forEach(function (r) {
+        Logger.log("chat_id: " + r[1] + "  @" + r[2] + "  " + r[3] + " " + r[4] + "  text: " + r[5]);
+      });
+      return;
+    }
+  }
+
   var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
   var resp = UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/getUpdates", { muteHttpExceptions: true });
   var data = JSON.parse(resp.getContentText());
   var result = data.result || [];
   if (!result.length) {
-    Logger.log("Нет обновлений. Сначала напиши /start боту @pp_fairy_bot, потом запусти эту функцию снова.");
+    Logger.log("Нет новых сообщений в getUpdates (polling их уже забрал). Пусть Лена напишет /start и подожди 1 мин — смотри лист Chats в таблице.");
     return;
   }
   result.forEach(function (upd) {
     var msg = upd.message || upd.edited_message;
-    if (msg) Logger.log("chat_id: " + msg.chat.id + "  username: " + (msg.chat.username || "") + "  first_name: " + (msg.chat.first_name || ""));
+    if (msg) Logger.log("chat_id: " + msg.chat.id + "  username: " + (msg.from.username || "") + "  first_name: " + (msg.from.first_name || ""));
   });
 }
 

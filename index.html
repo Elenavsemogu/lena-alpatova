@@ -1234,8 +1234,34 @@ const PRODUCTS = [
 ];
 
 // STATE
+const CART_STORAGE_KEY = 'ppfairy_cart_v1';
 let cart = [];
 let activeCategory = 'all';
+
+function saveCart() {
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+  } catch (_) {}
+}
+
+function loadCart() {
+  try {
+    const raw = localStorage.getItem(CART_STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!Array.isArray(data)) return;
+    cart = data.filter((item) => {
+      const p = PRODUCTS.find((x) => x.id === item.pid);
+      return p && p.variants[item.vi] && item.qty > 0;
+    });
+  } catch (_) {
+    cart = [];
+  }
+}
+
+function clearCartStorage() {
+  try { localStorage.removeItem(CART_STORAGE_KEY); } catch (_) {}
+}
 
 // UI STACK (назад/закрыть для модалок)
 const uiStack = [];
@@ -1581,6 +1607,7 @@ function updateCartUI() {
   document.getElementById('cartF').textContent = totalF + ' г';
   document.getElementById('cartC').textContent = totalC + ' г';
   document.getElementById('cartTotal').textContent = fmtPrice(totalPrice);
+  saveCart();
 }
 
 // PLANNER
@@ -2072,9 +2099,11 @@ function initTgWebApp() {
 
 // INIT
 initTgWebApp();
+loadCart();
 initHeroCarousel();
 renderTabs();
 renderCatalog();
+updateCartUI();
 
 const hdr = document.getElementById('header');
 const stickyCta = document.getElementById('stickyCta');
