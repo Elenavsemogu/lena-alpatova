@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ПП Фея — Десерты, выпечка и блюда на заказ | Елена Алпатова</title>
 <meta name="description" content="ПП Фея Елена Алпатова — авторские десерты, несладкая выпечка, торты и блюда из 100% натуральных ингредиентов. Каталог с КБЖУ, умная корзина, доставка по Барнаулу.">
+<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Forum&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -212,16 +214,21 @@ nav a:hover::after{width:100%}
 .cart-overlay.open{opacity:1;visibility:visible}
 .cart-drawer{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:100vw;background:var(--bg);z-index:201;transform:translateX(100%);transition:transform .35s ease;display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.1)}
 .cart-drawer.open{transform:translateX(0)}
-.cart-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border-light)}
+.cart-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border-light);gap:10px}
+.cart-header-left{display:flex;align-items:center;gap:10px;min-width:0}
 .cart-header h3{font-size:1.3rem;color:var(--sage-dark)}
+.cart-back{background:none;border:none;cursor:pointer;padding:6px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center}
+.cart-back svg{width:22px;height:22px;stroke:var(--text-muted);stroke-width:2;fill:none}
+.cart-back:hover{background:rgba(91,111,94,.06)}
 .cart-close{background:none;border:none;cursor:pointer;padding:4px}
 .cart-close svg{width:24px;height:24px;stroke:var(--text-muted);stroke-width:2}
-.cart-body{flex:1;overflow-y:auto;padding:16px 24px}
+.cart-body{flex:1;overflow-y:auto;padding:16px 24px;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
 .cart-empty{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:1.05rem}
 .cart-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border-light);align-items:flex-start}
 .cart-item-icon{width:48px;height:48px;border-radius:8px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
 .cart-item-info{flex:1;min-width:0}
-.cart-item-name{font-family:'Forum',cursive;font-size:.95rem;color:var(--sage-dark);margin-bottom:2px}
+.cart-item-name{font-family:'Forum',cursive;font-size:.95rem;color:var(--sage-dark);margin-bottom:2px;cursor:pointer}
+.cart-item-name:hover{text-decoration:underline}
 .cart-item-detail{font-size:.78rem;color:var(--text-muted)}
 .cart-item-qty{display:flex;align-items:center;gap:8px;margin-top:6px}
 .cart-item-qty button{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:var(--bg-alt);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;color:var(--text-sec);transition:all .2s}
@@ -230,7 +237,7 @@ nav a:hover::after{width:100%}
 .cart-item-price{font-family:'Forum',cursive;font-size:1rem;color:var(--sage-dark);white-space:nowrap;margin-left:8px}
 .cart-item-remove{cursor:pointer;color:var(--text-muted);font-size:.75rem;padding:0;transition:color .2s;display:inline-block;margin-top:4px}
 .cart-item-remove:hover{color:#c44}
-.cart-footer{padding:20px 24px;border-top:1px solid var(--border-light);background:var(--bg-alt)}
+.cart-footer{padding:20px 24px;padding-bottom:calc(20px + env(safe-area-inset-bottom));border-top:1px solid var(--border-light);background:var(--bg-alt)}
 .cart-kbzhu-summary{background:rgba(91,111,94,.06);border-radius:10px;padding:14px 16px;margin-bottom:16px}
 .cart-kbzhu-title{font-family:'Forum',cursive;font-size:.9rem;color:var(--sage-dark);margin-bottom:8px}
 .cart-kbzhu-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
@@ -245,10 +252,32 @@ nav a:hover::after{width:100%}
 .btn-planner{background:none;border:1.5px solid var(--sage);color:var(--sage-dark);padding:12px 24px;border-radius:50px;font-family:'Forum',cursive;font-size:.9rem;cursor:pointer;transition:all .2s;letter-spacing:.04em}
 .btn-planner:hover{background:var(--sage);color:#fff}
 
+/* SMART FAIRY CTA (в корзине) */
+.smartfairy-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;border:none;cursor:pointer;border-radius:16px;padding:14px 16px;background:linear-gradient(135deg,var(--sage) 0%,var(--sage-dark) 100%);color:#fff;box-shadow:0 10px 26px rgba(45,59,46,.28);text-align:left}
+.smartfairy-cta:hover{filter:brightness(1.03)}
+.sf-left{display:flex;align-items:center;gap:12px;min-width:0}
+.sf-star{width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.sf-star svg{width:18px;height:18px;fill:var(--gold-light)}
+.sf-text{min-width:0}
+.sf-text b{font-family:'Forum',cursive;font-weight:400;display:block;font-size:1.02rem;letter-spacing:.02em}
+.sf-text small{display:block;font-size:.82rem;opacity:.85;line-height:1.3;margin-top:2px}
+.sf-badge{position:relative;width:56px;height:56px;flex:0 0 auto}
+.sf-badge-inner{position:absolute;inset:11px;border-radius:50%;background:rgba(255,255,255,.10);border:1px solid rgba(224,207,160,.45);display:flex;align-items:center;justify-content:center}
+.sf-badge-inner svg{width:18px;height:18px;fill:var(--gold-light)}
+.sf-ring{position:absolute;inset:0}
+.sf-ring text{fill:rgba(224,207,160,.9);font-size:10.4px;font-family:'Forum',cursive;letter-spacing:2px;text-transform:uppercase}
+@keyframes sf-rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.sf-ring{animation:sf-rotate 8s linear infinite}
+
 /* PLANNER MODAL */
 .planner-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:all .3s}
 .planner-overlay.open{opacity:1;visibility:visible}
 .planner-modal{background:var(--bg);border-radius:16px;width:100%;max-width:640px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-lg);padding:32px}
+.planner-topbar{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 2px 10px;margin:-16px 0 18px}
+.planner-topbar .planner-left{display:flex;align-items:center;gap:8px}
+.planner-topbar button{background:none;border:none;cursor:pointer;padding:8px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center}
+.planner-topbar button:hover{background:rgba(91,111,94,.06)}
+.planner-topbar svg{width:22px;height:22px;stroke:var(--text-muted);stroke-width:2;fill:none}
 .planner-modal h3{font-size:1.5rem;color:var(--sage-dark);margin-bottom:8px}
 .planner-subtitle{color:var(--text-muted);font-size:.95rem;margin-bottom:24px}
 .planner-targets{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
@@ -278,6 +307,40 @@ nav a:hover::after{width:100%}
 .planner-meal-btn{padding:8px 18px;border-radius:50px;border:1.5px solid var(--border);font-family:'Forum',cursive;font-size:.9rem;cursor:pointer;background:var(--bg-alt);color:var(--text-sec);transition:all .2s;user-select:none}
 .planner-meal-btn.active{border-color:var(--sage);background:var(--sage);color:#fff}
 .planner-warn{background:rgba(201,173,110,.1);border-radius:10px;padding:14px 18px;font-size:.9rem;color:var(--gold-dark);text-align:center;margin-bottom:20px}
+
+/* PRODUCT MODAL */
+.pm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:350;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:all .25s}
+.pm-overlay.open{opacity:1;visibility:visible}
+.pm-modal{width:100%;max-width:720px;max-height:90vh;overflow:auto;background:var(--bg);border-radius:18px;box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,.5)}
+.pm-topbar{position:sticky;top:0;z-index:5;background:rgba(251,251,248,.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border-light)}
+.pm-topbar .pm-left{display:flex;align-items:center;gap:10px;min-width:0}
+.pm-topbar .pm-title{font-family:'Forum',cursive;color:var(--sage-dark);font-size:1.02rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pm-topbar button{background:none;border:none;cursor:pointer;padding:8px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center}
+.pm-topbar button:hover{background:rgba(91,111,94,.06)}
+.pm-topbar svg{width:22px;height:22px;stroke:var(--text-muted);stroke-width:2;fill:none}
+.pm-body{padding:16px}
+.pm-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+.pm-img{border-radius:16px;overflow:hidden;background:var(--bg-warm);border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;min-height:280px}
+.pm-img img{width:100%;height:auto;max-height:420px;object-fit:contain}
+.pm-info h3{font-size:1.6rem;color:var(--sage-dark);margin-bottom:6px}
+.pm-desc{color:var(--text-sec);margin-bottom:12px}
+.pm-kbzhu{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 12px}
+.pm-kbzhu span{background:rgba(91,111,94,.06);border:1px solid var(--border-light);border-radius:999px;padding:7px 12px;font-size:.9rem;color:var(--text-sec)}
+.pm-variants{display:flex;flex-direction:column;gap:8px;margin:10px 0 14px}
+.pm-var{border:1.5px solid var(--border);background:var(--bg-alt);padding:10px 12px;border-radius:12px;cursor:pointer;font-family:'Forum',cursive;letter-spacing:.02em;color:var(--text-sec);display:flex;justify-content:space-between;gap:10px}
+.pm-var.active{border-color:var(--sage);box-shadow:0 6px 18px rgba(45,59,46,.10)}
+.pm-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.pm-actions .btn{flex:1;min-width:210px;justify-content:center}
+.pm-actions .btn-outline{border-color:var(--sage);color:var(--sage-dark)}
+.pm-actions .btn-outline:hover{background:var(--sage);color:#fff}
+
+@media(max-width:900px){
+  .pm-grid{grid-template-columns:1fr;gap:14px}
+  .pm-img{min-height:220px}
+  .pm-body{padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+  .planner-modal{padding:18px}
+  .cart-header,.cart-body,.cart-footer{padding-left:18px;padding-right:18px}
+}
 
 /* KBZHU NOTE */
 .kbzhu-note{text-align:center;font-size:.82rem;color:var(--text-muted);margin-top:12px;font-style:italic;padding:8px 16px;background:rgba(201,173,110,.08);border-radius:8px;display:inline-block}
@@ -884,8 +947,15 @@ nav a:hover::after{width:100%}
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-header">
-    <h3>Корзина</h3>
-    <button class="cart-close" onclick="toggleCart()"><svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="cart-header-left">
+      <button class="cart-back" onclick="uiBack()" aria-label="Назад">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/><path d="M9 12h12"/></svg>
+      </button>
+      <h3>Корзина</h3>
+    </div>
+    <button class="cart-close" onclick="uiCloseAll()" aria-label="Закрыть">
+      <svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
   </div>
   <div class="cart-body" id="cartBody">
     <div class="cart-empty">Корзина пуста — добавьте блюда из каталога</div>
@@ -906,7 +976,26 @@ nav a:hover::after{width:100%}
     </div>
     <div class="cart-actions">
       <a href="https://t.me/elenappdeserty" target="_blank" rel="noopener" class="btn btn-primary" id="btnOrder" style="width:100%;justify-content:center">Оформить заказ в Telegram</a>
-      <button class="btn-planner" onclick="openPlanner()">Разбить по дням и приёмам пищи</button>
+      <button class="smartfairy-cta" onclick="openPlanner()">
+        <span class="sf-left">
+          <span class="sf-star" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg>
+          </span>
+          <span class="sf-text">
+            <b>Умный расчёт по дням</b>
+            <small>разбить по приёмам пищи и КБЖУ</small>
+          </span>
+        </span>
+        <span class="sf-badge" aria-hidden="true">
+          <svg class="sf-ring" viewBox="0 0 120 120">
+            <defs><path id="sfPath" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs>
+            <text><textPath href="#sfPath" startOffset="0%">умная фея ПП · умная фея ПП · </textPath></text>
+          </svg>
+          <span class="sf-badge-inner">
+            <svg viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg>
+          </span>
+        </span>
+      </button>
     </div>
   </div>
 </div>
@@ -914,6 +1003,16 @@ nav a:hover::after{width:100%}
 <!-- PLANNER MODAL -->
 <div class="planner-overlay" id="plannerOverlay" onclick="closePlanner()">
   <div class="planner-modal" onclick="event.stopPropagation()">
+    <div class="planner-topbar">
+      <div class="planner-left">
+        <button onclick="uiBack()" aria-label="Назад">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/><path d="M9 12h12"/></svg>
+        </button>
+      </div>
+      <button onclick="uiCloseAll()" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
     <h3>Распределение по дням</h3>
     <p class="planner-subtitle">Настройте под себя — выберите количество дней и приёмы пищи</p>
 
@@ -937,6 +1036,24 @@ nav a:hover::after{width:100%}
     <div class="planner-close">
       <button class="btn btn-outline" onclick="closePlanner()">Закрыть</button>
     </div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="pm-overlay" id="pmOverlay" onclick="closeProductModal()">
+  <div class="pm-modal" onclick="event.stopPropagation()">
+    <div class="pm-topbar">
+      <div class="pm-left">
+        <button onclick="uiBack()" aria-label="Назад">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/><path d="M9 12h12"/></svg>
+        </button>
+        <div class="pm-title" id="pmTopTitle">Карточка блюда</div>
+      </div>
+      <button onclick="uiCloseAll()" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="pm-body" id="pmBody"></div>
   </div>
 </div>
 
@@ -1061,6 +1178,20 @@ const PRODUCTS = [
 let cart = [];
 let activeCategory = 'all';
 
+// UI STACK (назад/закрыть для модалок)
+const uiStack = [];
+function uiPush(closeFn) { uiStack.push(closeFn); }
+function uiBack() {
+  const fn = uiStack.pop();
+  if (typeof fn === 'function') fn();
+}
+function uiCloseAll() {
+  while (uiStack.length) uiBack();
+}
+
+// Прячем «обычную кнопку», если нужно
+// (оставляю в разметке как запасной вариант — можно удалить)
+
 // RENDER CATALOG
 function renderTabs() {
   const el = document.getElementById('catalogTabs');
@@ -1084,7 +1215,7 @@ function renderCatalog() {
     const imgHtml = p.photo
       ? `<img class="lazy-img" src="images/menu/thumbs/${p.photo}" data-full="images/menu/${p.photo}" alt="${p.name}" loading="lazy">`
       : `<span class="cat-icon">${p.icon}</span>`;
-    return `<div class="product-card">
+    return `<div class="product-card" onclick="openProductModal(${p.id})">
       <div class="product-card-img">${imgHtml}</div>
       <div class="product-card-body">
         <h4>${p.name}</h4>
@@ -1097,11 +1228,11 @@ function renderCatalog() {
         </div>
         ${fromNote}
         ${multiVar ? `<div class="p-variants" data-pid="${p.id}">
-          ${p.variants.map((v,i) => `<span class="p-var${i===0?' active':''}" onclick="selectVariant(${p.id},${i},this)">${v.label} — ${fmtPrice(v.price)}</span>`).join('')}
+          ${p.variants.map((v,i) => `<span class="p-var${i===0?' active':''}" onclick="event.stopPropagation(); selectVariant(${p.id},${i},this)">${v.label} — ${fmtPrice(v.price)}</span>`).join('')}
         </div>` : ''}
         <div class="p-bottom">
           <div class="p-price">${fmtPrice(v0.price)} ${!multiVar?`<small>/ ${v0.label}</small>`:''}</div>
-          <button class="btn-add" id="add-${p.id}" onclick="addToCart(${p.id})">В корзину</button>
+          <button class="btn-add" id="add-${p.id}" onclick="event.stopPropagation(); addToCart(${p.id})">В корзину</button>
         </div>
       </div>
     </div>`;
@@ -1185,8 +1316,21 @@ function changeQty(idx, delta) {
 }
 
 function toggleCart() {
-  document.getElementById('cartOverlay').classList.toggle('open');
-  document.getElementById('cartDrawer').classList.toggle('open');
+  const open = document.getElementById('cartOverlay').classList.contains('open');
+  if (open) closeCart();
+  else openCart();
+}
+
+function openCart() {
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartDrawer').classList.add('open');
+  uiPush(closeCart);
+}
+
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartDrawer').classList.remove('open');
+  if (uiStack[uiStack.length - 1] === closeCart) uiStack.pop();
 }
 
 function updateCartUI() {
@@ -1219,7 +1363,7 @@ function updateCartUI() {
     return `<div class="cart-item">
       <div class="cart-item-icon">${p.icon}</div>
       <div class="cart-item-info">
-        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-name" onclick="event.stopPropagation(); openProductModal(${p.id}, true)">${p.name}</div>
         <div class="cart-item-detail">${v.label}${item.qty>1?' × '+item.qty:''} · ${kcal} ккал · Б:${pr} Ж:${fat} У:${carb}</div>
         <div class="cart-item-qty">
           <button onclick="changeQty(${idx},-1)">−</button>
@@ -1255,13 +1399,96 @@ let activeMeals = ['breakfast','lunch','dinner','snack'];
 function openPlanner() {
   if (cart.length === 0) return;
   document.getElementById('plannerOverlay').classList.add('open');
+  uiPush(closePlanner);
   renderPlannerControls();
   generatePlan();
 }
 
 function closePlanner() {
   document.getElementById('plannerOverlay').classList.remove('open');
+  if (uiStack[uiStack.length - 1] === closePlanner) uiStack.pop();
 }
+
+// PRODUCT MODAL
+let pmPid = null;
+let pmVi = 0;
+
+function openProductModal(pid, fromCart = false) {
+  const p = PRODUCTS.find(x => x.id === pid);
+  if (!p) return;
+  pmPid = pid;
+  pmVi = 0;
+
+  const v0 = p.variants[0];
+  const fromPrefix = p.kbjuFrom ? 'от ' : '';
+  const fromNote = p.kbjuFrom ? '<p class="p-kbzhu-note" style="margin-top:10px">Итоговое КБЖУ зависит от начинки</p>' : '';
+
+  const imgHtml = p.photo
+    ? `<img src="images/menu/${p.photo}" alt="${p.name}" loading="lazy">`
+    : `<div style="font-size:64px;opacity:.55">${p.icon}</div>`;
+
+  document.getElementById('pmTopTitle').textContent = fromCart ? 'Блюдо из корзины' : 'Карточка блюда';
+
+  document.getElementById('pmBody').innerHTML = `
+    <div class="pm-grid">
+      <div class="pm-img">${imgHtml}</div>
+      <div class="pm-info">
+        <h3>${p.name}</h3>
+        <p class="pm-desc">${p.desc}</p>
+        <div class="pm-kbzhu">
+          <span>${fromPrefix}${p.per100.kcal} ккал/100г</span>
+          <span>Б: ${p.per100.p}</span>
+          <span>Ж: ${p.per100.f}</span>
+          <span>У: ${p.per100.c}</span>
+        </div>
+        ${fromNote}
+        <div class="pm-variants" id="pmVars">
+          ${p.variants.map((v, i) => `
+            <div class="pm-var${i === 0 ? ' active' : ''}" onclick="selectPmVariant(${i})">
+              <span>${v.label}</span>
+              <span>${fmtPrice(v.price)}</span>
+            </div>
+          `).join('')}
+        </div>
+        <div class="pm-actions">
+          <button class="btn btn-primary" onclick="addToCartFromModal()">В корзину — <span id="pmPrice">${fmtPrice(v0.price)}</span></button>
+          <button class="btn btn-outline" onclick="closeProductModal()">Закрыть</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('pmOverlay').classList.add('open');
+  uiPush(closeProductModal);
+}
+
+function closeProductModal() {
+  document.getElementById('pmOverlay').classList.remove('open');
+  pmPid = null;
+  if (uiStack[uiStack.length - 1] === closeProductModal) uiStack.pop();
+}
+
+function selectPmVariant(i) {
+  pmVi = i;
+  const p = PRODUCTS.find(x => x.id === pmPid);
+  if (!p) return;
+  document.querySelectorAll('#pmVars .pm-var').forEach((el, idx) => el.classList.toggle('active', idx === i));
+  document.getElementById('pmPrice').textContent = fmtPrice(p.variants[i].price);
+}
+
+function addToCartFromModal() {
+  const p = PRODUCTS.find(x => x.id === pmPid);
+  if (!p) return;
+  const existing = cart.find(c => c.pid === pmPid && c.vi === pmVi);
+  if (existing) existing.qty++;
+  else cart.push({pid: pmPid, vi: pmVi, qty: 1});
+  updateCartUI();
+}
+
+// keyboard shortcuts
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') uiCloseAll();
+});
 
 function renderPlannerControls() {
   document.getElementById('plannerKcal').innerHTML = KCAL_OPTIONS.map(k =>
