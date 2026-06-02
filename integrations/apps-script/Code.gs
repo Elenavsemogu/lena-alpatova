@@ -495,22 +495,22 @@ function json_(code, obj) {
  * РЕКОМЕНДУЕМЫЙ режим для Telegram + Apps Script: polling (без webhook).
  * Telegram webhook на GAS Web App ломается (302/405) — см. README.
  *
- * Один раз: Run → enableTelegramPolling_
- * Потом триггер раз в 1 минуту сам вызывает pollTelegramUpdates_.
+ * Один раз: Run → enableTelegramPolling (в списке функций сверху).
+ * Потом триггер раз в 1 минуту сам вызывает pollTelegramUpdates.
  */
-function enableTelegramPolling_() {
+function enableTelegramPolling() {
   var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
   UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/deleteWebhook", { muteHttpExceptions: true });
 
   var triggers = ScriptApp.getProjectTriggers();
   triggers.forEach(function (t) {
-    if (t.getHandlerFunction() === "pollTelegramUpdates_") ScriptApp.deleteTrigger(t);
+    if (t.getHandlerFunction() === "pollTelegramUpdates") ScriptApp.deleteTrigger(t);
   });
-  ScriptApp.newTrigger("pollTelegramUpdates_").timeBased().everyMinutes(1).create();
-  Logger.log("Polling включён: webhook удалён, триггер pollTelegramUpdates_ каждую минуту.");
+  ScriptApp.newTrigger("pollTelegramUpdates").timeBased().everyMinutes(1).create();
+  Logger.log("Polling включён: webhook удалён, триггер pollTelegramUpdates каждую минуту.");
 }
 
-function pollTelegramUpdates_() {
+function pollTelegramUpdates() {
   var props = PropertiesService.getScriptProperties();
   var token = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
   var offset = parseInt(props.getProperty("TG_OFFSET") || "0", 10) || 0;
@@ -530,7 +530,7 @@ function pollTelegramUpdates_() {
 
 /**
  * Запусти вручную (Run → getMyLenaChatId) ПОСЛЕ /start боту.
- * Работает только если webhook выключен (deleteWebhook или enableTelegramPolling_).
+ * Работает только если webhook выключен (deleteWebhook или enableTelegramPolling).
  */
 function getMyLenaChatId() {
   var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;

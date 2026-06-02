@@ -11,7 +11,7 @@
 
 **Другие наши боты** (HR Boost, Secretroom) работают через **polling** (`getUpdates`) или через **сервер** (Node на Render с `POST /webhook` → сразу `200`). Там нет редиректов Google.
 
-**Для ПП Феи:** сайт → GAS (заказы в таблицу) оставляем как есть. Диалог в Telegram — через **polling** в Apps Script: один раз `enableTelegramPolling_` + триггер раз в минуту.
+**Для ПП Феи:** сайт → GAS (заказы в таблицу) оставляем как есть. Диалог в Telegram — через **polling** в Apps Script: один раз `enableTelegramPolling` + триггер раз в минуту.
 
 ---
 
@@ -82,7 +82,7 @@ const ORDER_WEBHOOK_URL = 'https://script.google.com/macros/s/ВАШ_ID/exec';
 ## Включить бота (без webhook)
 
 1. В Script Properties добавь `LENA_CHAT_ID` (число Лены; **для теста** можно временно `473640248` — аккаунт Елены, потом заменить на chat_id Лены).
-2. В редакторе: выбери функцию **`enableTelegramPolling_`** → **Выполнить** → разреши доступ.
+2. В редакторе: в списке функций сверху выбери **`enableTelegramPolling`** → **▶ Выполнить** → разреши доступ.
 3. Готово: бот будет опрашивать Telegram раз в минуту и отвечать на `/start` и кнопки.
 
 ## Проверка
