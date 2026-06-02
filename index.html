@@ -282,6 +282,127 @@ nav a:hover::after{width:100%}
 /* KBZHU NOTE */
 .kbzhu-note{text-align:center;font-size:.82rem;color:var(--text-muted);margin-top:12px;font-style:italic;padding:8px 16px;background:rgba(201,173,110,.08);border-radius:8px;display:inline-block}
 
+/* ===== HERO REDESIGN ===== */
+.hero-new{padding:124px 0 64px;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-warm) 100%)}
+.hero-new::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,rgba(201,173,110,.10) 0%,transparent 48%),radial-gradient(ellipse at 18% 80%,rgba(91,111,94,.06) 0%,transparent 55%);pointer-events:none}
+.hero-new .container{position:relative;z-index:2}
+.hero-eyebrow{text-align:center;font-family:'Forum',cursive;font-size:.74rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:18px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:"";display:inline-block;width:28px;height:1px;background:var(--gold-light);vertical-align:middle;margin:0 14px}
+.hero-new-title{text-align:center;max-width:880px;margin:0 auto}
+.hero-new-title h1{font-size:3.15rem;color:var(--sage-dark);letter-spacing:.005em;line-height:1.22}
+.hero-new-title h1 em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;color:var(--gold-dark)}
+.hero-stage{display:grid;grid-template-columns:1fr 1.3fr 1fr;align-items:center;gap:8px;margin:18px 0 4px;touch-action:pan-y}
+.hero-stage-side{display:flex;flex-direction:column;gap:18px;z-index:3}
+.hero-stage-side.left{align-items:flex-start}
+.hero-stage-side.right{align-items:flex-end}
+.hero-photo-wrap{display:flex;align-items:center;justify-content:center;position:relative;padding:10px 0;overflow:visible}
+.hero-photo-wrap::before{content:"";position:absolute;width:82%;height:82%;left:50%;top:54%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(201,173,110,.30) 0%,rgba(201,173,110,.12) 40%,transparent 72%);filter:blur(10px);z-index:0}
+.hero-photo-wrap img{position:relative;z-index:1;width:100%;max-width:480px;height:auto;object-fit:contain;filter:drop-shadow(0 20px 30px rgba(45,59,46,.22)) drop-shadow(0 6px 12px rgba(45,59,46,.12));transition:opacity .4s ease,transform .4s ease;transform-origin:center center}
+.hero-stage[data-fading] .hero-photo-wrap img,.hero-stage[data-fading] .hero-info-card{opacity:0}
+.hero-info-card{transition:opacity .4s ease}
+.hero-slides-nav{display:flex;justify-content:center;align-items:center;gap:8px;margin:4px 0 0;flex-wrap:wrap}
+.hero-slides-dot{width:8px;height:8px;border-radius:50%;background:var(--border);border:none;padding:0;cursor:pointer;transition:all .25s}
+.hero-slides-dot:hover{background:var(--sage-light)}
+.hero-slides-dot.active{background:var(--sage);width:22px;border-radius:5px}
+.hero-slides-dot:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.hero-info-card{background:#FFFFFF;border:1px solid var(--border-light);border-radius:16px;padding:22px 24px;box-shadow:0 14px 36px rgba(45,59,46,.12);max-width:260px;text-align:left}
+@media(min-width:901px){
+  .hero-stage-side.left .hero-info-card{max-width:380px;min-width:340px}
+  .hero-compare-grid{gap:12px}
+  .hc-col{padding:14px 16px}
+  .hc-col .hc-bju{white-space:nowrap;font-size:.86rem;letter-spacing:.02em}
+}
+.hero-info-card .hic-label{display:flex;align-items:center;gap:8px;font-family:'Forum',cursive;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:14px}
+.hero-info-card .hic-label svg{width:15px;height:15px;stroke:var(--gold-dark);fill:none;stroke-width:1.6}
+.hero-kbzhu-rows{display:flex;flex-direction:column;gap:7px;font-size:1rem;color:var(--text-sec)}
+.hero-kbzhu-rows .row{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.hero-kbzhu-rows .row .v{font-family:'Forum',cursive;color:var(--sage-dark);font-size:1.05rem}
+.hero-kbzhu-rows .row.kcal{margin-top:10px;padding-top:12px;border-top:1px solid var(--border);font-size:1.05rem}
+.hero-kbzhu-rows .row.kcal span:first-child{color:var(--sage-dark)}
+.hero-kbzhu-rows .row.kcal .v{color:var(--gold-dark);font-size:1.5rem}
+/* Сравнение Наш / Обычный */
+.hero-compare{margin-top:16px;border-top:1px solid var(--border);padding-top:14px}
+.hero-compare-title{font-family:'Forum',cursive;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:12px;text-align:center}
+.hero-compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hc-col{border-radius:12px;padding:14px 12px;text-align:center}
+.hc-col.ours{background:var(--sage-dark);color:#fff}
+.hc-col.usual{background:var(--bg-warm);border:1px solid var(--border)}
+.hc-col .hc-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;margin-bottom:6px;opacity:.92}
+.hc-col.usual .hc-name{color:var(--text-sec)}
+.hc-col .hc-kcal{font-family:'Forum',cursive;font-size:2rem;line-height:1;margin-bottom:2px}
+.hc-col.ours .hc-kcal{color:var(--gold-light)}
+.hc-col.usual .hc-kcal{color:var(--text-sec)}
+.hc-col .hc-kcal small{font-size:.82rem;font-family:'Cormorant Garamond',serif;opacity:.8;margin-left:3px}
+.hc-col .hc-bju{font-size:.82rem;margin-top:8px;line-height:1.5}
+.hc-col.ours .hc-bju{color:rgba(244,241,233,.85)}
+.hc-col.usual .hc-bju{color:var(--text-muted)}
+.hero-compare-note{margin-top:10px;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:var(--sage-dark)}
+.hero-compare-note b{font-family:'Forum',cursive;font-style:normal;color:var(--gold-dark);font-weight:400}
+.hero-sostav-list{font-size:1.06rem;color:var(--text-sec);line-height:1.85;font-style:italic}
+.hero-sub{display:grid;grid-template-columns:1fr 1fr;gap:48px;max-width:840px;margin:6px auto 34px;text-align:center}
+.hero-sub-col{position:relative;padding-top:18px}
+.hero-sub-col::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:32px;height:2px;background:var(--gold);border-radius:1px}
+.hero-sub p{font-size:1.1rem;color:var(--text-sec);line-height:1.6}
+.hero-new-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center}
+.hero-new-btns .btn-primary{box-shadow:0 8px 22px rgba(91,111,94,.28)}
+/* Полоска категорий в hero */
+.hero-cats{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:26px auto 0;max-width:680px}
+.hero-cats .hc-chip{font-family:'Forum',cursive;font-size:.86rem;letter-spacing:.03em;color:var(--sage-dark);background:#fff;border:1px solid var(--border-light);border-radius:50px;padding:7px 18px;box-shadow:0 4px 14px rgba(45,59,46,.06);transition:all .25s;text-decoration:none}
+.hero-cats .hc-chip:hover{background:var(--sage);color:#fff;border-color:var(--sage)}
+/* Ранний социальный пруф в hero */
+.hero-proof{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 16px;max-width:680px;margin:24px auto 0;padding:14px 22px;background:rgba(255,255,255,.7);border:1px solid var(--border-light);border-radius:14px}
+.hero-proof .stars{color:var(--gold);letter-spacing:2px;font-size:1rem}
+.hero-proof .hp-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.02rem;color:var(--text-sec)}
+.hero-proof .hp-text b{font-family:'Forum',cursive;font-style:normal;font-weight:400;color:var(--sage-dark)}
+.hero-proof a{color:var(--gold-dark);text-decoration:none;font-family:'Forum',cursive;font-size:.88rem;white-space:nowrap}
+.hero-proof a:hover{text-decoration:underline}
+/* Кнопки связи (иконка+текст) */
+.btn svg.btn-ic{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-right:8px;vertical-align:-3px}
+.contact-strip{display:flex;justify-content:center;flex-wrap:wrap;gap:14px 22px;margin-top:18px;font-size:.96rem;color:var(--text-sec)}
+.contact-strip a{display:inline-flex;align-items:center;gap:7px;color:var(--sage-dark);text-decoration:none;font-family:'Forum',cursive;letter-spacing:.02em;transition:color .2s}
+.contact-strip a:hover{color:var(--gold-dark)}
+.contact-strip a svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== STORY / MANIFESTO (с GitHub) ===== */
+.story-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.story-card{background:var(--bg-alt);border:1px solid var(--border-light);border-radius:var(--radius);padding:26px 24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.story-card::before{content:'';position:absolute;top:0;left:24px;right:24px;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.story-card .num{font-family:'Forum',cursive;color:var(--gold-dark);font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px}
+.story-card h3{font-size:1.22rem;color:var(--sage-dark);margin-bottom:10px}
+.story-card p{font-size:.95rem;color:var(--text-sec);line-height:1.55}
+.manifesto{background:var(--bg-warm);position:relative;overflow:hidden}
+.manifesto::before{content:'';position:absolute;left:-90px;bottom:-120px;width:280px;height:280px;border-radius:50%;background:rgba(91,111,94,.06)}
+.manifesto-lead{max-width:850px;margin:0 auto 42px;text-align:center}
+.manifesto-kicker{font-family:'Forum',cursive;color:var(--gold-dark);letter-spacing:.18em;text-transform:uppercase;font-size:.82rem;margin-bottom:12px}
+.manifesto-lead h2{font-size:2.55rem;color:var(--sage-dark);margin-bottom:14px}
+.manifesto-lead p{font-size:1.18rem;color:var(--text-sec)}
+.feature-split{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center}
+.feature-copy h2{font-size:2.35rem;color:var(--sage-dark);margin-bottom:16px}
+.feature-copy p{color:var(--text-sec);margin-bottom:16px}
+.feature-list{display:grid;gap:12px;margin-top:24px}
+.feature-item{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:12px;background:rgba(91,111,94,.06);color:var(--text-sec)}
+.feature-item b{font-family:'Forum',cursive;color:var(--sage-dark);font-weight:400}
+.feature-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);margin-top:11px;flex-shrink:0}
+.feature-image{border-radius:28px;background:linear-gradient(145deg,#fff,var(--bg-warm));padding:26px;box-shadow:var(--shadow-lg);position:relative}
+.feature-image::before{content:'';position:absolute;inset:12px;border:1px solid rgba(201,173,110,.38);border-radius:22px;pointer-events:none}
+.feature-image img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:20px}
+
+/* ===== PRE-CATALOG CTA (Блок Г) ===== */
+.section-precta{background:linear-gradient(135deg,#3E4E3F 0%,#324233 60%,#2D3B2E 100%);position:relative;overflow:hidden}
+.section-precta::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,173,110,.16) 0%,transparent 55%);pointer-events:none}
+.precta{text-align:center;position:relative;z-index:2}
+.precta .hero-eyebrow{color:var(--gold-light)}
+.precta .hero-eyebrow::before,.precta .hero-eyebrow::after{background:rgba(224,207,160,.4)}
+.precta h2{font-size:2.5rem;color:var(--gold-light);margin-bottom:14px}
+.precta p{font-size:1.12rem;color:rgba(240,237,229,.78);margin-bottom:34px;max-width:540px;margin-left:auto;margin-right:auto;line-height:1.6}
+.precta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+/* ===== STICKY CTA (для горячих) ===== */
+.sticky-cta{position:fixed;bottom:24px;right:24px;z-index:90;display:flex;align-items:center;gap:10px;background:var(--sage);color:#fff;padding:13px 24px;border-radius:50px;font-family:'Forum',cursive;font-size:.95rem;letter-spacing:.04em;box-shadow:0 10px 30px rgba(45,59,46,.32);opacity:0;visibility:hidden;transform:translateY(16px);transition:all .4s;cursor:pointer}
+.sticky-cta.show{opacity:1;visibility:visible;transform:translateY(0)}
+.sticky-cta:hover{background:var(--sage-dark);color:#fff}
+.sticky-cta svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2}
+
 /* RESPONSIVE */
 @media(max-width:900px){
   .hero{padding-top:100px}
@@ -300,6 +421,17 @@ nav a:hover::after{width:100%}
   .about-grid{grid-template-columns:1fr;gap:32px}
   .about-img{max-width:400px;margin:0 auto}
   .marathon-grid{grid-template-columns:1fr;gap:24px}
+  .hero-new-title h1{font-size:2.6rem}
+  .hero-stage{grid-template-columns:1fr;gap:8px}
+  .hero-stage-side.left,.hero-stage-side.right{align-items:stretch;text-align:left}
+  .hero-stage-side{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:16px}
+  .hero-photo-wrap{order:-1}
+  .hero-photo-wrap img{max-width:380px}
+  .hero-info-card{max-width:300px;flex:1;min-width:240px}
+  .story-grid{grid-template-columns:repeat(2,1fr)}
+  .feature-split{grid-template-columns:1fr;gap:34px}
+  .manifesto-lead h2,.feature-copy h2{font-size:1.85rem}
+  .precta h2{font-size:2.1rem}
 }
 @media(max-width:768px){
   nav{display:none;position:fixed;top:64px;left:0;right:0;background:var(--bg);flex-direction:column;padding:24px;gap:20px;border-bottom:1px solid var(--border-light);box-shadow:0 4px 20px rgba(0,0,0,.06)}
@@ -307,6 +439,13 @@ nav a:hover::after{width:100%}
   .burger{display:flex}
   .hero h1{font-size:2.2rem}
   .hero p{font-size:1.05rem}
+  .hero-new-title h1{font-size:2.05rem}
+  .hero-eyebrow{font-size:.68rem;letter-spacing:.18em}
+  .hero-sub{grid-template-columns:1fr;gap:26px}
+  .hero-photo-wrap img{animation:none}
+  .story-grid{grid-template-columns:1fr}
+  .precta h2{font-size:1.9rem}
+  .sticky-cta{bottom:16px;right:16px;padding:11px 18px;font-size:.85rem}
   .section{padding:60px 0}
   .section-heading h2{font-size:1.8rem}
   .reviews-grid{grid-template-columns:1fr}
@@ -357,7 +496,7 @@ nav a:hover::after{width:100%}
       <a href="#marathon">Марафон</a>
       <a href="#reviews">Отзывы</a>
       <a href="#faq">Вопросы</a>
-      <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" target="_blank">Instagram</a>
+      <a href="https://t.me/elenappdeserty" target="_blank" rel="noopener">Связаться</a>
     </nav>
     <div style="display:flex;align-items:center;gap:12px">
       <div class="nav-cart" onclick="toggleCart()">
@@ -372,103 +511,163 @@ nav a:hover::after{width:100%}
 </header>
 
 <!-- HERO -->
-<section class="hero" id="hero">
-  <div class="container hero-layout">
-    <div class="hero-content">
-      <img class="hero-mark" src="Fairytrue.svg" alt="ПП Фея">
-      <div class="hero-badge">Натурально · Штучно · Под вашу задачу</div>
-      <h1>Чистая сбалансированная еда<br><em>и десерты без компромиссов</em></h1>
-      <p>ПП-торты, конфеты, хлеб, пицца, киши и хачапури по-аджарски — из понятных ингредиентов, с заботой о вкусе, ограничениях в питании и точном КБЖУ.</p>
-      <div class="hero-btns">
-        <a href="#catalog" class="btn btn-primary">Собрать заказ</a>
-        <a href="#principles" class="btn btn-outline">Как я готовлю</a>
+<section class="hero-new" id="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Полезная еда на заказ · Барнаул</div>
+    <div class="hero-new-title">
+      <h1>Полезная еда и десерты на заказ — <em>вкусно, удобно</em> и с понятным составом</h1>
+    </div>
+
+    <div class="hero-stage" id="heroStage">
+      <div class="hero-stage-side left">
+        <div class="hero-info-card" id="heroCompareCard">
+          <div class="hic-label">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+            КБЖУ · сравнение
+          </div>
+          <div class="hero-compare" style="border-top:none;padding-top:0;margin-top:0">
+            <div class="hero-compare-title" id="heroCompareTitle"></div>
+            <div class="hero-compare-grid">
+              <div class="hc-col ours">
+                <div class="hc-name">Наш ПП</div>
+                <div class="hc-kcal" id="heroOursKcal"></div>
+                <div class="hc-bju" id="heroOursBju"></div>
+              </div>
+              <div class="hc-col usual">
+                <div class="hc-name">Обычный</div>
+                <div class="hc-kcal" id="heroUsualKcal"></div>
+                <div class="hc-bju" id="heroUsualBju"></div>
+              </div>
+            </div>
+            <div class="hero-compare-note" id="heroCompareNote"></div>
+          </div>
+        </div>
       </div>
-      <div class="hero-points" aria-label="Преимущества">
-        <div class="hero-point"><strong>Без белой муки</strong><span>рисовая, овсяная, полбяная и закваски</span></div>
-        <div class="hero-point"><strong>Без сахара</strong><span>эритритол, шоколад без сахара, ягоды</span></div>
-        <div class="hero-point"><strong>С КБЖУ</strong><span>карточки блюд и умная корзина считают заказ</span></div>
+
+      <div class="hero-photo-wrap">
+        <img id="heroDishImg" src="" alt="">
+      </div>
+
+      <div class="hero-stage-side right">
+        <div class="hero-info-card" id="heroSostavCard">
+          <div class="hic-label">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Чистый состав
+          </div>
+          <p class="hero-sostav-list" id="heroSostav"></p>
+        </div>
       </div>
     </div>
-    <div class="hero-visual" aria-label="Хачапури по-аджарски как центральный акцент">
-      <div class="hero-plate">
-        <img class="hero-food" src="images/menu/hachapuri.jpg" alt="Хачапури по-аджарски от Елены Алпатовой">
-      </div>
-      <div class="hero-orbit hero-orbit-1">штучно<small>готовлю под заказ</small></div>
-      <div class="hero-orbit hero-orbit-2">для ЗОЖ<small>и ограничений</small></div>
-      <div class="hero-orbit hero-orbit-3">Барнаул<small>доставка и самовывоз</small></div>
-      <div class="hero-quote"><span>ПП Фея</span>«Пространство, где творится чистая сбалансированная еда и десерты»</div>
+    <div class="hero-slides-nav" id="heroSlidesNav" aria-label="Блюда в подборке"></div>
+
+    <div class="hero-sub">
+      <div class="hero-sub-col"><p>Для тех, кому важно питание без белого сахара, баланс БЖУ, низкий ГИ или еда под индивидуальные ограничения.</p></div>
+      <div class="hero-sub-col"><p>Готовые блюда, выпечка и десерты, которые легко вписать в повседневную жизнь.</p></div>
+    </div>
+
+    <div class="hero-new-btns">
+      <a href="#catalog" class="btn btn-primary">Выбрать блюда</a>
+      <!-- Основной канал заказа: личный Telegram Елены. Когда бот @pp_fairy_bot заработает — замените href на https://t.me/pp_fairy_bot -->
+      <a href="https://t.me/elenappdeserty" class="btn btn-outline" target="_blank" rel="noopener">
+        <svg class="btn-ic" viewBox="0 0 24 24"><path d="M21.5 4.5L2.5 11.8c-.9.35-.85 1.65.07 1.93l4.7 1.45 1.78 5.3c.27.8 1.3.98 1.82.32l2.5-3.1 4.7 3.45c.65.48 1.6.12 1.78-.66l3.2-14.4c.2-.9-.7-1.66-1.55-1.3z"/></svg>
+        Написать в Telegram
+      </a>
+    </div>
+
+    <div class="contact-strip">
+      <a href="tel:+79237765384">
+        <svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.4-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>
+        Позвонить: +7 923 776 53 84
+      </a>
+      <!-- Когда бот в МАКС (id645485103174_1_bot) пройдёт модерацию и появится ссылка — раскомментируйте блок ниже и вставьте href:
+      <a href="ССЫЛКА_НА_МАКС_БОТА" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-11.9 7.6L3 21l1.9-5.7A8.4 8.4 0 1 1 21 11.5z"/></svg>
+        Написать в МАКС
+      </a>
+      -->
+    </div>
+
+    <div class="hero-cats">
+      <a class="hc-chip" href="#catalog" onclick="filterCatalog('nesladkie')">Блюда несладкие</a>
+      <a class="hc-chip" href="#catalog" onclick="filterCatalog('torty')">Торты</a>
+      <a class="hc-chip" href="#catalog" onclick="filterCatalog('deserty')">Десерты</a>
+      <a class="hc-chip" href="#catalog" onclick="filterCatalog('konfety')">Конфеты</a>
+      <a class="hc-chip" href="#catalog" onclick="filterCatalog('pechenie')">Печенье</a>
+      <a class="hc-chip" href="#catalog" onclick="filterCatalog('vypechka')">Выпечка</a>
+    </div>
+
+    <div class="hero-proof">
+      <span class="stars">★★★★★</span>
+      <span class="hp-text">«Все были в шоке, что торт без сахара — вкуснее обычного!» — <b>Кристина</b></span>
+      <a href="#reviews">Все отзывы →</a>
     </div>
   </div>
 </section>
 
-<!-- PRINCIPLES -->
+<!-- ФИЛОСОФИЯ ЕЛЕНЫ (с GitHub) -->
 <section class="section manifesto" id="principles">
   <div class="container">
     <div class="manifesto-lead">
       <div class="manifesto-kicker">Философия Елены</div>
-      <h2>Не «диетическая замена», а настоящая вкусная еда</h2>
-      <p>В основе сайта теперь не только каталог, а понятная история бренда: что можно заказать, кому это подходит и почему ПП-выпечка может быть красивой, праздничной и честной по составу.</p>
+      <h2>Не диетическая замена, а настоящая вкусная еда</h2>
+      <p>Мы довели рецепты до совершенства. Правильное, здоровое соотношение БЖУ и потрясающий вкус.</p>
     </div>
     <div class="story-grid">
       <article class="story-card">
         <div class="num">01 · состав</div>
         <h3>100% натуральные ингредиенты</h3>
-        <p>Без усилителей и лишних добавок: творог, рикотта, орехи, ягоды, шоколад без сахара, мука бурого риса, полба и овсяная мука.</p>
+        <p>Без усилителей и лишних добавок. Только качественные продукты от проверенных производителей.</p>
       </article>
       <article class="story-card">
         <div class="num">02 · забота</div>
         <h3>Под ограничения в питании</h3>
-        <p>Для людей с повышенным сахаром, аллергиями, ЗОЖ-задачами, спортсменов и веганов — Лена уточняет состав, вес, дату, доставку и декор.</p>
+        <p>Для людей с повышенным сахаром, аллергиями, ЗОЖ-задачами, спортсменов и веганов. Мы умеем подстроить состав под самые жесткие запреты.</p>
       </article>
       <article class="story-card">
         <div class="num">03 · вкус</div>
         <h3>ПП, которое не похоже на наказание</h3>
-        <p>Можно заказать торт «как Прага», муссовый десерт, конфеты, пиццу, киш или хачапури — красиво, сытно и без ощущения запрета.</p>
+        <p>Хачапури, пицца, торты - все с соотношением кбжу Здоровой тарелки. Невероятно? Да, мы знаем и гордимся рецептами, которые разрабатывались и совершенствовались годами.  </p>
       </article>
       <article class="story-card">
         <div class="num">04 · система</div>
-        <h3>Каталог с КБЖУ и ценами</h3>
-        <p>Каждая карточка хранит фото, описание, цену и нутриенты. Корзина складывает заказ и показывает калории, белки, жиры и углеводы.</p>
+        <h3>Каталог с КБЖУ и ценами и умной корзиной</h3>
+        <p>Вам не нужно больше считать все вручную - положите блюда в корзину и она поможет вам распределить пищу на желаемое количество дней, каллорий, время приема пищи с учетом ваших целей.</p>
       </article>
     </div>
   </div>
 </section>
 
-<!-- FEATURE -->
+<!-- ДЛЯ КОГО (с GitHub) -->
 <section class="section" id="for-whom">
   <div class="container feature-split">
     <div class="feature-image">
-      <img src="images/menu/bento-pp.jpg" alt="ПП бенто-торт без сахара">
+      <img src="images/menu/bento-pp.jpg" alt="ПП бенто-торт без сахара" loading="lazy">
     </div>
     <div class="feature-copy">
       <div class="manifesto-kicker">Для кого</div>
-      <h2>Когда хочется сладкого, но важно понимать, из чего оно сделано</h2>
-      <p>Лена делает десерты и несладкую выпечку для реальной жизни: день рождения, семейный ужин, перекус после тренировки, подарок, рацион без сахара или меню с индивидуальными ограничениями.</p>
+      <h2>Когда хочется вкусного, но важно понимать, из чего оно сделано</h2>
+      <p>Мы делаем десерты и несладкую выпечку для реальной жизни: на каждый день и на праздники, рацион без сахара или меню с индивидуальными ограничениями.</p>
       <div class="feature-list">
         <div class="feature-item"><span class="feature-dot"></span><div><b>Для людей с ограничениями.</b> Подберём вариант без сахара, без белой муки, веганский или с учётом аллергий.</div></div>
-        <div class="feature-item"><span class="feature-dot"></span><div><b>Для спортсменов и ЗОЖ.</b> В карточках есть КБЖУ, а в корзине — итоговая раскладка всего заказа.</div></div>
-        <div class="feature-item"><span class="feature-dot"></span><div><b>Для тех, кто любит «как обычное».</b> Вкус, текстура и красота остаются — меняется только подход к составу.</div></div>
+        <div class="feature-item"><span class="feature-dot"></span><div><b>Для спортсменов и ЗОЖ.</b> Норма белка для самых активных - вкусно и не скучно.</div></div>
+        <div class="feature-item"><span class="feature-dot"></span><div><b>Для уставших от диет.</b> Вкус и впечатления как от привычной еды — меняется только подход к составу.</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ORDER FLOW -->
-<section class="section section-alt" id="order-flow">
-  <div class="container">
-    <div class="section-heading">
-      <h2>Как собрать заказ</h2>
-      <p>Каталог остаётся главным инструментом сайта: выберите позиции, посмотрите КБЖУ и отправьте заявку Елене</p>
-      <div class="section-line"></div>
-    </div>
-    <div class="order-steps">
-      <article class="order-step"><span>1</span><h3>Выберите формат</h3><p>Торт, конфеты, печенье, пицца, киш, хлеб, блины или хачапури — можно собрать один праздник или набор на несколько дней.</p></article>
-      <article class="order-step"><span>2</span><h3>Добавьте в корзину</h3><p>Сайт посчитает общую стоимость и КБЖУ. Если позиций много, планировщик предложит распределение по приёмам пищи.</p></article>
-      <article class="order-step"><span>3</span><h3>Уточните детали</h3><p>Дата, время, доставка, декор, надпись, ограничения и предоплата — Елена подтверждает заказ лично, без конвейера.</p></article>
+<!-- БЛОК Г: CTA ПЕРЕД КАТАЛОГОМ -->
+<section class="section section-precta" id="pre-catalog">
+  <div class="container precta">
+    <div class="hero-eyebrow">Сделайте первый шаг</div>
+    <h2>Готовы попробовать?</h2>
+    <p>Выберите блюда в каталоге с точным КБЖУ — или напишите нам, и мы поможем собрать заказ под ваши цели.</p>
+    <div class="precta-btns">
+      <a href="#catalog" class="btn btn-gold">Выбрать блюдо</a>
+      <a href="https://t.me/elenappdeserty" class="btn btn-outline" style="border-color:var(--gold-light);color:var(--gold-light)" target="_blank" rel="noopener">Написать в Telegram</a>
     </div>
   </div>
 </section>
-
 <!-- CATALOG -->
 <section class="section section-alt" id="catalog">
   <div class="container">
@@ -494,9 +693,11 @@ nav a:hover::after{width:100%}
       </div>
       <div class="about-text">
         <h3>Привет, я Елена!</h3>
-        <p>Готовлю только из 100% натуральных ингредиентов, с любовью и заботой о каждом клиенте. Моя суперсила — индивидуальный подход: каждый заказ выполняю максимально качественно.</p>
-        <p>Мои клиенты — люди с ограничениями в питании, спортсмены, веганы и все, кто ведёт здоровый образ жизни. Вместо белой муки — рисовая и полбяная. Вместо сахара — эритритол. Шоколад только без сахара, хлеб на собственной закваске.</p>
-        <p>Каждый день готовлю свежие десерты, торты, выпечку, пиццу и хлеб — штучно, на заказ. Никакого конвейера.</p>
+        <p>Я основатель бренда ПП Фея. Сейчас мы активно растем и развиваемся, но наш подход - индивидуальный, с любовью и заботой о каждом клиенте не изменится никогда.</p>
+        <p>Я - дипломированный повар и преподаватель. Я знаю что правильное питание меняет жизнь, и у меня есть 100 и одно доказательство этому. Больше сотни клиентов достигших своих целей и их отзывы вдохновляют меня двигаться вперед.</p>
+        <p>Каждый день мы готовим для вас как для своей большой семьи. Спасибо что продолжаете выбирать нас.
+          Ваша Елена Алпатова.
+        </p>
         <div class="about-values">
           <span class="about-value">100% натуральный состав</span>
           <span class="about-value">Точный КБЖУ</span>
@@ -531,7 +732,7 @@ nav a:hover::after{width:100%}
             <li>Личная поддержка Елены</li>
             <li>Онлайн-встреча с разбором</li>
           </ul>
-          <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" class="btn btn-gold" style="margin-top:20px" target="_blank">Записаться на марафон</a>
+          <a href="https://t.me/elenappdeserty" class="btn btn-gold" style="margin-top:20px" target="_blank" rel="noopener">Записаться на марафон</a>
         </div>
         <div>
           <h3 style="color:var(--gold);margin-bottom:16px">Для кого?</h3>
@@ -642,7 +843,7 @@ nav a:hover::after{width:100%}
     <p>Выбери блюда в каталоге, посмотри КБЖУ — и закажи с доставкой по Барнаулу</p>
     <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
       <a href="#catalog" class="btn btn-gold">Открыть каталог</a>
-      <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" class="btn btn-outline" style="border-color:var(--gold-light);color:var(--gold-light)" target="_blank">Написать в Instagram</a>
+      <a href="https://t.me/elenappdeserty" class="btn btn-outline" style="border-color:var(--gold-light);color:var(--gold-light)" target="_blank" rel="noopener">Написать в Telegram</a>
     </div>
   </div>
 </section>
@@ -664,12 +865,20 @@ nav a:hover::after{width:100%}
         <a href="menu-admin.html" target="_blank">База меню</a>
         <a href="recipe-kulich.html" target="_blank">Рецепт: Кулич ПП</a>
         <a href="recipe-pasha.html" target="_blank">Рецепт: Творожная пасха</a>
-        <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" target="_blank">Instagram</a>
+        <a href="https://t.me/elenappdeserty" target="_blank" rel="noopener">Telegram</a>
+        <a href="tel:+79237765384">+7 923 776 53 84</a>
+        <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" target="_blank" rel="noopener">Instagram</a>
       </div>
     </div>
     <div class="footer-copy">© 2026 ПП Фея — Елена Алпатова. Барнаул. Все права защищены.</div>
   </div>
 </footer>
+
+<!-- STICKY CTA (быстрый путь в каталог для горячих) -->
+<a href="#catalog" class="sticky-cta" id="stickyCta">
+  <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+  Перейти в каталог
+</a>
 
 <!-- CART DRAWER -->
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
@@ -696,7 +905,7 @@ nav a:hover::after{width:100%}
       <span class="cart-total-price" id="cartTotal">0 ₽</span>
     </div>
     <div class="cart-actions">
-      <a href="https://instagram.com/pp_prostranstvo_elena_alpatova" target="_blank" class="btn btn-primary" id="btnOrder" style="width:100%;justify-content:center">Оформить заказ</a>
+      <a href="https://t.me/elenappdeserty" target="_blank" rel="noopener" class="btn btn-primary" id="btnOrder" style="width:100%;justify-content:center">Оформить заказ в Telegram</a>
       <button class="btn-planner" onclick="openPlanner()">Разбить по дням и приёмам пищи</button>
     </div>
   </div>
@@ -734,14 +943,19 @@ nav a:hover::after{width:100%}
 <script>
 const CATEGORIES = [
   {id:'all',name:'Все',icon:''},
-  {id:'torty',name:'Торты',icon:'🎂'},
-  {id:'deserty',name:'Десерты',icon:'🍰'},
-  {id:'konfety',name:'Конфеты',icon:'🍬'},
-  {id:'pechenie',name:'Печенье',icon:'🍪'},
-  {id:'pizza',name:'Пицца и киши',icon:'🍕'},
-  {id:'vypechka',name:'Выпечка и хлеб',icon:'🥐'},
-  {id:'classic',name:'Классические торты',icon:'🎂'}
+  {id:'nesladkie',name:'Блюда несладкие',icon:''},
+  {id:'torty',name:'Торты',icon:''},
+  {id:'deserty',name:'Десерты',icon:''},
+  {id:'konfety',name:'Конфеты',icon:''},
+  {id:'pechenie',name:'Печенье',icon:''},
+  {id:'vypechka',name:'Выпечка',icon:''},
+  {id:'classic',name:'Классические торты',icon:''}
 ];
+const CAT_ORDER = ['nesladkie','torty','deserty','konfety','pechenie','vypechka','classic'];
+function catSortKey(cat) {
+  const i = CAT_ORDER.indexOf(cat);
+  return i === -1 ? 99 : i;
+}
 
 const PRODUCTS = [
   // ТОРТЫ ПП
@@ -807,35 +1021,35 @@ const PRODUCTS = [
     per100:{kcal:431,p:20,f:32,c:5}, variants:[{label:'150 г',w:150,price:380}]},
 
   // ПИЦЦА И КИШИ
-  {id:21, name:'Пицца курица + грибы', cat:'pizza', icon:'🍕', photo:'pizza-kurica-griby.jpg', desc:'ПП-пицца на твороге и рисовой муке: курица, шампиньоны, моцарелла.', meal:'lunch',
+  {id:21, name:'Пицца курица + грибы', cat:'nesladkie', icon:'🍕', photo:'pizza-kurica-griby.jpg', desc:'ПП-пицца на твороге и рисовой муке: курица, шампиньоны, моцарелла.', meal:'lunch',
     per100:{kcal:115,p:15,f:4.5,c:4}, variants:[{label:'~950 г',w:950,price:2100}]},
-  {id:22, name:'Пицца с морепродуктами', cat:'pizza', icon:'🦐', photo:'pizza-moreprodukty.jpg', desc:'Нерка или лосось, креветки, оливки, перец — на ПП-тесте.', meal:'lunch',
+  {id:22, name:'Пицца с морепродуктами', cat:'nesladkie', icon:'🦐', photo:'pizza-moreprodukty.jpg', desc:'Нерка или лосось, креветки, оливки, перец — на ПП-тесте.', meal:'lunch',
     per100:{kcal:140,p:16,f:3,c:12}, variants:[{label:'~950 г',w:950,price:2400}]},
-  {id:24, name:'Киш курица + грибы + капуста', cat:'pizza', icon:'🥧', photo:'kish-kurica-griby.jpg', desc:'Открытый пирог с курицей, грибами и капустой — сытный и ароматный.', meal:'lunch',
+  {id:24, name:'Киш курица + грибы + капуста', cat:'nesladkie', icon:'🥧', photo:'kish-kurica-griby.jpg', desc:'Открытый пирог с курицей, грибами и капустой — сытный и ароматный.', meal:'lunch',
     per100:{kcal:121,p:7,f:4,c:15}, variants:[{label:'~1 кг',w:1000,price:2600}]},
-  {id:25, name:'Киш с сёмгой, брокколи и сыром', cat:'pizza', icon:'🐟', photo:'kish-nerka.jpg', desc:'Нерка/сёмга, брокколи, сыр — киш ресторанного уровня.', meal:'lunch',
+  {id:25, name:'Киш с сёмгой, брокколи и сыром', cat:'nesladkie', icon:'🐟', photo:'kish-nerka.jpg', desc:'Нерка/сёмга, брокколи, сыр — киш ресторанного уровня.', meal:'lunch',
     per100:{kcal:134,p:7,f:5,c:15}, variants:[{label:'~1 кг',w:1000,price:3200}]},
-  {id:42, name:'Киш с морепродуктами', cat:'pizza', icon:'🦞', photo:'kish-moreprodukty.jpg', desc:'Форель, креветки, кальмар, брокколи, сыр — морской микс.', meal:'lunch',
+  {id:42, name:'Киш с морепродуктами', cat:'nesladkie', icon:'🦞', photo:'kish-moreprodukty.jpg', desc:'Форель, креветки, кальмар, брокколи, сыр — морской микс.', meal:'lunch',
     per100:{kcal:160,p:12,f:8,c:12}, variants:[{label:'~1 кг',w:1000,price:3200}]},
 
   // ВЫПЕЧКА И ХЛЕБ
-  {id:26, name:'Хачапури по-аджарски', cat:'vypechka', icon:'🧀', photo:'hachapuri.jpg', desc:'ПП-хачапури: сыр, творог, яйца, рисовая мука, зелень.', meal:'lunch',
+  {id:26, name:'Хачапури по-аджарски', cat:'nesladkie', icon:'🧀', photo:'hachapuri.jpg', desc:'ПП-хачапури: сыр, творог, яйца, рисовая мука, зелень.', meal:'lunch',
     per100:{kcal:157,p:17,f:7,c:8}, variants:[{label:'550 г',w:550,price:1050}]},
-  {id:28, name:'Хлеб безглютеновый', cat:'vypechka', icon:'🍞', photo:'hleb-2.jpg', desc:'Без глютена, на БГ-закваске — мягкий и ароматный.', meal:'any',
+  {id:28, name:'Хлеб безглютеновый', cat:'nesladkie', icon:'🍞', photo:'hleb-2.jpg', desc:'Без глютена, на БГ-закваске — мягкий и ароматный.', meal:'any',
     per100:{kcal:221,p:6,f:5,c:36}, variants:[{label:'450 г',w:450,price:670}]},
-  {id:29, name:'Хлеб на закваске', cat:'vypechka', icon:'🍞', photo:'hleb.jpg', desc:'На собственной закваске, мука пшеничная ц/з — максимум пользы.', meal:'any',
+  {id:29, name:'Хлеб на закваске', cat:'nesladkie', icon:'🍞', photo:'hleb.jpg', desc:'На собственной закваске, мука пшеничная ц/з — максимум пользы.', meal:'any',
     per100:{kcal:234,p:7,f:1,c:45}, variants:[{label:'900 г',w:900,price:970}]},
   {id:30, name:'Блины с творожным кремом и бананом', cat:'vypechka', icon:'🥞', photo:'bliny-s-nachinkoy.jpg', desc:'Протеиновые блины с творожно-арахисовым кремом и свежим бананом.', meal:'breakfast',
     per100:{kcal:145,p:18,f:5,c:19}, variants:[{label:'5 шт (~600 г)',w:600,price:1650}]},
-  {id:40, name:'Блины с курицей и грибами', cat:'vypechka', icon:'🍗', photo:'bliny-bez-nachinki.jpg', desc:'Сытные протеиновые блины с курицей, шампиньонами и сыром.', meal:'lunch',
+  {id:40, name:'Блины с курицей и грибами', cat:'nesladkie', icon:'🍗', photo:'bliny-bez-nachinki.jpg', desc:'Сытные протеиновые блины с курицей, шампиньонами и сыром.', meal:'lunch',
     per100:{kcal:155,p:17,f:8,c:18}, variants:[{label:'5 шт (~650 г)',w:650,price:1700}]},
-  {id:41, name:'Блины с тунцом и сыром', cat:'vypechka', icon:'🐟', photo:'bliny-s-nachinkoy.jpg', desc:'Тунец, отварные яйца, сыр — белковая бомба на завтрак или обед.', meal:'lunch',
+  {id:41, name:'Блины с тунцом и сыром', cat:'nesladkie', icon:'🐟', photo:'bliny-s-nachinkoy.jpg', desc:'Тунец, отварные яйца, сыр — белковая бомба на завтрак или обед.', meal:'lunch',
     per100:{kcal:140,p:16,f:4,c:6}, variants:[{label:'5 шт (~650 г)',w:650,price:1700}]},
   {id:32, name:'Сочни с творогом', cat:'vypechka', icon:'🥟', photo:'sochni-tvorog.jpg', desc:'Мука бурого риса, яйцо, мягкий творог, творог брикет, кукурузный крахмал, эритритол, разрыхлитель.', meal:'breakfast',
     per100:{kcal:145,p:15,f:4,c:18}, variants:[{label:'5 шт (~400 г)',w:400,price:800}]},
-  {id:33, name:'Булочки чечевичные', cat:'vypechka', icon:'🫘', photo:'bulochki-chechevichnye.jpg', desc:'Высокобелковые булочки из зелёной чечевицы — много белка и железа.', meal:'any',
+  {id:33, name:'Булочки чечевичные', cat:'nesladkie', icon:'🫘', photo:'bulochki-chechevichnye.jpg', desc:'Высокобелковые булочки из зелёной чечевицы — много белка и железа.', meal:'any',
     per100:{kcal:210,p:13,f:6,c:34}, variants:[{label:'10 шт (~900 г)',w:900,price:1400}]},
-  {id:34, name:'Пирожки белковые', cat:'vypechka', icon:'🥟', photo:'pirozhki-belkovye.jpg', desc:'Начинки: лук+яйцо+сыр, курица+грибы+сыр, капуста+сыр.', meal:'lunch',
+  {id:34, name:'Пирожки белковые', cat:'nesladkie', icon:'🥟', photo:'pirozhki-belkovye.jpg', desc:'Начинки: лук+яйцо+сыр, курица+грибы+сыр, капуста+сыр.', meal:'lunch',
     per100:{kcal:178,p:20,f:7,c:15}, kbjuFrom:true, variants:[{label:'5 шт (~600 г)',w:600,price:1650}]},
 
   // КЛАССИЧЕСКИЕ
@@ -857,7 +1071,10 @@ function renderTabs() {
 
 function renderCatalog() {
   const grid = document.getElementById('catalogGrid');
-  const items = activeCategory === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === activeCategory);
+  let items = activeCategory === 'all' ? [...PRODUCTS] : PRODUCTS.filter(p => p.cat === activeCategory);
+  if (activeCategory === 'all') {
+    items.sort((a, b) => catSortKey(a.cat) - catSortKey(b.cat) || a.id - b.id);
+  }
   grid.innerHTML = items.map(p => {
     const v0 = p.variants[0];
     const multiVar = p.variants.length > 1;
@@ -1244,12 +1461,194 @@ function declDays(n) {
   return n + ' дней';
 }
 
+// HERO — смена блюд (КБЖУ ПП с каталога, обычное — от Лены)
+const HERO_SLIDES = [
+  {
+    title: 'Киш с семгой, брокколи и сыром · на 100 г',
+    image: 'images/menu/hero-kish-semga.png',
+    alt: 'Киш с семгой ПП — ПП Фея',
+    imgScale: 1.42,
+    imgScaleMobile: 1.32,
+    pp: { kcal: 134, p: 7, f: 5, c: 15 },
+    usual: { kcal: 299.3, p: 11, f: 19.3, c: 20.4 },
+    sostav: 'Творог, рисовая и пшеничная мука, масло гхи, зелень, сёмга, брокколи, брюссельская капуста, стручковая фасоль, яйца, йогурт, моцарелла, лёгкий сыр'
+  },
+  {
+    title: 'Рулет меренговый · на 100 г',
+    image: 'images/menu/hero-rulet-merengoviy.png',
+    alt: 'Рулет меренговый ПП — ПП Фея',
+    pp: { kcal: 113, p: 7, f: 6, c: 5 },
+    usual: { kcal: 232, p: 2.71, f: 9.88, c: 35.16 },
+    sostav: 'Яичный белок, кукурузный крахмал, камедь рожкового дерева, эритрит, мягкий творог, творожный сыр, ягоды, фрукты'
+  },
+  {
+    title: 'Эклеры · на 100 г',
+    image: 'images/menu/hero-eklery.png',
+    alt: 'Эклеры ПП — ПП Фея',
+    pp: { kcal: 116, p: 8, f: 2, c: 9 },
+    usual: { kcal: 341, p: 5.3, f: 19.5, c: 36.1 },
+    sostav: 'Рисовая мука, кукурузный крахмал, яйца, эритритол, разрыхлитель, мягкий творог. Крем на выбор'
+  },
+  {
+    title: 'Торт медовик ПП · на 100 г',
+    image: 'images/menu/hero-medovik.png',
+    alt: 'Торт медовик ПП — ПП Фея',
+    pp: { kcal: 196, p: 11, f: 5, c: 27 },
+    usual: { kcal: 391, p: 5, f: 22, c: 43 },
+    sostav: 'Мука рисовая ц/з, мука пшеничная ц/з, яйца, мёд, ряженка, эритритол, мягкий творог, творожный сыр, арахисовая паста, масло виноградной косточки'
+  },
+  {
+    title: 'Фундучный чизкейк · на 100 г',
+    image: 'images/menu/hero-chizkeik-funduk.png',
+    alt: 'Фундучный чизкейк ПП — ПП Фея',
+    pp: { kcal: 199, p: 9, f: 10, c: 19 },
+    usual: { kcal: 377, p: 7.44, f: 27.48, c: 27.38 },
+    sostav: 'Шоколадная основа, сырно-сливочный крем, карамель с фундуком'
+  }
+];
+
+let heroSlideIdx = 0;
+let heroAutoplayTimer = null;
+let heroAutoplayPaused = false;
+const HERO_INTERVAL_MS = 5500;
+const HERO_FIRST_DELAY_MS = 4500;
+const HERO_SWIPE_MIN_PX = 48;
+const heroCanHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+function fmtHeroMacro(n) {
+  const v = Math.round(n * 10) / 10;
+  return Number.isInteger(v) ? String(v) : v.toFixed(1);
+}
+
+function fmtHeroKcal(n) {
+  return String(Math.round(n));
+}
+
+function heroBjuLine(macros) {
+  return `Б ${fmtHeroMacro(macros.p)} · Ж ${fmtHeroMacro(macros.f)} · У ${fmtHeroMacro(macros.c)}`;
+}
+
+function heroCompareNoteHtml(pp, usual) {
+  const ratio = usual.kcal / pp.kcal;
+  if (ratio >= 1.85) return '<b>Вдвое легче</b> — тот же вкус';
+  if (ratio >= 1.35) return '<b>Заметно легче</b> — тот же вкус';
+  return '<b>Легче классики</b> — тот же вкус';
+}
+
+function applyHeroSlide(idx) {
+  const s = HERO_SLIDES[idx];
+  document.getElementById('heroCompareTitle').textContent = s.title;
+  document.getElementById('heroOursKcal').innerHTML = `${fmtHeroKcal(s.pp.kcal)}<small>ккал</small>`;
+  document.getElementById('heroUsualKcal').innerHTML = `${fmtHeroKcal(s.usual.kcal)}<small>ккал</small>`;
+  document.getElementById('heroOursBju').textContent = heroBjuLine(s.pp);
+  document.getElementById('heroUsualBju').textContent = heroBjuLine(s.usual);
+  document.getElementById('heroCompareNote').innerHTML = heroCompareNoteHtml(s.pp, s.usual);
+  const img = document.getElementById('heroDishImg');
+  img.src = s.image;
+  img.alt = s.alt;
+  const mobile = window.matchMedia('(max-width: 900px)').matches;
+  const scale = mobile ? (s.imgScaleMobile ?? s.imgScale) : s.imgScale;
+  img.style.transform = scale ? `scale(${scale})` : '';
+  document.getElementById('heroSostav').textContent = s.sostav;
+  document.querySelectorAll('.hero-slides-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === idx);
+    dot.setAttribute('aria-current', i === idx ? 'true' : 'false');
+  });
+}
+
+function goHeroSlide(idx, animate) {
+  heroSlideIdx = (idx + HERO_SLIDES.length) % HERO_SLIDES.length;
+  const stage = document.getElementById('heroStage');
+  if (!animate) {
+    applyHeroSlide(heroSlideIdx);
+    return;
+  }
+  stage.setAttribute('data-fading', '1');
+  setTimeout(() => {
+    applyHeroSlide(heroSlideIdx);
+    stage.removeAttribute('data-fading');
+  }, 380);
+}
+
+function clearHeroAutoplay() {
+  if (heroAutoplayTimer) {
+    clearTimeout(heroAutoplayTimer);
+    heroAutoplayTimer = null;
+  }
+}
+
+function scheduleHeroAutoplay(delay) {
+  clearHeroAutoplay();
+  heroAutoplayTimer = setTimeout(() => {
+    if (!heroAutoplayPaused) goHeroSlide(heroSlideIdx + 1, true);
+    scheduleHeroAutoplay(HERO_INTERVAL_MS);
+  }, delay);
+}
+
+function resetHeroAutoplay() {
+  scheduleHeroAutoplay(HERO_INTERVAL_MS);
+}
+
+function initHeroCarousel() {
+  const nav = document.getElementById('heroSlidesNav');
+  nav.innerHTML = HERO_SLIDES.map((s, i) => {
+    const label = s.title.replace(' · на 100 г', '');
+    return `<button type="button" class="hero-slides-dot${i === 0 ? ' active' : ''}" data-idx="${i}" aria-label="${label}" aria-current="${i === 0 ? 'true' : 'false'}"></button>`;
+  }).join('');
+  nav.addEventListener('click', e => {
+    const btn = e.target.closest('.hero-slides-dot');
+    if (!btn) return;
+    goHeroSlide(+btn.dataset.idx, true);
+    resetHeroAutoplay();
+  });
+
+  const stage = document.getElementById('heroStage');
+  if (heroCanHover) {
+    stage.addEventListener('mouseenter', () => { heroAutoplayPaused = true; });
+    stage.addEventListener('mouseleave', () => {
+      heroAutoplayPaused = false;
+      resetHeroAutoplay();
+    });
+  }
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  stage.addEventListener('touchstart', e => {
+    if (!e.changedTouches[0]) return;
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener('touchend', e => {
+    const t = e.changedTouches[0];
+    if (!t) return;
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    if (Math.abs(dx) < HERO_SWIPE_MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+    if (dx < 0) goHeroSlide(heroSlideIdx + 1, true);
+    else goHeroSlide(heroSlideIdx - 1, true);
+    resetHeroAutoplay();
+  }, { passive: true });
+
+  HERO_SLIDES.forEach(s => { const i = new Image(); i.src = s.image; });
+  goHeroSlide(0, false);
+  scheduleHeroAutoplay(HERO_FIRST_DELAY_MS);
+}
+
 // INIT
+initHeroCarousel();
 renderTabs();
 renderCatalog();
 
 const hdr = document.getElementById('header');
-window.addEventListener('scroll', () => hdr.classList.toggle('scrolled', window.scrollY > 10));
+const stickyCta = document.getElementById('stickyCta');
+const catalogEl = document.getElementById('catalog');
+window.addEventListener('scroll', () => {
+  hdr.classList.toggle('scrolled', window.scrollY > 10);
+  // показываем быструю кнопку после hero и прячем, когда каталог уже на экране
+  const catTop = catalogEl ? catalogEl.getBoundingClientRect().top : 99999;
+  const show = window.scrollY > window.innerHeight * 0.6 && catTop > window.innerHeight * 0.4;
+  stickyCta.classList.toggle('show', show);
+});
 document.querySelectorAll('#nav a').forEach(a => a.addEventListener('click', () => document.getElementById('nav').classList.remove('open')));
 </script>
 </body>
