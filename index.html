@@ -342,6 +342,25 @@ nav a:hover::after{width:100%}
   .cart-header,.cart-body,.cart-footer{padding-left:18px;padding-right:18px}
 }
 
+/* CHECKOUT MODAL (отправка заказа в бота/таблицу) */
+.cm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:360;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:all .25s}
+.cm-overlay.open{opacity:1;visibility:visible}
+.cm-modal{width:100%;max-width:640px;max-height:90vh;overflow:auto;background:var(--bg);border-radius:18px;box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,.5)}
+.cm-topbar{position:sticky;top:0;z-index:5;background:rgba(251,251,248,.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border-light)}
+.cm-topbar .cm-left{display:flex;align-items:center;gap:10px;min-width:0}
+.cm-topbar .cm-title{font-family:'Forum',cursive;color:var(--sage-dark);font-size:1.02rem}
+.cm-topbar button{background:none;border:none;cursor:pointer;padding:8px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center}
+.cm-topbar button:hover{background:rgba(91,111,94,.06)}
+.cm-topbar svg{width:22px;height:22px;stroke:var(--text-muted);stroke-width:2;fill:none}
+.cm-body{padding:16px}
+.cm-grid{display:grid;grid-template-columns:1fr;gap:12px}
+.cm-field label{display:block;font-family:'Forum',cursive;color:var(--sage-dark);margin-bottom:6px}
+.cm-field input,.cm-field textarea,.cm-field select{width:100%;padding:12px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg-alt);font-size:1rem}
+.cm-field textarea{min-height:92px;resize:vertical}
+.cm-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.cm-actions .btn{flex:1;min-width:210px;justify-content:center}
+.cm-hint{font-size:.9rem;color:var(--text-muted);margin-top:4px}
+
 /* KBZHU NOTE */
 .kbzhu-note{text-align:center;font-size:.82rem;color:var(--text-muted);margin-top:12px;font-style:italic;padding:8px 16px;background:rgba(201,173,110,.08);border-radius:8px;display:inline-block}
 
@@ -975,7 +994,7 @@ nav a:hover::after{width:100%}
       <span class="cart-total-price" id="cartTotal">0 ₽</span>
     </div>
     <div class="cart-actions">
-      <a href="https://t.me/elenappdeserty" target="_blank" rel="noopener" class="btn btn-primary" id="btnOrder" style="width:100%;justify-content:center">Оформить заказ в Telegram</a>
+      <button class="btn btn-primary" id="btnOrder" style="width:100%;justify-content:center" onclick="openCheckout()">Оформить заказ</button>
       <button class="smartfairy-cta" onclick="openPlanner()">
         <span class="sf-left">
           <span class="sf-star" aria-hidden="true">
@@ -1057,6 +1076,41 @@ nav a:hover::after{width:100%}
   </div>
 </div>
 
+<!-- CHECKOUT MODAL -->
+<div class="cm-overlay" id="cmOverlay" onclick="closeCheckout()">
+  <div class="cm-modal" onclick="event.stopPropagation()">
+    <div class="cm-topbar">
+      <div class="cm-left">
+        <button onclick="uiBack()" aria-label="Назад">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/><path d="M9 12h12"/></svg>
+        </button>
+        <div class="cm-title">Оформление заказа</div>
+      </div>
+      <button onclick="uiCloseAll()" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="cm-body">
+      <div class="cm-grid">
+        <div class="cm-field">
+          <label for="cmPhone">Телефон для связи</label>
+          <input id="cmPhone" type="tel" inputmode="tel" placeholder="+7…" autocomplete="tel">
+          <div class="cm-hint">Нужен, чтобы быстро согласовать детали.</div>
+        </div>
+        <div class="cm-field">
+          <label for="cmComment">Комментарий к заказу (опционально)</label>
+          <textarea id="cmComment" placeholder="Доставка/самовывоз, дата, пожелания, ограничения…"></textarea>
+        </div>
+        <div class="cm-actions">
+          <button class="btn btn-primary" onclick="submitOrder()">Отправить заказ</button>
+          <a class="btn btn-outline" href="https://t.me/elenappdeserty" target="_blank" rel="noopener" style="justify-content:center">Написать в Telegram</a>
+        </div>
+        <div class="cm-hint" id="cmStatus" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const CATEGORIES = [
   {id:'all',name:'Все',icon:''},
@@ -1073,6 +1127,10 @@ function catSortKey(cat) {
   const i = CAT_ORDER.indexOf(cat);
   return i === -1 ? 99 : i;
 }
+
+// ===== INTEGRATION: SITE -> APPS SCRIPT (orders/forms) =====
+// Вставь сюда URL Web App деплоя Apps Script (см. integrations/apps-script/README.md)
+const ORDER_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbx2Udh7R-yonTszrGqYNKSYyrNCOp7rUWtwdhX57fNQp1_Z3DD-yBcT1qBd12Qxvt6Ing/exec';
 
 const PRODUCTS = [
   // ТОРТЫ ПП
@@ -1191,6 +1249,89 @@ function uiCloseAll() {
 
 // Прячем «обычную кнопку», если нужно
 // (оставляю в разметке как запасной вариант — можно удалить)
+
+function getTgUserSafe() {
+  try {
+    const tg = window.Telegram && window.Telegram.WebApp;
+    const u = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+    if (!u) return null;
+    return {
+      tgUserId: u.id,
+      username: u.username || '',
+      firstName: u.first_name || '',
+      lastName: u.last_name || ''
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
+function openCheckout() {
+  if (!cart.length) return;
+  const status = document.getElementById('cmStatus');
+  status.style.display = 'none';
+  status.textContent = '';
+  document.getElementById('cmOverlay').classList.add('open');
+  uiPush(closeCheckout);
+}
+
+function closeCheckout() {
+  document.getElementById('cmOverlay').classList.remove('open');
+  if (uiStack[uiStack.length - 1] === closeCheckout) uiStack.pop();
+}
+
+function buildOrderPayload() {
+  const tgUser = getTgUserSafe();
+  const phone = (document.getElementById('cmPhone').value || '').trim();
+  const comment = (document.getElementById('cmComment').value || '').trim();
+  let totalPrice = 0, totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
+
+  const items = cart.map((item) => {
+    const p = PRODUCTS.find(x => x.id === item.pid);
+    const v = p.variants[item.vi];
+    const sum = v.price * item.qty;
+    const w = v.w * item.qty;
+    const kcal = Math.round(p.per100.kcal * w / 100);
+    const pr = Math.round(p.per100.p * w / 100);
+    const fat = Math.round(p.per100.f * w / 100);
+    const carb = Math.round(p.per100.c * w / 100);
+    totalPrice += sum; totalKcal += kcal; totalP += pr; totalF += fat; totalC += carb;
+    return { pid: p.id, name: p.name, variant: v.label, qty: item.qty, sum };
+  });
+
+  return {
+    type: 'order',
+    source: (tgUser ? 'tg_mini_app' : 'web'),
+    client: { ...(tgUser || {}), phone, comment },
+    items,
+    totals: { price: totalPrice, kcal: totalKcal, p: totalP, f: totalF, c: totalC }
+  };
+}
+
+async function submitOrder() {
+  const status = document.getElementById('cmStatus');
+  status.style.display = 'block';
+
+  if (!ORDER_WEBHOOK_URL) {
+    status.textContent = 'Интеграция ещё не подключена. Пока просто напишите Елене в Telegram.';
+    return;
+  }
+
+  const payload = buildOrderPayload();
+  status.textContent = 'Отправляем заказ…';
+
+  try {
+    const res = await fetch(ORDER_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    await res.text();
+    status.textContent = 'Заказ отправлен ✅ Мы свяжемся с вами в течение 10 минут.';
+  } catch (e) {
+    status.textContent = 'Не получилось отправить автоматически. Напишите Елене в Telegram — поможем вручную.';
+  }
+}
 
 // RENDER CATALOG
 function renderTabs() {
