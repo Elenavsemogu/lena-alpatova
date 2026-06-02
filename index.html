@@ -1303,7 +1303,13 @@ function buildOrderPayload() {
     type: 'order_draft',
     // Важно: Apps Script не отдаёт CORS-заголовки, поэтому мы не можем надёжно читать ответ.
     // Генерируем orderId на клиенте и используем его в deep-link в бота.
-    orderId: (crypto && crypto.randomUUID ? `ord_${crypto.randomUUID().replace(/-/g,'').slice(0,16)}` : `ord_${Math.random().toString(16).slice(2,10)}${Date.now().toString(16).slice(-8)}`),
+    orderId: (() => {
+      try {
+        const c = (window && window.crypto) ? window.crypto : null;
+        if (c && typeof c.randomUUID === 'function') return `ord_${c.randomUUID().replace(/-/g,'').slice(0,16)}`;
+      } catch (_) {}
+      return `ord_${Math.random().toString(16).slice(2,10)}${Date.now().toString(16).slice(-8)}`;
+    })(),
     source: (tgUser ? 'tg_mini_app' : 'web'),
     client: { ...(tgUser || {}), phone, comment },
     items,
@@ -1324,14 +1330,21 @@ async function submitOrder() {
   status.textContent = 'Формируем заказ…';
 
   try {
-    // Отправляем как text/plain, чтобы избежать CORS preflight.
-    // Ответ прочитать нельзя (opaque), но запрос уйдёт.
-    await fetch(ORDER_WEBHOOK_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify(payload)
-    });
+    // Самый надёжный способ для кросс-доменных отправок без CORS.
+    // Если доступен sendBeacon — используем его.
+    const body = JSON.stringify(payload);
+    if (navigator && typeof navigator.sendBeacon === 'function') {
+      const ok = navigator.sendBeacon(ORDER_WEBHOOK_URL, new Blob([body], { type: 'text/plain;charset=UTF-8' }));
+      if (!ok) throw new Error('sendBeacon failed');
+    } else {
+      // Фолбэк: no-cors fetch (ответ прочитать нельзя).
+      await fetch(ORDER_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body
+      });
+    }
     const deeplink = `https://t.me/pp_fairy_bot?start=order_${encodeURIComponent(payload.orderId)}`;
     status.textContent = 'Откройте бота, чтобы проверить и подтвердить заказ ✅';
 
@@ -1346,7 +1359,7 @@ async function submitOrder() {
       window.open(deeplink, '_blank', 'noopener');
     }
   } catch (e) {
-    status.textContent = 'Не получилось отправить автоматически. Напишите Елене в Telegram — поможем вручную.';
+    status.textContent = 'Не получилось отправить автоматически. Откройте бота по ссылке и продублируйте заказ, если нужно.';
   }
 }
 
