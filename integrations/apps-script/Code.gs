@@ -492,8 +492,45 @@ function json_(code, obj) {
 }
 
 /**
- * Запусти эту функцию вручную (Run → getMyLenaChatId) ПОСЛЕ того как напишешь /start боту.
- * Она напечатает твой chat_id в логах (View → Logs).
+ * РЕКОМЕНДУЕМЫЙ режим для Telegram + Apps Script: polling (без webhook).
+ * Telegram webhook на GAS Web App ломается (302/405) — см. README.
+ *
+ * Один раз: Run → enableTelegramPolling_
+ * Потом триггер раз в 1 минуту сам вызывает pollTelegramUpdates_.
+ */
+function enableTelegramPolling_() {
+  var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/deleteWebhook", { muteHttpExceptions: true });
+
+  var triggers = ScriptApp.getProjectTriggers();
+  triggers.forEach(function (t) {
+    if (t.getHandlerFunction() === "pollTelegramUpdates_") ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger("pollTelegramUpdates_").timeBased().everyMinutes(1).create();
+  Logger.log("Polling включён: webhook удалён, триггер pollTelegramUpdates_ каждую минуту.");
+}
+
+function pollTelegramUpdates_() {
+  var props = PropertiesService.getScriptProperties();
+  var token = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var offset = parseInt(props.getProperty("TG_OFFSET") || "0", 10) || 0;
+  var url = "https://api.telegram.org/bot" + token + "/getUpdates?limit=50&timeout=0" + (offset ? "&offset=" + offset : "");
+  var resp = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+  var data = JSON.parse(resp.getContentText() || "{}");
+  if (!data.ok) return;
+
+  var updates = data.result || [];
+  var nextOffset = offset;
+  updates.forEach(function (u) {
+    if (u.update_id >= nextOffset) nextOffset = u.update_id + 1;
+    handleTelegramUpdate_(u);
+  });
+  if (nextOffset !== offset) props.setProperty("TG_OFFSET", String(nextOffset));
+}
+
+/**
+ * Запусти вручную (Run → getMyLenaChatId) ПОСЛЕ /start боту.
+ * Работает только если webhook выключен (deleteWebhook или enableTelegramPolling_).
  */
 function getMyLenaChatId() {
   var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
