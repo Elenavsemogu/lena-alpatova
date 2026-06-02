@@ -14,6 +14,12 @@
 // Токен уже прописан здесь как запасной вариант (если нет Script Property BOT_TOKEN)
 var HARDCODED_BOT_TOKEN = "8708408440:AAHVJZOI4dAKShpcMX-oqJ8aY2R6GZvdrB8";
 
+// Telegram при setWebhook / проверках может обращаться GET-запросом.
+// Чтобы не получать 405 Method Not Allowed — отвечаем 200 OK.
+function doGet(e) {
+  return json_(200, { ok: true, ts: new Date().toISOString() });
+}
+
 function doPost(e) {
   try {
     var payload = JSON.parse(e.postData && e.postData.contents ? e.postData.contents : "{}");
