@@ -1300,7 +1300,7 @@ function buildOrderPayload() {
   });
 
   return {
-    type: 'order',
+    type: 'order_draft',
     source: (tgUser ? 'tg_mini_app' : 'web'),
     client: { ...(tgUser || {}), phone, comment },
     items,
@@ -1318,7 +1318,7 @@ async function submitOrder() {
   }
 
   const payload = buildOrderPayload();
-  status.textContent = 'Отправляем заказ…';
+  status.textContent = 'Формируем заказ…';
 
   try {
     const res = await fetch(ORDER_WEBHOOK_URL, {
@@ -1326,8 +1326,28 @@ async function submitOrder() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    await res.text();
-    status.textContent = 'Заказ отправлен ✅ Мы свяжемся с вами в течение 10 минут.';
+    const dataText = await res.text();
+    let data = null;
+    try { data = JSON.parse(dataText); } catch (_) { data = null; }
+
+    if (!data || !data.ok || !data.orderId) {
+      status.textContent = 'Заказ отправлен ✅ Если бот не открылся — напишите Елене в Telegram.';
+      return;
+    }
+
+    const deeplink = `https://t.me/pp_fairy_bot?start=order_${encodeURIComponent(data.orderId)}`;
+    status.textContent = 'Откройте бота, чтобы проверить и подтвердить заказ ✅';
+
+    try {
+      const tg = window.Telegram && window.Telegram.WebApp;
+      if (tg && typeof tg.openTelegramLink === 'function') {
+        tg.openTelegramLink(deeplink);
+      } else {
+        window.open(deeplink, '_blank', 'noopener');
+      }
+    } catch (_) {
+      window.open(deeplink, '_blank', 'noopener');
+    }
   } catch (e) {
     status.textContent = 'Не получилось отправить автоматически. Напишите Елене в Telegram — поможем вручную.';
   }

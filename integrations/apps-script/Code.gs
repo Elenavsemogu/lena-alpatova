@@ -17,15 +17,62 @@ var HARDCODED_BOT_TOKEN = "8708408440:AAHVJZOI4dAKShpcMX-oqJ8aY2R6GZvdrB8";
 function doPost(e) {
   try {
     var payload = JSON.parse(e.postData && e.postData.contents ? e.postData.contents : "{}");
+    // Telegram updates приходят без нашего поля type — у них есть update_id
+    if (payload && payload.update_id) return handleTelegramUpdate_(payload);
+
     var type = payload.type || "order";
 
     if (type === "order") return handleOrder_(payload);
+    if (type === "order_draft") return handleOrderDraft_(payload);
     if (type === "questionnaire") return handleQuestionnaire_(payload);
 
     return json_(200, { ok: true, ignored: true, type: type });
   } catch (err) {
     return json_(200, { ok: false, error: String(err) });
   }
+}
+
+/**
+ * Черновик заказа: записываем в Google Sheets и возвращаем orderId.
+ * Затем сайт открывает бота: https://t.me/pp_fairy_bot?start=order_<orderId>
+ */
+function handleOrderDraft_(p) {
+  var props = PropertiesService.getScriptProperties();
+  var sheetId = props.getProperty("SHEET_ID");
+  var sheetName = props.getProperty("SHEET_ORDERS") || "Orders";
+
+  var ts = new Date();
+  var orderId = "ord_" + Utilities.getUuid().replace(/-/g, "").slice(0, 16);
+  var source = p.source || "web";
+  var client = p.client || {};
+  var items = p.items || [];
+  var totals = p.totals || {};
+
+  if (sheetId) {
+    var ss = SpreadsheetApp.openById(sheetId);
+    var sh = ss.getSheetByName(sheetName) || ss.insertSheet(sheetName);
+    ensureOrdersHeader_(sh);
+    sh.appendRow([
+      ts,
+      source,
+      client.tgUserId || "",
+      client.username || "",
+      client.firstName || "",
+      client.lastName || "",
+      client.phone || "",
+      client.comment || "",
+      items.map(function (it) { return it.name + " (" + it.variant + ") × " + it.qty; }).join("\n"),
+      totals.price || "",
+      totals.kcal || "",
+      totals.p || "",
+      totals.f || "",
+      totals.c || "",
+      orderId,
+      "DRAFT"
+    ]);
+  }
+
+  return json_(200, { ok: true, orderId: orderId });
 }
 
 function handleOrder_(p) {
@@ -130,8 +177,7 @@ function handleQuestionnaire_(p) {
 }
 
 function ensureOrdersHeader_(sh) {
-  if (sh.getLastRow() > 0) return;
-  sh.appendRow([
+  var header = [
     "created_at",
     "source",
     "tg_user_id",
@@ -145,8 +191,26 @@ function ensureOrdersHeader_(sh) {
     "total_kcal",
     "total_p",
     "total_f",
-    "total_c"
-  ]);
+    "total_c",
+    "order_id",
+    "status"
+  ];
+
+  var lastRow = sh.getLastRow();
+  if (lastRow === 0) {
+    sh.appendRow(header);
+    return;
+  }
+
+  // Если заголовок уже есть, но без новых колонок — добавим их в первую строку.
+  var firstRow = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  var existing = {};
+  firstRow.forEach(function (v) { existing[String(v || "").trim()] = true; });
+  var missing = header.filter(function (h) { return !existing[h]; });
+  if (!missing.length) return;
+
+  var startCol = sh.getLastColumn() + 1;
+  sh.getRange(1, startCol, 1, missing.length).setValues([missing]);
 }
 
 function ensureFormsHeader_(sh) {
@@ -242,6 +306,177 @@ function tgSend_(token, chatId, text, opts) {
     payload: JSON.stringify(payload),
     muteHttpExceptions: true
   });
+}
+
+function tgCall_(token, method, payload) {
+  var url = "https://api.telegram.org/bot" + token + "/" + method;
+  var res = UrlFetchApp.fetch(url, {
+    method: "post",
+    contentType: "application/json",
+    payload: JSON.stringify(payload || {}),
+    muteHttpExceptions: true
+  });
+  try { return JSON.parse(res.getContentText()); } catch (_) { return { ok: false, raw: res.getContentText() }; }
+}
+
+function handleTelegramUpdate_(u) {
+  var props = PropertiesService.getScriptProperties();
+  var botToken = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+
+  // /start order_xxx
+  if (u.message && u.message.text) {
+    var text = String(u.message.text || "");
+    if (text.indexOf("/start") === 0) {
+      var parts = text.split(" ");
+      var param = parts.length > 1 ? parts[1] : "";
+      if (param && param.indexOf("order_") === 0) {
+        return tgStartOrder_(botToken, u.message.chat.id, param.replace(/^order_/, ""));
+      }
+      // просто старт
+      tgSend_(botToken, String(u.message.chat.id), "Привет! Я «ПП Фея» ✨\nЧтобы подтвердить заказ, откройте ссылку из сайта (корзины).", {});
+      return json_(200, { ok: true });
+    }
+  }
+
+  // callback кнопок
+  if (u.callback_query && u.callback_query.data) {
+    return tgHandleCallback_(botToken, u.callback_query);
+  }
+
+  return json_(200, { ok: true });
+}
+
+function tgStartOrder_(token, chatId, orderId) {
+  var order = findOrderById_(orderId);
+  if (!order) {
+    tgSend_(token, String(chatId), "Не нашла заказ. Возможно, ссылка устарела. Попробуйте оформить заказ ещё раз на сайте.", {});
+    return json_(200, { ok: true });
+  }
+
+  var txt = formatDraftForClient_(order);
+  var kb = {
+    inline_keyboard: [
+      [{ text: "✅ Подтвердить заказ", callback_data: "confirm:" + orderId }],
+      [{ text: "✏️ Редактировать (на сайте)", url: "https://еленалпатова.рф/?editOrder=" + encodeURIComponent(orderId) }]
+    ]
+  };
+
+  tgCall_(token, "sendMessage", { chat_id: chatId, text: txt, reply_markup: kb });
+  return json_(200, { ok: true });
+}
+
+function tgHandleCallback_(token, cq) {
+  var data = String(cq.data || "");
+  if (data.indexOf("confirm:") === 0) {
+    var orderId = data.replace(/^confirm:/, "");
+    var order = findOrderById_(orderId);
+    if (!order) {
+      tgCall_(token, "answerCallbackQuery", { callback_query_id: cq.id, text: "Заказ не найден" });
+      return json_(200, { ok: true });
+    }
+
+    markOrderStatus_(orderId, "CONFIRMED");
+    var finalText = formatOrderForClient_(order.items, order.totals) + "\n\nЕсли нужно что-то изменить — напишите Елене, пожалуйста.";
+    tgCall_(token, "answerCallbackQuery", { callback_query_id: cq.id, text: "Принято ✅" });
+    tgCall_(token, "sendMessage", { chat_id: cq.message.chat.id, text: finalText, disable_web_page_preview: true });
+    return json_(200, { ok: true });
+  }
+
+  tgCall_(token, "answerCallbackQuery", { callback_query_id: cq.id, text: "Ок" });
+  return json_(200, { ok: true });
+}
+
+function findOrderById_(orderId) {
+  var props = PropertiesService.getScriptProperties();
+  var sheetId = props.getProperty("SHEET_ID");
+  var sheetName = props.getProperty("SHEET_ORDERS") || "Orders";
+  if (!sheetId) return null;
+  var ss = SpreadsheetApp.openById(sheetId);
+  var sh = ss.getSheetByName(sheetName);
+  if (!sh || sh.getLastRow() < 2) return null;
+
+  var header = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  var idx = {};
+  header.forEach(function (h, i) { idx[String(h || "").trim()] = i; });
+  if (idx.order_id == null) return null;
+
+  var values = sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).getValues();
+  for (var r = 0; r < values.length; r++) {
+    if (String(values[r][idx.order_id]) === String(orderId)) {
+      return {
+        row: r + 2,
+        createdAt: values[r][idx.created_at],
+        source: values[r][idx.source],
+        client: {
+          tgUserId: values[r][idx.tg_user_id],
+          username: values[r][idx.username],
+          firstName: values[r][idx.first_name],
+          lastName: values[r][idx.last_name],
+          phone: values[r][idx.phone],
+          comment: values[r][idx.comment]
+        },
+        itemsText: values[r][idx.items],
+        totals: {
+          price: values[r][idx.total_price],
+          kcal: values[r][idx.total_kcal],
+          p: values[r][idx.total_p],
+          f: values[r][idx.total_f],
+          c: values[r][idx.total_c]
+        },
+        items: parseItemsText_(values[r][idx.items])
+      };
+    }
+  }
+  return null;
+}
+
+function markOrderStatus_(orderId, status) {
+  var props = PropertiesService.getScriptProperties();
+  var sheetId = props.getProperty("SHEET_ID");
+  var sheetName = props.getProperty("SHEET_ORDERS") || "Orders";
+  if (!sheetId) return;
+  var ss = SpreadsheetApp.openById(sheetId);
+  var sh = ss.getSheetByName(sheetName);
+  if (!sh || sh.getLastRow() < 2) return;
+
+  var header = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  var idx = {};
+  header.forEach(function (h, i) { idx[String(h || "").trim()] = i + 1; }); // 1-based
+  if (!idx.order_id || !idx.status) return;
+
+  var values = sh.getRange(2, idx.order_id, sh.getLastRow() - 1, 1).getValues();
+  for (var r = 0; r < values.length; r++) {
+    if (String(values[r][0]) === String(orderId)) {
+      sh.getRange(r + 2, idx.status).setValue(status);
+      return;
+    }
+  }
+}
+
+function parseItemsText_(txt) {
+  var lines = String(txt || "").split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+  return lines.map(function (line) {
+    // "Name (Variant) × Q"
+    var m = line.match(/^(.*)\s+×\s+(\d+)\s*$/);
+    if (!m) return { name: line, variant: "", qty: 1 };
+    var left = m[1];
+    var qty = parseInt(m[2], 10) || 1;
+    var vm = left.match(/^(.*)\s+\((.*)\)\s*$/);
+    return { name: vm ? vm[1] : left, variant: vm ? vm[2] : "", qty: qty };
+  });
+}
+
+function formatDraftForClient_(order) {
+  var lines = [];
+  lines.push("Проверьте заказ и подтвердите ✅");
+  lines.push("");
+  lines.push("Позиции:");
+  (order.items || []).forEach(function (it) {
+    lines.push("— " + it.name + (it.variant ? " (" + it.variant + ")" : "") + " × " + it.qty);
+  });
+  lines.push("");
+  lines.push("Сумма: " + (order.totals && order.totals.price ? order.totals.price : 0) + " ₽");
+  return lines.join("\n");
 }
 
 function json_(code, obj) {
