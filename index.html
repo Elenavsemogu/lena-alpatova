@@ -224,8 +224,20 @@ nav a:hover::after{width:100%}
 .cart-close{background:none;border:none;cursor:pointer;padding:4px}
 .cart-close svg{width:24px;height:24px;stroke:var(--text-muted);stroke-width:2}
 .cart-body{flex:1;overflow-y:auto;padding:16px 24px;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+.cart-toolbar{display:none;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 24px;border-bottom:1px solid var(--border-light);background:var(--bg-alt)}
+.cart-toolbar.show{display:flex}
+.cart-select-all{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:var(--text-sec);cursor:pointer;user-select:none;margin-right:auto}
+.cart-select-all input{width:16px;height:16px;accent-color:var(--sage);cursor:pointer}
+.cart-toolbar-btn{font-family:'Forum',cursive;font-size:.78rem;letter-spacing:.03em;padding:6px 12px;border-radius:50px;border:1px solid var(--border);background:var(--bg);color:var(--text-sec);cursor:pointer;transition:all .2s}
+.cart-toolbar-btn:hover:not(:disabled){border-color:var(--sage);color:var(--sage-dark)}
+.cart-toolbar-btn:disabled{opacity:.45;cursor:not-allowed}
+.cart-toolbar-btn--danger{border-color:rgba(196,68,68,.35);color:#a33}
+.cart-toolbar-btn--danger:hover:not(:disabled){background:rgba(196,68,68,.08);border-color:#c44;color:#922}
 .cart-empty{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:1.05rem}
-.cart-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border-light);align-items:flex-start}
+.cart-item{display:flex;gap:10px;padding:14px 0;border-bottom:1px solid var(--border-light);align-items:flex-start}
+.cart-item.selected{background:rgba(91,111,94,.04);margin:0 -8px;padding-left:8px;padding-right:8px;border-radius:8px}
+.cart-item-check{flex-shrink:0;padding-top:14px}
+.cart-item-check input{width:18px;height:18px;accent-color:var(--sage);cursor:pointer}
 .cart-item-icon{width:48px;height:48px;border-radius:8px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
 .cart-item-info{flex:1;min-width:0}
 .cart-item-name{font-family:'Forum',cursive;font-size:.95rem;color:var(--sage-dark);margin-bottom:2px;cursor:pointer}
@@ -977,6 +989,14 @@ nav a:hover::after{width:100%}
       <svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
+  <div class="cart-toolbar" id="cartToolbar">
+    <label class="cart-select-all">
+      <input type="checkbox" id="cartSelectAll" onchange="toggleSelectAllCart(this.checked)">
+      <span>Выбрать все</span>
+    </label>
+    <button type="button" class="cart-toolbar-btn" id="btnRemoveSelected" onclick="removeSelectedFromCart()" disabled>Удалить выбранные</button>
+    <button type="button" class="cart-toolbar-btn cart-toolbar-btn--danger" onclick="clearCart()">Очистить корзину</button>
+  </div>
   <div class="cart-body" id="cartBody">
     <div class="cart-empty">Корзина пуста — добавьте блюда из каталога</div>
   </div>
@@ -1236,6 +1256,60 @@ const PRODUCTS = [
 // STATE
 const CART_STORAGE_KEY = 'ppfairy_cart_v1';
 let cart = [];
+let cartSelected = new Set();
+
+function cartItemKey(item) {
+  return `${item.pid}-${item.vi}`;
+}
+
+function toggleCartItemSelect(idx, checked) {
+  const key = cartItemKey(cart[idx]);
+  if (checked) cartSelected.add(key);
+  else cartSelected.delete(key);
+  updateCartToolbarState();
+  const row = document.querySelector(`.cart-item[data-idx="${idx}"]`);
+  if (row) row.classList.toggle('selected', checked);
+}
+
+function toggleSelectAllCart(checked) {
+  if (checked) cart.forEach((item) => cartSelected.add(cartItemKey(item)));
+  else cartSelected.clear();
+  updateCartUI();
+}
+
+function removeSelectedFromCart() {
+  if (!cartSelected.size) return;
+  cart = cart.filter((item) => !cartSelected.has(cartItemKey(item)));
+  cartSelected.clear();
+  updateCartUI();
+}
+
+function clearCart() {
+  if (!cart.length) return;
+  if (!confirm('Очистить корзину? Все позиции будут удалены.')) return;
+  cart = [];
+  cartSelected.clear();
+  updateCartUI();
+}
+
+function updateCartToolbarState() {
+  const toolbar = document.getElementById('cartToolbar');
+  const btn = document.getElementById('btnRemoveSelected');
+  const selectAll = document.getElementById('cartSelectAll');
+  const n = cartSelected.size;
+  if (toolbar) toolbar.classList.toggle('show', cart.length > 0);
+  if (btn) {
+    btn.disabled = n === 0;
+    btn.textContent = n ? `Удалить выбранные (${n})` : 'Удалить выбранные';
+  }
+  if (selectAll && cart.length) {
+    selectAll.checked = n > 0 && n === cart.length;
+    selectAll.indeterminate = n > 0 && n < cart.length;
+  } else if (selectAll) {
+    selectAll.checked = false;
+    selectAll.indeterminate = false;
+  }
+}
 let activeCategory = 'all';
 
 function saveCart() {
@@ -1596,13 +1670,17 @@ function addToCart(pid) {
 }
 
 function removeFromCart(idx) {
+  cartSelected.delete(cartItemKey(cart[idx]));
   cart.splice(idx, 1);
   updateCartUI();
 }
 
 function changeQty(idx, delta) {
   cart[idx].qty += delta;
-  if (cart[idx].qty <= 0) cart.splice(idx, 1);
+  if (cart[idx].qty <= 0) {
+    cartSelected.delete(cartItemKey(cart[idx]));
+    cart.splice(idx, 1);
+  }
   updateCartUI();
 }
 
@@ -1633,8 +1711,10 @@ function updateCartUI() {
   badge.classList.toggle('show', totalItems > 0);
 
   if (cart.length === 0) {
+    cartSelected.clear();
     body.innerHTML = '<div class="cart-empty">Корзина пуста — добавьте блюда из каталога</div>';
     footer.style.display = 'none';
+    updateCartToolbarState();
     return;
   }
 
@@ -1644,6 +1724,8 @@ function updateCartUI() {
   body.innerHTML = cart.map((item, idx) => {
     const p = PRODUCTS.find(x => x.id === item.pid);
     const v = p.variants[item.vi];
+    const key = cartItemKey(item);
+    const checked = cartSelected.has(key);
     const price = v.price * item.qty;
     const w = v.w * item.qty;
     const kcal = Math.round(p.per100.kcal * w / 100);
@@ -1651,17 +1733,20 @@ function updateCartUI() {
     const fat = Math.round(p.per100.f * w / 100);
     const carb = Math.round(p.per100.c * w / 100);
     totalPrice += price; totalKcal += kcal; totalP += pr; totalF += fat; totalC += carb;
-    return `<div class="cart-item">
+    return `<div class="cart-item${checked ? ' selected' : ''}" data-idx="${idx}">
+      <label class="cart-item-check" onclick="event.stopPropagation()">
+        <input type="checkbox"${checked ? ' checked' : ''} onchange="toggleCartItemSelect(${idx}, this.checked)" aria-label="Выбрать ${p.name}">
+      </label>
       <div class="cart-item-icon">${p.icon}</div>
       <div class="cart-item-info">
         <div class="cart-item-name" onclick="event.stopPropagation(); openProductModal(${p.id}, true)">${p.name}</div>
         <div class="cart-item-detail">${v.label}${item.qty>1?' × '+item.qty:''} · ${kcal} ккал · Б:${pr} Ж:${fat} У:${carb}</div>
         <div class="cart-item-qty">
-          <button onclick="changeQty(${idx},-1)">−</button>
+          <button type="button" onclick="changeQty(${idx},-1)">−</button>
           <span>${item.qty}</span>
-          <button onclick="changeQty(${idx},1)">+</button>
+          <button type="button" onclick="changeQty(${idx},1)">+</button>
         </div>
-        <a class="cart-item-remove" onclick="removeFromCart(${idx})">удалить</a>
+        <a class="cart-item-remove" href="#" onclick="event.preventDefault(); removeFromCart(${idx})">удалить</a>
       </div>
       <div class="cart-item-price">${fmtPrice(price)}</div>
     </div>`;
@@ -1672,6 +1757,7 @@ function updateCartUI() {
   document.getElementById('cartF').textContent = totalF + ' г';
   document.getElementById('cartC').textContent = totalC + ' г';
   document.getElementById('cartTotal').textContent = fmtPrice(totalPrice);
+  updateCartToolbarState();
   saveCart();
 }
 
