@@ -62,13 +62,17 @@ git push
 
 ## Шаг 4. Переменные окружения в Amvera
 
-В [cloud.amvera.ru](https://cloud.amvera.ru) → проект **pp-fairy-bot** → **Переменные** (или Secrets) → добавь:
+Готовый файл для импорта: **`integrations/amvera-bot/pp-fairy-bot.env`** (токен и URL уже заполнены; `WEBHOOK_URL` — после появления домена).
+
+В [cloud.amvera.ru](https://cloud.amvera.ru) → проект **pp-fairy-bot** → **Переменные** → **импорт / подгрузить .env** → выбери `pp-fairy-bot.env` → перезапуск.
+
+Или вручную:
 
 | Имя | Значение |
 |-----|----------|
 | `BOT_TOKEN` | токен бота @pp_fairy_bot |
 | `LENA_CHAT_ID` | `6336708488` |
-| `GAS_WEBHOOK_URL` | `https://script.google.com/macros/s/AKfycbwLrf3IC373jgo2VcbMRqPY3e7434wcmFPhgSk66XIGw3kgGGjOJyCGN6U4HPI6wxBrlg/exec` |
+| `GAS_WEBHOOK_URL` | `https://script.google.com/macros/s/AKfycbyOs9GPu_hi6GSFCxlVmezgvrO2B8sM1U3SNQ0oTyRuzcPIgDsVo9ydd3Xh234BEj7ECg/exec` |
 | `MINI_APP_URL` | `https://ппфея.рф` |
 | `WEBHOOK_URL` | домен проекта **без** `/webhook` (см. шаг 5) |
 
@@ -100,6 +104,17 @@ https://api.telegram.org/bot<ВСТАВЬ_BOT_TOKEN>/setWebhook?url=https%3A%2F%
 - **Бот в Telegram** (меню, /start, Mini App, быстрые ответы) — на **Amvera**.
 
 В Apps Script **не нужен** polling (`enableTelegramPolling`) после того, как webhook на Amvera работает — иначе два источника будут драться за сообщения.
+
+---
+
+## Если бот отвечает заглушками («напишите @elenappdeserty» на всё)
+
+Значит на Amvera **старая версия** `app.py`. Обнови файл из `integrations/amvera-bot/app.py` (через git push или «Через интерфейс») и дождись пересборки.
+
+После обновления:
+- **❓ Частые вопросы** → меню из 6 тем (ингредиенты, оплата, доставка…)
+- **💬 Написать Елене** → следующее сообщение уходит Лене в личку
+- **📝 Анкета** → 3 вопроса → Google Sheets через `GAS_WEBHOOK_URL`
 
 ---
 
