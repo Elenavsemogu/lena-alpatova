@@ -829,7 +829,7 @@ nav a:hover::after{width:100%}
     <div class="marathon-wrap">
       <div class="marathon-grid">
         <div>
-          <div class="marathon-price-tag">1 399 ₽</div>
+          <div class="marathon-price-tag">1 999 ₽</div>
           <p class="marathon-duration">16 дней · Старт каждый месяц</p>
           <ul class="marathon-list">
             <li>Работа с мышлением и мотивацией</li>
@@ -1169,23 +1169,23 @@ const ORDER_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyOs9GPu_hi6G
 const PRODUCTS = [
   // ТОРТЫ ПП
   {id:1, name:'Бенто-торт', cat:'torty', icon:'🎂', photo:'bento-pp.jpg', desc:'Торт-открытка с персональной надписью. ПП, без сахара.', meal:'snack',
-    per100:{kcal:145,p:8,f:8,c:15}, kbjuFrom:true, variants:[{label:'~450 г',w:450,price:1400}]},
+    per100:{kcal:145,p:8,f:8,c:15}, kbjuFrom:true, variants:[{label:'600–700 г',w:650,price:2200},{label:'1.2 кг (макси)',w:1200,price:3200}]},
   {id:2, name:'Муссовый торт', cat:'torty', icon:'🎂', photo:'tort-mussoviy.jpg', desc:'Бисквит, ягодная начинка, мусс, велюр — нежный торт без сахара.', meal:'snack',
-    per100:{kcal:150,p:8,f:4,c:13}, variants:[{label:'~1 кг',w:1000,price:2800}]},
+    per100:{kcal:150,p:8,f:4,c:13}, variants:[{label:'от ~1 кг',w:1000,price:3200}]},
   {id:3, name:'Торт медовик ПП', cat:'torty', icon:'🍯', photo:'medovik.jpg', desc:'Любимый медовик на ц/з муке с творожным кремом и арахисовой пастой.', meal:'snack',
-    per100:{kcal:196,p:11,f:5,c:27}, variants:[{label:'~1 кг',w:1000,price:2400},{label:'~1.5 кг',w:1500,price:3400}]},
+    per100:{kcal:196,p:11,f:5,c:27}, variants:[{label:'~1 кг',w:1000,price:2600},{label:'~1.5 кг',w:1500,price:3900}]},
   {id:4, name:'Торт для аллергиков / веганов', cat:'torty', icon:'🌿', photo:'tort-vegan.jpg', desc:'Без глютена, без лактозы, без яиц — без компромиссов по вкусу.', meal:'snack',
-    per100:{kcal:228,p:9,f:11,c:19}, variants:[{label:'~800 г',w:800,price:2300},{label:'~1.2 кг',w:1200,price:3300}]},
+    per100:{kcal:228,p:9,f:11,c:19}, variants:[{label:'~1 кг',w:1000,price:2800},{label:'~1.2 кг',w:1200,price:3360}]},
   {id:7, name:'Порционные десерты', cat:'torty', icon:'🥤', photo:'trayfl-snikers.jpg', desc:'Порционные десерты — состав как у тортов, начинка на выбор.', meal:'snack',
     per100:{kcal:145,p:8,f:8,c:15}, kbjuFrom:true, variants:[{label:'1 шт',w:200,price:350}]},
 
   // ДЕСЕРТЫ
   {id:8, name:'Чизкейк с манго', cat:'deserty', icon:'🥭', photo:'chizkeik-mango.jpg', desc:'Нежный чизкейк с тропическим манго, без сахара.', meal:'snack',
-    per100:{kcal:138,p:11,f:3,c:12}, variants:[{label:'~800 г',w:800,price:2300}]},
+    per100:{kcal:138,p:11,f:3,c:12}, variants:[{label:'~1 кг',w:1000,price:2400}]},
   {id:9, name:'Фундучный чизкейк', cat:'deserty', icon:'🌰', photo:'chizkeik-funduk.jpg', desc:'Шоколадная основа, сырно-сливочный крем, карамель с фундуком.', meal:'snack',
     per100:{kcal:199,p:9,f:10,c:19}, variants:[{label:'~800 г',w:800,price:2600}]},
   {id:10, name:'Рулет меренговый', cat:'deserty', icon:'🍥', photo:'rulet-merengoviy.jpg', desc:'Воздушная меренга с творожным кремом и ягодами.', meal:'snack',
-    per100:{kcal:113,p:7,f:6,c:5}, variants:[{label:'~900 г',w:900,price:2400}]},
+    per100:{kcal:113,p:7,f:6,c:5}, variants:[{label:'~1 кг',w:1000,price:2600}]},
   {id:11, name:'Рулет маковый белковый', cat:'deserty', icon:'🌸', photo:'rulet-makoviy.jpg', desc:'Белковый рулет с маком — высокобелковый и низкокалорийный.', meal:'snack',
     per100:{kcal:169,p:16,f:12,c:14}, variants:[{label:'450 г',w:450,price:930}]},
   {id:36, name:'Эклеры', cat:'deserty', icon:'🥐', photo:'eklery.jpg', desc:'Воздушные ПП-эклеры с творожным кремом — крем на выбор.', meal:'snack',
@@ -1202,22 +1202,22 @@ const PRODUCTS = [
     per100:{kcal:175,p:8,f:7,c:12}, variants:[{label:'5 шт (~250 г)',w:250,price:2100}]},
   {id:46, name:'Штолен кекс', cat:'deserty', icon:'🎄', photo:'shtollen.jpg', desc:'Полбяная и кокосовая мука, творог, клюква, изюм, апельсин — рождественская классика.', meal:'snack',
     per100:{kcal:210,p:10,f:5,c:30}, variants:[{label:'800 г',w:800,price:1800}]},
-  {id:47, name:'Трайфлы «Сникерс»', cat:'konfety', icon:'🍫', photo:'trayfl-snikers.jpg', desc:'Шоколадный бисквит, сливочный крем, карамель и арахис — порционно в стакане.', meal:'snack',
-    per100:{kcal:145,p:11,f:6,c:14}, variants:[{label:'9 шт (~150 г)',w:150,price:2250}]},
+  {id:47, name:'Трайфлы «Сникерс»', cat:'konfety', icon:'🍫', photo:'trayfl-snikers.jpg', desc:'Шоколадный бисквит, сливочный крем, карамель и арахис — порционно в стакане. Минимальный заказ — от 5 шт.', meal:'snack',
+    per100:{kcal:145,p:11,f:6,c:14}, variants:[{label:'1 шт',w:150,price:350}]},
 
   // КОНФЕТЫ
   {id:12, name:'Конфеты «Сникерс»', cat:'konfety', icon:'🍫', photo:'konfety-snikers.jpg', desc:'ПП-версия легендарного Сникерса — арахис, карамель, шоколад без сахара.', meal:'snack',
-    per100:{kcal:340,p:12,f:20,c:30}, variants:[{label:'9 шт',w:270,price:1250}]},
+    per100:{kcal:340,p:12,f:20,c:30}, variants:[{label:'9 шт',w:270,price:2250}]},
   {id:13, name:'Конфеты «Рафаэлло»', cat:'konfety', icon:'🥥', photo:'rafaello.jpg', desc:'Кокос, миндаль, белый шоколад без сахара — нежнейшие.', meal:'snack',
-    per100:{kcal:243,p:18,f:5,c:19}, variants:[{label:'9 шт',w:270,price:1250}]},
+    per100:{kcal:243,p:18,f:5,c:19}, variants:[{label:'9 шт',w:270,price:2250}]},
   {id:14, name:'Батончики', cat:'konfety', icon:'🍫', photo:'batonchiki.jpg', desc:'Протеиновые батончики — идеальный перекус.', meal:'snack',
-    per100:{kcal:320,p:14,f:16,c:30}, variants:[{label:'9 шт',w:270,price:1250}]},
+    per100:{kcal:320,p:14,f:16,c:30}, variants:[{label:'9 шт',w:270,price:2250}]},
   {id:15, name:'Фундучные конфеты', cat:'konfety', icon:'🌰', photo:'konfety-funduchnye.jpg', desc:'Цельный фундук в нежной шоколадной оболочке без сахара — ПП-альтернатива классике.', meal:'snack',
-    per100:{kcal:370,p:10,f:24,c:28}, variants:[{label:'9 шт',w:270,price:1250}]},
+    per100:{kcal:370,p:10,f:24,c:28}, variants:[{label:'9 шт',w:270,price:2250}]},
   {id:16, name:'Трюфель', cat:'konfety', icon:'🍫', photo:'tryufel.jpg', desc:'Шоколадный трюфель без сахара — тает во рту.', meal:'snack',
     per100:{kcal:238,p:11,f:10,c:26}, variants:[{label:'9 шт',w:150,price:2250}]},
   {id:17, name:'Трюфель Дор блю', cat:'konfety', icon:'🧀', photo:'tryufel-dorblue.jpg', desc:'Авторский трюфель с голубым сыром — для гурманов.', meal:'snack',
-    per100:{kcal:360,p:10,f:24,c:28}, variants:[{label:'9 шт',w:270,price:1350}]},
+    per100:{kcal:360,p:10,f:24,c:28}, variants:[{label:'9 шт',w:270,price:2250}]},
 
   // ПЕЧЕНЬЕ
   {id:18, name:'Печенье протеиновое с арахисом', cat:'pechenie', icon:'🥜', photo:'pechenie-arahis.jpg', desc:'Высокобелковое печенье с арахисом — идеальный перекус для спортсменов.', meal:'snack',
