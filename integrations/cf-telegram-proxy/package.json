@@ -1,0 +1,11 @@
+{
+  "name": "pp-fairy-tg-proxy",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "whoami": "wrangler whoami"
+  },
+  "devDependencies": {
+    "wrangler": "^4.113.0"
+  }
+}

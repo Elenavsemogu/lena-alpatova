@@ -1163,9 +1163,15 @@ function catSortKey(cat) {
 }
 
 // ===== INTEGRATION: SITE -> APPS SCRIPT (orders/forms) =====
-// Вставь сюда URL Web App деплоя Apps Script (см. integrations/apps-script/README.md)
 const ORDER_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyOs9GPu_hi6GSFCxlVmezgvrO2B8sM1U3SNQ0oTyRuzcPIgDsVo9ydd3Xh234BEj7ECg/exec';
+// Тот же ключ в Apps Script → Script Properties → WEBHOOK_SECRET
+const ORDER_WEBHOOK_SECRET = 'LM7PuTO-xx2Syq5ooL-8QkhmpJ4jHZun37ilplN6uwk';
 
+function orderWebhookQs(params) {
+  const q = new URLSearchParams(params || {});
+  if (ORDER_WEBHOOK_SECRET) q.set('key', ORDER_WEBHOOK_SECRET);
+  return q;
+}
 const PRODUCTS = [
   // ТОРТЫ ПП
   {id:1, name:'Бенто-торт', cat:'torty', icon:'🎂', photo:'bento-pp.jpg', desc:'Торт-открытка с персональной надписью. ПП, без сахара.', meal:'snack',
@@ -1452,7 +1458,10 @@ function allocateOrderId() {
     };
     const script = document.createElement('script');
     script.onerror = fail;
-    script.src = ORDER_WEBHOOK_URL + '?action=allocate_order&callback=' + encodeURIComponent(cb);
+    script.src = ORDER_WEBHOOK_URL + '?' + orderWebhookQs({
+      action: 'allocate_order',
+      callback: cb,
+    }).toString();
     document.body.appendChild(script);
     const timer = setTimeout(fail, 8000);
   });
@@ -1483,6 +1492,14 @@ function saveOrderDraftToGas(payload) {
     input.value = body;
     form.appendChild(input);
 
+    if (ORDER_WEBHOOK_SECRET) {
+      const keyInput = document.createElement('input');
+      keyInput.type = 'hidden';
+      keyInput.name = 'key';
+      keyInput.value = ORDER_WEBHOOK_SECRET;
+      form.appendChild(keyInput);
+    }
+
     document.body.appendChild(form);
     let done = false;
     const finish = () => {
@@ -1497,7 +1514,7 @@ function saveOrderDraftToGas(payload) {
     setTimeout(finish, 2500);
   }).then(() => {
     if (body.length > 1800) return;
-    const q = new URLSearchParams({ type: 'order_draft', data: body });
+    const q = orderWebhookQs({ type: 'order_draft', data: body });
     const img = new Image();
     img.src = ORDER_WEBHOOK_URL + '?' + q.toString();
   });

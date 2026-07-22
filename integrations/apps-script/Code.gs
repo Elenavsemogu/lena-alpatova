@@ -1,21 +1,31 @@
 /**
  * PP Фея — приём заявок с сайта → Telegram + Google Sheets
  *
- * Настройка через Script Properties (Project Settings → Script Properties):
- * - BOT_TOKEN:   уже вписан ниже как HARDCODED_BOT_TOKEN, но лучше хранить в Properties
- * - LENA_CHAT_ID: chat_id Лены (число) — узнаём в шаг 2 инструкции
- * - SHEET_ID:     id Google Spreadsheet — из URL таблицы
- * - SHEET_ORDERS: "Orders"
- * - SHEET_FORMS:  "Forms"
+ * Script Properties (обязательно):
+ * - BOT_TOKEN       — только здесь, НЕ в коде / git
+ * - WEBHOOK_SECRET  — ключ сайта/бота (см. index.html ORDER_WEBHOOK_SECRET)
+ * - LENA_CHAT_ID, SHEET_ID, SHEET_ORDERS, SHEET_FORMS
  *
- * Бот: @pp_fairy_bot  id: 8708408440
+ * Бот: @pp_fairy_bot (polling на Amvera; GAS — заказы/анкеты)
  */
 
-// Токен уже прописан здесь как запасной вариант (если нет Script Property BOT_TOKEN)
-var HARDCODED_BOT_TOKEN = "8708408440:AAHVJZOI4dAKShpcMX-oqJ8aY2R6GZvdrB8";
 var HARDCODED_SHEET_ID = "1d4vyOwUcHbAYS9mFc0oUWjbghYqcDrlQ8xS23m8E1to";
-var HARDCODED_LENA_CHAT_ID = "6336708488"; // chat_id Лены (из /myid), лучше дублировать в Script Properties
-var DEFAULT_MINI_APP_URL = "https://xn--e1atau0d.xn--p1ai/"; // ппфея.рф
+var HARDCODED_LENA_CHAT_ID = "6336708488";
+var DEFAULT_MINI_APP_URL = "https://xn--e1atau0d.xn--p1ai/";
+// Совпадает с ORDER_WEBHOOK_SECRET на сайте; лучше дублировать в Script Properties
+var DEFAULT_WEBHOOK_SECRET = "LM7PuTO-xx2Syq5ooL-8QkhmpJ4jHZun37ilplN6uwk";
+
+function getBotToken_() {
+  return PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || "";
+}
+
+function getWebhookSecret_() {
+  return (
+    PropertiesService.getScriptProperties().getProperty("WEBHOOK_SECRET") ||
+    DEFAULT_WEBHOOK_SECRET ||
+    ""
+  );
+}
 
 function getLenaChatId_() {
   return PropertiesService.getScriptProperties().getProperty("LENA_CHAT_ID") || HARDCODED_LENA_CHAT_ID;
@@ -25,6 +35,35 @@ function getSheetId_() {
   return PropertiesService.getScriptProperties().getProperty("SHEET_ID") || HARDCODED_SHEET_ID;
 }
 
+/** Ключ из query / form / JSON. */
+function extractWebhookKey_(e, payload) {
+  var key = "";
+  if (e && e.parameter) {
+    key = String(e.parameter.key || e.parameter.secret || e.parameter.webhook_secret || "");
+  }
+  if (!key && payload && typeof payload === "object") {
+    key = String(payload.key || payload.secret || payload.webhook_secret || "");
+  }
+  return key;
+}
+
+function isWebhookAuthorized_(e, payload) {
+  var expected = getWebhookSecret_();
+  if (!expected) return true;
+  return extractWebhookKey_(e, payload) === expected;
+}
+
+/** Глобальный антиспам (CacheService). */
+function rateLimitOk_(bucket, limit, ttlSec) {
+  var cache = CacheService.getScriptCache();
+  var k = "rl_" + bucket;
+  var n = parseInt(cache.get(k) || "0", 10);
+  if (isNaN(n)) n = 0;
+  if (n >= limit) return false;
+  cache.put(k, String(n + 1), ttlSec || 3600);
+  return true;
+}
+
 function getMiniAppUrl_() {
   return PropertiesService.getScriptProperties().getProperty("MINI_APP_URL") || DEFAULT_MINI_APP_URL;
 }
@@ -32,7 +71,89 @@ function getMiniAppUrl_() {
 function normalizeOrderId_(orderId) {
   var id = String(orderId || "").trim();
   while (id.indexOf("order_") === 0) id = id.slice("order_".length);
+  while (id.indexOf("ord_") === 0) id = id.slice("ord_".length);
+  if (/^\d+$/.test(id)) {
+    var n = parseInt(id, 10);
+    if (!isNaN(n) && n >= 0) return Utilities.formatString("%03d", n % 1000);
+  }
   return id;
+}
+
+/** Максимальный 3-значный номер заказа за сегодня (из таблицы). */
+function getMaxOrderNumToday_() {
+  var sheetId = getSheetId_();
+  if (!sheetId) return 100;
+  var ss = SpreadsheetApp.openById(sheetId);
+  var sh = ss.getSheetByName(PropertiesService.getScriptProperties().getProperty("SHEET_ORDERS") || "Orders");
+  if (!sh || sh.getLastRow() < 2) return 100;
+
+  var tz = Session.getScriptTimeZone();
+  var today = Utilities.formatDate(new Date(), tz, "yyyy-MM-dd");
+  var header = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  var idx = {};
+  header.forEach(function (h, i) { idx[String(h || "").trim()] = i; });
+  if (idx.order_id == null || idx.created_at == null) return 100;
+
+  var values = sh.getRange(2, 1, sh.getLastRow(), sh.getLastColumn()).getValues();
+  var maxNum = 100;
+  for (var r = 0; r < values.length; r++) {
+    var created = values[r][idx.created_at];
+    if (!created) continue;
+    var rowDate = Utilities.formatDate(new Date(created), tz, "yyyy-MM-dd");
+    if (rowDate !== today) continue;
+    var n = parseInt(normalizeOrderId_(values[r][idx.order_id]), 10);
+    if (!isNaN(n) && n > maxNum) maxNum = n;
+  }
+  return maxNum;
+}
+
+function orderIdExists_(orderId) {
+  orderId = normalizeOrderId_(orderId);
+  if (!orderId) return false;
+  var sheetId = getSheetId_();
+  if (!sheetId) return false;
+  var ss = SpreadsheetApp.openById(sheetId);
+  var sh = ss.getSheetByName(PropertiesService.getScriptProperties().getProperty("SHEET_ORDERS") || "Orders");
+  if (!sh || sh.getLastRow() < 2) return false;
+
+  var header = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  var idx = {};
+  header.forEach(function (h, i) { idx[String(h || "").trim()] = i; });
+  if (idx.order_id == null) return false;
+
+  var values = sh.getRange(2, idx.order_id + 1, sh.getLastRow(), 1).getValues();
+  for (var r = 0; r < values.length; r++) {
+    if (normalizeOrderId_(values[r][0]) === orderId) return true;
+  }
+  return false;
+}
+
+/** Выдать следующий номер заказа за сегодня: 101 … 999 (с резервом в cache). */
+function allocateNextOrderId_() {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(8000);
+  try {
+    var props = PropertiesService.getScriptProperties();
+    var cache = CacheService.getScriptCache();
+    var tz = Session.getScriptTimeZone();
+    var today = Utilities.formatDate(new Date(), tz, "yyyy-MM-dd");
+    var dayKey = "order_seq_" + today;
+    var sheetMax = getMaxOrderNumToday_();
+    var seq = parseInt(cache.get(dayKey) || props.getProperty(dayKey) || String(sheetMax), 10);
+    if (isNaN(seq) || seq < 100) seq = Math.max(100, sheetMax);
+    var next = seq + 1;
+    if (next > 999) next = 101;
+    var id = Utilities.formatString("%03d", next);
+    cache.put(dayKey, String(next), 21600);
+    props.setProperty(dayKey, String(next));
+    return id;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function getNextOrderId_() {
+  return allocateNextOrderId_();
 }
 
 function saveOrderDraftCache_(orderId, payload) {
@@ -87,12 +208,58 @@ function parseIncomingPayload_(e) {
 
 function doGet(e) {
   var payload = parseIncomingPayload_(e);
+  var action = e && e.parameter ? String(e.parameter.action || "") : "";
+  var needsAuth =
+    action === "allocate_order" ||
+    action === "order_lookup" ||
+    (payload && payload.type === "order_draft") ||
+    (e && e.parameter && e.parameter.type === "order_draft");
+
+  if (needsAuth && !isWebhookAuthorized_(e, payload)) {
+    return json_(403, { ok: false, error: "unauthorized" });
+  }
+
   if (payload && payload.type === "order_draft") {
+    if (!rateLimitOk_("order_hour", 40, 3600)) {
+      return json_(429, { ok: false, error: "rate_limited" });
+    }
     return handleOrderDraft_(payload);
+  }
+  if (action === "order_lookup") {
+    if (!rateLimitOk_("lookup_hour", 120, 3600)) {
+      return json_(429, { ok: false, error: "rate_limited" });
+    }
+    var orderId = normalizeOrderId_(e.parameter.orderId || "");
+    var order = findOrderById_(orderId);
+    if (!order) return json_(200, { ok: false, error: "not_found" });
+    return json_(200, { ok: true, order: order });
+  }
+  if (action === "allocate_order") {
+    if (!rateLimitOk_("alloc_hour", 40, 3600)) {
+      var cbDeny = String((e.parameter && e.parameter.callback) || "");
+      var deny = JSON.stringify({ ok: false, error: "rate_limited" });
+      if (cbDeny && /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(cbDeny)) {
+        return ContentService
+          .createTextOutput(cbDeny + "(" + deny + ");")
+          .setMimeType(ContentService.MimeType.JAVASCRIPT);
+      }
+      return json_(429, { ok: false, error: "rate_limited" });
+    }
+    var newId = allocateNextOrderId_();
+    var cb = String(e.parameter.callback || "");
+    if (cb && /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(cb)) {
+      return ContentService
+        .createTextOutput(cb + "(" + JSON.stringify({ ok: true, orderId: newId }) + ");")
+        .setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    return json_(200, { ok: true, orderId: newId });
   }
   if (e && e.parameter && e.parameter.type === "order_draft" && e.parameter.data) {
     try {
       payload = JSON.parse(String(e.parameter.data));
+      if (!rateLimitOk_("order_hour", 40, 3600)) {
+        return json_(429, { ok: false, error: "rate_limited" });
+      }
       return handleOrderDraft_(payload);
     } catch (err) {
       return json_(200, { ok: false, error: String(err) });
@@ -107,10 +274,23 @@ function doPost(e) {
     if (!payload || !Object.keys(payload).length) {
       payload = JSON.parse(e.postData && e.postData.contents ? e.postData.contents : "{}");
     }
-    // Telegram updates приходят без нашего поля type — у них есть update_id
-    if (payload && payload.update_id) return handleTelegramUpdate_(payload);
+
+    // Старый TG webhook на GAS больше не используем — без ключа отклоняем
+    if (payload && payload.update_id) {
+      return json_(403, { ok: false, error: "telegram_webhook_disabled" });
+    }
+
+    if (!isWebhookAuthorized_(e, payload)) {
+      return json_(403, { ok: false, error: "unauthorized" });
+    }
 
     var type = payload.type || "order";
+
+    if (type === "order" || type === "order_draft" || type === "questionnaire") {
+      if (!rateLimitOk_("post_hour", 50, 3600)) {
+        return json_(429, { ok: false, error: "rate_limited" });
+      }
+    }
 
     if (type === "order") return handleOrder_(payload);
     if (type === "order_draft") return handleOrderDraft_(payload);
@@ -127,7 +307,13 @@ function doPost(e) {
  */
 function handleOrderDraft_(p) {
   var ts = new Date();
-  var orderId = normalizeOrderId_(p.orderId || ("ord_" + Utilities.getUuid().replace(/-/g, "").slice(0, 16)));
+  var rawId = normalizeOrderId_(p.orderId || "");
+  var orderId;
+  if (/^\d{3}$/.test(rawId) && !orderIdExists_(rawId)) {
+    orderId = rawId;
+  } else {
+    orderId = allocateNextOrderId_();
+  }
   var source = p.source || "web";
   var client = p.client || {};
   var items = p.items || [];
@@ -176,7 +362,7 @@ function processSiteOrderNotifications_(orderId, ts, source, client, items, tota
   var cached = loadOrderDraftCache_(orderId) || {};
   var lenaNotified = !!cached.lenaNotified;
   var clientNotified = !!cached.clientNotified;
-  var botToken = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var botToken = getBotToken_();
   var lenaChatId = getLenaChatId_();
   var clientId = client.tgUserId ? String(client.tgUserId) : "";
 
@@ -208,7 +394,7 @@ function processSiteOrderNotifications_(orderId, ts, source, client, items, tota
 
 function handleOrder_(p) {
   var props = PropertiesService.getScriptProperties();
-  var botToken = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var botToken = getBotToken_();
   var lenaChatId = getLenaChatId_();
   var sheetId = getSheetId_();
   var sheetName = props.getProperty("SHEET_ORDERS") || "Orders";
@@ -258,7 +444,7 @@ function handleOrder_(p) {
 
 function handleQuestionnaire_(p) {
   var props = PropertiesService.getScriptProperties();
-  var botToken = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var botToken = getBotToken_();
   var lenaChatId = getLenaChatId_();
   var sheetId = getSheetId_();
   var sheetName = props.getProperty("SHEET_FORMS") || "Forms";
@@ -504,7 +690,7 @@ function logTelegramContact_(msg) {
 
 function handleTelegramUpdate_(u) {
   var props = PropertiesService.getScriptProperties();
-  var botToken = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var botToken = getBotToken_();
   var chatId = u.message && u.message.chat ? u.message.chat.id : (u.callback_query && u.callback_query.message ? u.callback_query.message.chat.id : null);
 
   if (u.message) logTelegramContact_(u.message);
@@ -611,7 +797,7 @@ function getFaqText_(key) {
 }
 
 function setupBotUi() {
-  var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var token = getBotToken_();
   var url = getMiniAppUrl_();
   tgCall_(token, "setChatMenuButton", {
     menu_button: { type: "web_app", text: "🍰 Каталог", web_app: { url: url } }
@@ -785,14 +971,27 @@ function json_(code, obj) {
 }
 
 /**
+ * Выключить polling в Apps Script (обязательно, если бот на Amvera).
+ * Run → disableTelegramPolling — иначе GAS забирает /start у Amvera.
+ */
+function disableTelegramPolling() {
+  var triggers = ScriptApp.getProjectTriggers();
+  triggers.forEach(function (t) {
+    if (t.getHandlerFunction() === "pollTelegramUpdates") ScriptApp.deleteTrigger(t);
+  });
+  Logger.log("Polling выключен. Сообщения должен обрабатывать бот на Amvera.");
+}
+
+/**
  * РЕКОМЕНДУЕМЫЙ режим для Telegram + Apps Script: polling (без webhook).
  * Telegram webhook на GAS Web App ломается (302/405) — см. README.
  *
  * Один раз: Run → enableTelegramPolling (в списке функций сверху).
  * Потом триггер раз в 1 минуту сам вызывает pollTelegramUpdates.
+ * НЕ включай, если бот уже на Amvera — конфликт getUpdates.
  */
 function enableTelegramPolling() {
-  var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var token = getBotToken_();
   UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/deleteWebhook", { muteHttpExceptions: true });
 
   var triggers = ScriptApp.getProjectTriggers();
@@ -812,7 +1011,7 @@ function setupBotUiPublic() {
 
 function pollTelegramUpdates() {
   var props = PropertiesService.getScriptProperties();
-  var token = props.getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var token = getBotToken_();
   var offset = parseInt(props.getProperty("TG_OFFSET") || "0", 10) || 0;
   var url = "https://api.telegram.org/bot" + token + "/getUpdates?limit=50&timeout=0" + (offset ? "&offset=" + offset : "");
   var resp = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
@@ -847,7 +1046,7 @@ function getMyLenaChatId() {
     }
   }
 
-  var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var token = getBotToken_();
   var resp = UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/getUpdates", { muteHttpExceptions: true });
   var data = JSON.parse(resp.getContentText());
   var result = data.result || [];
@@ -867,7 +1066,7 @@ function getMyLenaChatId() {
  * потом Run → testSendToLena.
  */
 function testSendToLena() {
-  var token = PropertiesService.getScriptProperties().getProperty("BOT_TOKEN") || HARDCODED_BOT_TOKEN;
+  var token = getBotToken_();
   var chatId = getLenaChatId_();
   if (!chatId) { Logger.log("LENA_CHAT_ID не задан"); return; }
   tgSend_(token, chatId, "✅ Тест пройден! Сайт ПП Феи успешно связан с ботом.", {});

@@ -1,0 +1,5 @@
+.DS_Store
+integrations/amvera-bot/pp-fairy-bot.env
+integrations/cf-telegram-proxy/node_modules/
+.env
+.env.local

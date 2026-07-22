@@ -1,3 +1,10 @@
+## 2026-07-22
+- Безопасность: убран hardcoded BOT_TOKEN из GAS; WEBHOOK_SECRET + rate limit; CF PROXY_SECRET; чеклист `integrations/SECURITY.md`.
+- Amvera↔Telegram `ConnectTimeout`: CF proxy `restless-morning-ac62.papa3313.workers.dev`, ретраи в `app.py`.
+- В логах httpx убран INFO (токен не светится).
+
+## 2026-06-02
+
 ## 2026-06-02
 - Добавлена модальная карточка блюда (большое фото + инфо + варианты + «в корзину»).
 - В корзине и умном расчёте добавлены видимые кнопки «назад» и «закрыть», улучшены отступы на мобиле (safe-area).

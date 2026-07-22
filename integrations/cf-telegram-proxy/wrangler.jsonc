@@ -1,0 +1,6 @@
+{
+  "name": "pp-fairy-tg-proxy",
+  "main": "src/index.js",
+  "compatibility_date": "2026-07-01",
+  "workers_dev": true
+}
